@@ -1,0 +1,170 @@
+# Szymanski's algorithm 
+#
+# http://en.wikipedia.org/wiki/Szymanski%27s_Algorithm
+# Memory layout:
+# 0 - flag[0]
+# 1 - flag[1]
+# ...
+
+memory_size 4
+
+thread t0
+initial q0
+
+transition q0 	q1 	write	1	0
+
+transition q1 	q11 	read	flag1  	1
+transition q11	q12	read	flag2	2
+transition q12	q13	read	flag3	3
+transition q13 	q1 	check 	|| || >= flag1 3 >= flag2 3 >= flag3 3
+transition q13 	q2 	check 	&& && < flag1 3  < flag2 3 < flag3 3
+
+transition q2 	q3 	write 	3	0
+
+transition q3 	q31 	read 	flag1	1
+transition q31	q32	read	flag2	2
+transition q32	q33	read	flag3	3
+transition q33 	q4 	check 	|| || == flag1 1 == flag2 1 == flag3 1	
+transition q33 	q5 	check 	&& && != flag1 1 != flag2 1 != flag3 1
+
+transition q4 	q41 	write 	2	0
+transition q41 	q42 	read 	flag1	1
+transition q42	q43	read	flag2	2
+transition q43	q44	read	flag3	3
+transition q44 	q5 	check 	|| || == flag1 4 == flag2 4 == flag3 4
+transition q44 	q41 	check 	&& && != flag1 4 != flag2 4 != flag3 4
+
+transition q5 	q6 	write  4 	0
+
+transition q6	q7	noop
+
+transition q7 	q71 	read 	flag1 	1
+transition q71	q72	read	flag2	2
+transition q72	q73	read	flag3	3
+transition q73 q7 	check 	|| || || == flag1 3 == flag1 2 || == flag2 3 == flag2 2 || == flag3 3 == flag3 2 
+transition q73 q8 	check 	&& && || < flag1 2 > flag1 3 || < flag2 2 > flag2 3 || < flag3 2 > flag3 3
+
+transition q8 q0 	write 0		0
+end
+
+thread t1
+initial q0
+
+transition q0 	q1 	write	1	1
+
+transition q1 	q11 	read	flag0  	0
+transition q11	q12	read	flag2	2
+transition q12	q13	read	flag3	3
+transition q13 	q1 	check 	||  || >= flag0 3 >= flag2 3 >= flag3 3
+transition q13 	q2 	check 	&& && < flag0 3  < flag2 3 < flag3 3
+
+transition q2 	q3 	write 	3	1
+
+transition q3 	q31 	read 	flag0	0
+transition q31	q32	read	flag2	2
+transition q32	q33	read	flag3	3
+transition q33 	q4 	check 	|| || == flag0 1 == flag2 1 == flag3 1
+transition q33 	q5 	check 	&& && != flag0 1 != flag2 1 != flag3 1
+
+transition q4 	q41 	write 	2	1
+transition q41 	q42 	read 	flag0	0
+transition q42	q43	read	flag2	2
+transition q43	q44	read	flag3	3
+transition q44 	q5 	check 	|| || == flag0 4 == flag2 4 == flag3 4
+transition q44 	q41 	check 	&& && != flag0 4 != flag2 4 != flag3 4
+
+transition q5 	q6 	write  4 	1
+
+transition q6	q61	read	flag0	0
+transition q61	q6	check	> flag0	1
+transition q61	q7	check 	<= flag0 1
+
+transition q7 	q71 	read	flag2	2
+transition q71	q72	read	flag3	3
+transition q72	q7	check	|| || == flag2 3 == flag2 2 || == flag3 3 == flag3 2
+transition q72	q8	check	&& || < flag2 2 > flag2 3 || < flag3 2 > flag3 3 
+
+transition q8 q0 	write 0		1
+end
+
+
+thread t2
+initial q0
+
+transition q0 	q1 	write	1	2
+
+transition q1 	q11 	read	flag0  	0
+transition q11	q12	read	flag1	1
+transition q12	q13	read	flag3	3
+transition q13 	q1 	check 	|| || >= flag0 3 >= flag1 3 >= flag3 3
+transition q13 	q2 	check 	&& && < flag0 3  < flag1 3 < flag3 3
+
+transition q2 	q3 	write 	3	2
+
+transition q3 	q31 	read 	flag0	0
+transition q31	q32	read	flag1	1
+transition q32 	q33	read	flag3	3	
+transition q33 	q4 	check 	|| || == flag0 1 == flag1 1 == flag3 1
+transition q33 	q5 	check 	&& && != flag0 1 != flag1 1 != flag3 1
+
+transition q4 	q41 	write 	2	2
+transition q41 	q42 	read 	flag0	0
+transition q42	q43	read	flag1	1
+transition q43	q44	read	flag3	3
+transition q44 	q5 	check 	|| || == flag0 4 == flag1 4 == flag3 4
+transition q44 	q41 	check 	&& && != flag0 4 != flag1 4 != flag3 4
+
+transition q5 	q6 	write  4 	2
+
+transition q6	q61	read	flag0	0
+transition q61	q62	read	flag1	1
+transition q62	q6	check	||  > flag0 1 	> flag1	1
+transition q62	q7	check 	&& <= flag0 1 	<= flag1 1
+
+transition q7 	q71	read	flag3	3
+transition q71	q7	check || == flag3 3 == flag3 2
+transition q71	q8	check || < flag3 2 > flag3 3
+
+transition q8 q0 	write 0		2
+end
+
+
+thread t3
+initial q0
+
+transition q0 	q1 	write	1	3
+
+transition q1 	q11 	read	flag0  	0
+transition q11	q12	read	flag1	1
+transition q12	q13	read	flag2	2
+transition q13 	q1 	check 	|| || >= flag0 3 >= flag1 3 >= flag2 3
+transition q13 	q2 	check 	&& && < flag0 3  < flag1 3 < flag2 3
+
+transition q2 	q3 	write 	3	3
+
+transition q3 	q31 	read 	flag0	0
+transition q31	q32	read	flag1	1
+transition q32 	q33	read	flag2	2	
+transition q33 	q4 	check 	|| || == flag0 1 == flag1 1 == flag2 1
+transition q33 	q5 	check 	&& && != flag0 1 != flag1 1 != flag2 1
+
+transition q4 	q41 	write 	2	3
+transition q41 	q42 	read 	flag0	0
+transition q42	q43	read	flag1	1
+transition q43	q44	read	flag2	2
+transition q44 	q5 	check 	|| || == flag0 4 == flag1 4 == flag2 4
+transition q44 	q41 	check 	&& && != flag0 4 != flag1 4 != flag2 4
+
+transition q5 	q6 	write  4 	3
+
+transition q6	q61	read	flag0	0
+transition q61	q62	read	flag1	1
+transition q62	q63	read	flag2	2
+transition q63	q6	check	|| ||  > flag0 1  > flag1 1 	> flag2	1
+transition q63	q7	check 	&& && <= flag0 1  <= flag1 1 	<= flag2 1
+
+transition q7 	q8	noop
+
+transition q8 q0 	write 0		3
+end
+

@@ -1,0 +1,74 @@
+int msg = 0;
+
+proctype p1 {
+	int nb = 1;
+	int limit = 10;
+	
+	do
+	:: nb < limit ->
+		store(msg,nb);
+	:: nb < limit ->
+		nb = nb+1;
+	:: nb == limit -> break;
+	od;
+}
+
+proctype p2 {
+	int val1;
+	int val2;
+	
+	val1 = loadval(msg);
+	val2 = loadval(msg);
+
+	if
+	:: val1 > val2 -> skip;
+	fi;
+}
+
+proctype p3 {
+	int val1;
+	int val2;
+
+	val1 = loadval(msg);
+	val2 = loadval(msg);
+
+	if
+	:: val1 > val2 -> skip;
+	fi;
+}
+
+proctype p4 {
+	int val1;
+	int val2;
+	
+	val1 = loadval(msg);
+	val2 = loadval(msg);
+
+	if
+	:: val1 > val2 -> skip;
+	fi;
+}
+
+proctype p5 {
+	int val1;
+	int val2;
+	
+	val1 = loadval(msg);
+	val2 = loadval(msg);
+
+	if
+	:: val1 > val2 -> skip;
+	fi;
+}
+
+proctype p6 {
+	int val1;
+	int val2;
+	
+	val1 = loadval(msg);
+	val2 = loadval(msg);
+
+	if
+	:: val1 > val2 -> skip;
+	fi;
+}

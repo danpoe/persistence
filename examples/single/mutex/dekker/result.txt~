@@ -1,0 +1,80 @@
+Memorax
+====================
+
+[phong@localhost build]$ memorax fencins -a sb ../examples/postgresql/tests/dekker/dekker.rmm
+Found 1 synchronization set:
+Totally 2 unique synchronizations:
+A: Lock write: L15 P0: write: flag[P0] := 1
+
+B: Lock write: L37 P1: write: flag[P1] := 1
+
+Synchronization sets:
+#0: {A, B}
+Total time to insert fences: 0.1 s
+
+
+[phong@localhost build]$ ./PERSIST -b -f 2 ../examples/postgresql/tests/dekker/dekker.txt
+Computed fences for enforcing persistence (4 total): (t0,q4) (t0,q1) (t1,q4) (t1,q1)
+*********************************************
+ Thread number: 2
+ State number: 24
+ Transition number: 30
+ PotentialAttackNum: 12
+ InfeasibleAttackNum: 0
+ InfeasibleAttackNum: 0
+ FeasibleAttackNum: 0
+ Fence number: 4
+ SpinTime in miliseconds: 278
+ CompilerTime in miliseconds: 6597
+ VerifierTime in miliseconds: 397
+ SeqRealTime in miliseconds: 7272
+ RealTime in milisecond: 4351
+*********************************************
+[phong@localhost build]$ ./trencher -b -f ../examples/postgresql/tests/dekker/dekker.txt
+filename ../examples/postgresql/tests/dekker/dekker.txt action 1 threadsCount 2 statesCount 24 transitionsCount 30 potentialAttacksCount 110 infeasibleAttacksCount1 24 infeasibleAttacksCount2 38 feasibleAttacksCount 48 fencesCount 4 spinTime 1991 compilerTime 41465 verifierTime 2854 cpuTime 130 realTime 23455
+
+
+Musketeer
+======================
+
+[root@localhost build]# ./goto-cc -o ../examples/postgresql/dekker/gb_dekker.gb ../examples/postgresql/dekker/gb_dekker.c
+[root@localhost build]# ./musketeer --mm tso ../examples/postgresql/dekker/gb_dekker.gb 
+Reading GOTO program from ../examples/postgresql/dekker/gb_dekker.gb
+Adding CPROVER library
+Partial Inlining
+Function Pointer Removal
+Pointer Analysis
+Fence detection for tso via critical cycles and ILP
+Adding weak memory (TSO) Instrumentation
+--------
+Temporary variables added
+Dependencies analysis enabled
+Number of threads detected: 2
+Graph with 16 nodes has 1 interesting SCCs
+Number of reads: 6
+Number of writes: 10
+Number of wse: 1
+Number of rfe/fre: 12
+Number of goto-instructions: 58
+Abstract event graph computed
+
+cycles collected: 7 cycles found
+i: 106 mat_size: 105
+Optimal solution found
+minimal cost: 15
+0 -> 1 : fence
+(between file ../examples/postgresql/dekker/gb_dekker.c line 13 function thr1 and file ../examples/postgresql/dekker/gb_dekker.c line 14 function thr1
+8 -> 9 : fence
+(between file ../examples/postgresql/dekker/gb_dekker.c line 30 function thr2 and file ../examples/postgresql/dekker/gb_dekker.c line 31 function thr2
+13 -> 9 : fence
+(between file ../examples/postgresql/dekker/gb_dekker.c line 36 function thr2 and file ../examples/postgresql/dekker/gb_dekker.c line 31 function thr2
+11 -> 12 : fence
+(between file ../examples/postgresql/dekker/gb_dekker.c line 34 function thr2 and file ../examples/postgresql/dekker/gb_dekker.c line 35 function thr2
+8 -> 12 : fence
+(between file ../examples/postgresql/dekker/gb_dekker.c line 30 function thr2 and file ../examples/postgresql/dekker/gb_dekker.c line 35 function thr2
+
+
+
+
+
+

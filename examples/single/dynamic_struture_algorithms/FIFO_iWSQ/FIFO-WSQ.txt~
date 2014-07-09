@@ -1,0 +1,81 @@
+#
+# FIFO Working steal queue
+#
+# Dynamic synthesis for relaxed memory models
+# 
+# IS robust
+# 
+# 
+# Memory layout:
+# 0 — H
+# 1 — T
+# 2 — Data
+
+memory_size 3
+
+thread owner
+initial t00
+
+transition	t00	t01	local 	n 10000  
+
+transition 	t01 	pop0	noop
+transition 	t01 	push0	noop
+
+transition	pop0	pop1	read	H	0
+transition 	pop1	pop2	read	T 	1
+transition 	pop2	t01	check	==	H	T
+transition 	pop2	pop3	check 	!=	H	T
+transition	pop3	t4	read	data	2
+
+transition	t4	t5	lock
+transition	t5	t6	read	H1	0
+transition	t6	t7	check	<	H1	n
+transition	t6	unlock	check 	>=	H1	n	
+transition	t7	t8	check 	==	H1	H
+transition	t7	unlock	check 	!=	H1	H
+
+transition	t8	unlock	write	+ H  1	0
+
+transition 	unlock 	t01 	unlock
+
+transition	push0	push1	read	H	0
+transition	push1 	push2	read	T	1
+transition	push2	push20	check	<	T	n
+transition	push2	t01	check	>=	T	n
+transition	push20	tt4	write	1	2
+
+transition	tt4	tt5	lock
+transition	tt5	tt6	read	H1	0
+transition	tt6	tt7	check	<	H1	n
+transition	tt6	unlock	check 	>=	H1	n	
+transition	tt7	tt8	check 	==	H1	H
+transition	tt7	unlock	check 	!=	H1	H
+
+transition	tt8	t01	write	+ T  1 	1
+
+end
+
+
+thread steal
+initial t00
+
+transition	t00	t01	local 	n 10000  
+
+transition	t01	t1	read	H	0
+transition	t1	t2	read	T	1
+transition	t2	t01	check	==	H	T
+transition	t2	t3	check	!=	H 	T
+transition	t3	t4	read	data	2
+
+transition	t4	t5	lock
+transition	t5	t6	read	H1	0
+transition	t6	t7	check	<	H1	- n 1
+transition	t6	unlock	check 	>=	H1	- n 1	
+transition	t7	t8	check 	==	H1	H
+transition	t7	unlock	check 	!=	H1	H
+
+transition	t8	unlock	write	+ H 1	0
+
+transition 	unlock t01 	unlock
+		
+end

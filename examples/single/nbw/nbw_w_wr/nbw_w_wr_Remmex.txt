@@ -1,0 +1,71 @@
+int buf = 0;
+int ccf = 0;
+
+proctype p1 {
+int lccf;
+int run = 1;
+int limit = 1000;
+do
+:: run == 1 ->
+	lccf = loadval(ccf);
+	lccf = lccf + 1;
+	store(ccf,lccf);
+	store(buf,1);
+	lccf = lccf + 1;
+	store(ccf,lccf);
+	if 
+	:: lccf > limit -> run = 0;
+	:: lccf < limit -> skip;
+	fi;
+:: run == 0 -> break;
+od;
+}
+
+proctype p2 {
+int ccfb;
+int ccfb1;
+int ccfe;
+int v;
+int done;
+int run = 1;
+int limit = 1000;
+int lccf;
+int error = 0;
+
+do
+:: true ->
+	lccf = loadval(ccf);
+	if 
+	:: lccf > limit -> break;
+	:: lccf < limit -> skip;
+	fi;
+	lccf = lccf + 1;
+	store(ccf,lccf);
+	store(buf,1);
+	lccf = lccf + 1;
+	store(ccf,lccf);
+	
+	do
+	:: true -> 
+		ccfb = loadval(ccf);
+		v = loadval(buf);
+		ccfe = loadval(ccf);
+		ccfb1  = ccfb - (ccfb/2)*2;
+		if
+		:: ccfb != ccfe || ccfb1 == 1 -> done = 0;
+		:: ccfb == ccfe && ccfb1 !=1 -> done = 1;
+		fi; 
+		if
+		:: done == 1 -> 
+			if
+			:: ccfb != ccfe -> error = 1;
+			:: ccfb == ccfe -> skip;
+			fi;
+			break;
+		:: done !=1 -> skip;
+		fi;
+	od;
+
+od;
+}
+

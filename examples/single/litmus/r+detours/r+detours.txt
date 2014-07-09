@@ -1,0 +1,42 @@
+# x - 0
+# z - 1
+# T1: z=3; Rx <-x =0
+# T2: x=0; z=2;
+# T3: x=0
+# error state: x=0; z=3, Rx=0
+#
+# Cycles for happended-before relation:
+# isu&update(x=0,t3), isu(z=3), Rx=x, isu&update(x=0,t2), isu&update(z=2), update(z=3)
+
+thread t0
+initial q0
+transition q0	q1	write	3	1
+transition q1	q2	read	rx	0
+transition q2	q0	check	== rx  0
+end
+
+thread t1
+initial q0
+transition q0	q1	write	3	1
+transition q1	q2	read	rx	0
+transition q2	q0	check	== rx  0
+end
+
+thread t2
+initial q0
+transition q0	q1	write	3	1
+transition q1	q2	read	rx	0
+transition q2	q0	check	== rx  0
+end
+
+
+thread	t3
+initial q0
+transition q0	q1	write	0	0
+transition q1	q0	write	2	1
+end
+
+thread t4
+initial q0
+transition q0	q0	write	0	0
+end

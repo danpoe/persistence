@@ -1,0 +1,142 @@
+/* Arbiter lock */
+/* Instantiation: 1 arbiter, 2 clients */
+
+forbidden
+  * * * * * CS CS * * *;
+  * * * * * CS * CS * *;
+  * * * * * CS * * CS *;
+  * * * * * CS * * * CS;
+  * * * * * * CS CS * *;
+  * * * * * * CS * CS *;
+  * * * * * * CS * * CS;
+  * * * * * * * CS CS *;
+  * * * * * * * CS * CS;
+  * * * * * * * * CS CS;
+  
+
+data
+  req = 0 : [0:5]
+  turn = 0 : [0:5]
+
+/* Arbiter */
+process
+registers
+  $r0 = 0 : [0:5]
+text
+  L0: read: $r0 := req;
+  if $r0 != 0 then{
+    write: turn := $r0;
+    read: turn = 0
+  };
+  goto L0
+
+process
+registers
+  $r0 = 0 : [0:5]
+text
+  L0: read: $r0 := req;
+  if $r0 != 0 then{
+    write: turn := $r0;
+    read: turn = 0
+  };
+  goto L0
+
+process
+registers
+  $r0 = 0 : [0:5]
+text
+  L0: read: $r0 := req;
+  if $r0 != 0 then{
+    write: turn := $r0;
+    read: turn = 0
+  };
+  goto L0
+
+process
+registers
+  $r0 = 0 : [0:5]
+text
+  L0: read: $r0 := req;
+  if $r0 != 0 then{
+    write: turn := $r0;
+    read: turn = 0
+  };
+  goto L0
+
+process
+registers
+  $r0 = 0 : [0:5]
+text
+  L0: read: $r0 := req;
+  if $r0 != 0 then{
+    write: turn := $r0;
+    read: turn = 0
+  };
+  goto L0
+
+/* Client 1 */
+process
+registers
+  $pid = 1 : [0:5]
+  $r0 = 0 : [0:5]
+text
+  L0: write: req := $pid;
+  read: $r0 := turn;
+  if $r0 != $pid then
+    goto L0;
+  CS: write: req := 0;
+  write: turn := 0;
+  goto L0
+
+process
+registers
+  $pid = 2 : [0:5]
+  $r0 = 0 : [0:5]
+text
+  L0: write: req := $pid;
+  read: $r0 := turn;
+  if $r0 != $pid then
+    goto L0;
+  CS: write: req := 0;
+  write: turn := 0;
+  goto L0
+
+process
+registers
+  $pid = 3 : [0:5]
+  $r0 = 0 : [0:5]
+text
+  L0: write: req := $pid;
+  read: $r0 := turn;
+  if $r0 != $pid then
+    goto L0;
+  CS: write: req := 0;
+  write: turn := 0;
+  goto L0
+
+process
+registers
+  $pid = 4 : [0:5]
+  $r0 = 0 : [0:5]
+text
+  L0: write: req := $pid;
+  read: $r0 := turn;
+  if $r0 != $pid then
+    goto L0;
+  CS: write: req := 0;
+  write: turn := 0;
+  goto L0
+
+process
+registers
+  $pid = 5 : [0:5]
+  $r0 = 0 : [0:5]
+text
+  L0: write: req := $pid;
+  read: $r0 := turn;
+  if $r0 != $pid then
+    goto L0;
+  CS: write: req := 0;
+  write: turn := 0;
+  goto L0
+

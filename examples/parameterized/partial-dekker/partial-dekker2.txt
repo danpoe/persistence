@@ -1,0 +1,79 @@
+#
+# Dekker's mutex algorithm:
+# http://en.wikipedia.org/wiki/Dekker's_algorithm
+#
+#
+# q0:   flag[0] = true;
+# q1:   while (flag[1] == true) {
+# q2:      if (turn ≠ 0) {
+# q3:         flag[0] = false;
+# q4:         while (turn ≠ 0) {
+# q5:         }
+# q6:         flag[0] = true;
+# q7:      }
+# q8:   }
+#  
+#    // critical section
+#    ...
+# q9:   turn    = 1;
+# q10:   flag[0] = false;
+#    // remainder section
+#
+# Memory layout:
+# 0 — flag[0]
+# 1 — flag[1]
+# 2 — turn
+
+
+thread t0
+initial q0
+transition q0	q1	write	1	0
+
+transition q1	q11	read	flag	1
+transition q11	q2	check	== flag 1
+transition q11	q6	check	== flag 0
+
+transition q2	q21	read	turn	2
+transition q21	q3	check	!= turn 0
+transition q21	q1	check	== turn 0
+
+transition q3	q4	write	0	0
+
+transition q4	q41	read	turn	2
+transition q41	q4	check	!= turn 0
+transition q41	q5	check	== turn 0
+
+transition q5	q1	write	1	0
+
+transition q6	q7	write	1	2
+transition q7	q8	write	0	0
+
+transition q8	q0	noop
+end
+
+
+thread t1
+initial q0
+transition q0	q1	write	1	1
+
+transition q1	q11	read	flag	0
+transition q11	q2	check	== flag 1
+transition q11	q6	check	== flag 0
+
+transition q2	q21	read	turn	2
+transition q21	q3	check	!= turn 1
+transition q21	q1	check	== turn 1
+
+transition q3	q4	write	0	1
+
+transition q4	q41	read	turn	2
+transition q41	q4	check	!= turn 1
+transition q41	q5	check	== turn 1
+
+transition q5	q1	write	1	1
+
+transition q6	q7	write	0	2
+transition q7	q8	write	0	1
+
+transition q8	q0	noop
+end

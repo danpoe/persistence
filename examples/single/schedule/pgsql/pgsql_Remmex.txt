@@ -1,0 +1,106 @@
+
+int latch=1;
+int work=0;
+int latchset=0;
+
+
+proctype p1 {
+int workdone = 0;
+int llatch;
+int llatchset;
+int error;	
+do
+:: true ->
+		store(latch, 0);
+		if
+		:: load(work,1) -> store(work,0); workdone = 1;	
+		:: load(work,0) -> skip;
+		fi;
+		llatchset = loadval(latchset);
+		llatch = loadval(latch);
+		if
+		:: llatch == 0 && workdone == 0 && llatchset == 1 -> error = 1;
+  		:: llatch != 0 || workdone != 0 || llatchset != 1 -> error = 0;
+		fi;
+		do
+		:: load(latch,1) -> break;
+		:: load(latch,0) -> skip;
+		od;
+od;
+}
+
+
+proctype waker1 {
+do
+:: true ->
+		store(latchset, 0);
+		store(work, 1);
+
+		if
+		:: load(latch,1) -> skip;
+		:: load(latch,0) -> store(latch,1);
+		fi;
+		
+		store(latchset, 1);
+od;
+}
+
+proctype waker2 {
+do
+:: true ->
+		store(latchset, 0);
+		store(work, 1);
+
+		if
+		:: load(latch,1) -> skip;
+		:: load(latch,0) -> store(latch,1);
+		fi;
+		
+		store(latchset, 1);
+od;
+}
+
+proctype waker3 {
+do
+:: true ->
+		store(latchset, 0);
+		store(work, 1);
+
+		if
+		:: load(latch,1) -> skip;
+		:: load(latch,0) -> store(latch,1);
+		fi;
+		
+		store(latchset, 1);
+od;
+}
+
+proctype waker4 {
+do
+:: true ->
+		store(latchset, 0);
+		store(work, 1);
+
+		if
+		:: load(latch,1) -> skip;
+		:: load(latch,0) -> store(latch,1);
+		fi;
+		
+		store(latchset, 1);
+od;
+}
+
+proctype waker5 {
+do
+:: true ->
+		store(latchset, 0);
+		store(work, 1);
+
+		if
+		:: load(latch,1) -> skip;
+		:: load(latch,0) -> store(latch,1);
+		fi;
+		
+		store(latchset, 1);
+od;
+}

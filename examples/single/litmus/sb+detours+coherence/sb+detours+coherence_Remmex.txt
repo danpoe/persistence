@@ -1,0 +1,143 @@
+int x = 0;
+int y = 0;
+int z = 0;
+
+proctype p0 {
+int rx;
+int ry;	
+int rz;
+int rx1;
+int error = 0;
+do
+:: true ->
+		store(x,1);
+		store(z,3);
+		rx = loadval(x);
+		do
+		:: rx != 1 -> rx = loadval(x);
+		:: rx == 1 -> break; 		
+		od;
+		rx1 = loadval(x);
+		ry = loadval(y);
+		rz = loadval(z);
+		if
+		:: rx == 1 && rx1 == 1 && ry == 0 && rz == 3 -> error = 1;
+		:: rx != 1 || rx1 != 1 || ry != 0 || rz != 3 -> skip;
+		fi;
+
+od;
+}
+
+
+proctype p1 {
+int rx;
+int ry;	
+int rz;
+int rx1;
+int error = 0;
+do
+:: true ->
+		store(x,1);
+		store(z,3);
+		rx = loadval(x);
+		do
+		:: rx != 1 -> rx = loadval(x);
+		:: rx == 1 -> break; 		
+		od;
+		rx1 = loadval(x);
+		ry = loadval(y);
+		rz = loadval(z);
+		if
+		:: rx == 1 && rx1 == 1 && ry == 0 && rz == 3 -> error = 1;
+		:: rx != 1 || rx1 != 1 || ry != 0 || rz != 3 -> skip;
+		fi;
+
+od;
+}
+
+
+proctype p2 {
+int rx;
+int ry;
+int ry1;
+int rz;
+int error = 0;
+do
+:: true ->
+		store(x,1);
+		ry = loadval(y);
+		do
+		:: ry != 0 -> ry = loadval(y);
+		:: ry == 0 -> break; 		
+		od;
+		rx = loadval(x);
+		ry1 = loadval(y);
+		rz = loadval(z);
+		if
+		:: rx == 1 && ry == 0 && ry1 == 0 && rz == 3 -> error = 1;
+		:: rx != 1 || ry != 0 || ry1 != 0 || rz != 3 -> skip;
+		fi;
+od;
+}
+
+proctype p3 {
+int rx;
+int ry;
+int ry1;
+int rz;
+int error = 0;
+do
+:: true ->
+		store(x,1);
+		ry = loadval(y);
+		do
+		:: ry != 0 -> ry = loadval(y);
+		:: ry == 0 -> break; 		
+		od;
+		rx = loadval(x);
+		ry1 = loadval(y);
+		rz = loadval(z);
+		if
+		:: rx == 1 && ry == 0 && ry1 == 0 && rz == 3 -> error = 1;
+		:: rx != 1 || ry != 0 || ry1 != 0 || rz != 3 -> skip;
+		fi;
+od;
+}
+
+proctype p4 {
+int rx;
+int ry;
+int rz;
+int error = 0;
+do
+:: true ->
+		store(y,0);
+		store(z,2);
+		rx = loadval(x);
+		ry = loadval(y);
+		rz = loadval(z);
+		if
+		:: rx == 1 && ry == 0 && rz == 3 -> error = 1;
+		:: rx != 1 || ry != 0 || rz != 3 -> skip;
+		fi;
+od;
+}
+
+
+proctype p5 {
+int rx;
+int ry;
+int rz;
+int error = 0;
+do
+:: true ->
+		store(y,0);
+		rx = loadval(x);
+		ry = loadval(y);
+		rz = loadval(z);
+		if
+		:: rx == 1 && ry == 0 && rz == 3 -> error = 1;
+		:: rx != 1 || ry != 0 || rz != 3 -> skip;
+		fi;
+od;
+}

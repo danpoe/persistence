@@ -1,0 +1,132 @@
+int x = 0;
+int y = 0;
+
+proctype p0 {
+int rx;
+int ry;
+int ry1;
+int error = 0;
+do
+:: true ->
+		store(x,0);
+		ry = loadval(y);
+		do
+		:: ry != 2 -> ry = loadval(y);
+		:: ry == 2 -> break; 		
+		od;
+		rx = loadval(x);
+		ry1 = loadval(y);
+		if
+		:: rx == 0 && ry == 2 && ry1 == 3 -> error = 1;
+		:: rx != 0 || ry != 2 || ry1 !=3  -> skip;
+		fi;
+
+od;
+}
+
+
+proctype p1 {
+int rx;
+int ry;
+int ry1;
+int error = 0;
+do
+:: true ->
+		store(x,0);
+		ry = loadval(y);
+		do
+		:: ry != 2 -> ry = loadval(y);
+		:: ry == 2 -> break; 		
+		od;
+		rx = loadval(x);
+		ry1 = loadval(y);
+		if
+		:: rx == 0 && ry == 2 && ry1 == 3 -> error = 1;
+		:: rx != 0 || ry != 2 || ry1 !=3  -> skip;
+		fi;
+
+od;
+}
+
+proctype p2 {
+int rx;
+int ry;
+int error = 0;
+do
+:: true ->
+		store(x,0);
+		store(y,2);
+		rx = loadval(x);
+		ry = loadval(y);
+		if
+		:: rx == 0 && ry == 3 -> error = 1;
+		:: rx != 0 || ry != 3 -> skip;
+		fi;
+od;
+}
+
+proctype p3 {
+int rx;
+int ry;
+int rx1;
+int error = 0;
+do
+:: true ->
+		store(y,3);
+       		rx = loadval(x);
+		do
+		:: rx != 0 -> rx = loadval(x);
+		:: rx == 0 -> break; 		
+		od;
+		ry = loadval(y);
+		rx1 = loadval(x);
+		if
+		:: rx == 0 && rx1 == 0 && ry == 3 -> error = 1;
+		:: rx != 0 || rx1 != 0 || ry != 3 -> skip;
+		fi;
+od;
+}
+
+proctype p4 {
+int rx;
+int ry;
+int rx1;
+int error = 0;
+do
+:: true ->
+		store(y,3);
+       		rx = loadval(x);
+		do
+		:: rx != 0 -> rx = loadval(x);
+		:: rx == 0 -> break; 		
+		od;
+		ry = loadval(y);
+		rx1 = loadval(x);
+		if
+		:: rx == 0 && rx1 == 0 && ry == 3 -> error = 1;
+		:: rx != 0 || rx1 != 0 || ry != 3 -> skip;
+		fi;
+od;
+}
+
+proctype p5 {
+int rx;
+int ry;
+int rx1;
+int error = 0;
+do
+:: true ->
+		store(y,3);
+       		rx = loadval(x);
+		do
+		:: rx != 0 -> rx = loadval(x);
+		:: rx == 0 -> break; 		
+		od;
+		ry = loadval(y);
+		rx1 = loadval(x);
+		if
+		:: rx == 0 && rx1 == 0 && ry == 3 -> error = 1;
+		:: rx != 0 || rx1 != 0 || ry != 3 -> skip;
+		fi;
+od;
+}

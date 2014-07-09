@@ -1,0 +1,85 @@
+forbidden
+  * ERROR * * * *;
+  * * ERROR * * * ;
+  * * * ERROR * *;
+  * * * * ERROR *;
+  * * * * * ERROR
+
+data
+  msg = 0 : [0:1]
+
+process(1)
+registers
+  $r0 = 0 : [0:10]
+text
+  L0: 
+   if $r0 = 10 then {
+     goto END
+  } else {
+	either {
+           write: msg := $r0  
+        or
+           $r0 := $r0 + 1
+        };
+	goto L0
+  };
+END: nop
+
+process(1)
+registers
+  $val1 = * : [0:1]
+  $val2 = * : [0:1]
+text
+  L0: nop;
+  read: $val1 := msg;
+  read: $val2 := msg;
+  if $val1 > $val2 then
+    ERROR: nop
+  
+process(1)
+registers
+  $val1 = * : [0:1]
+  $val2 = * : [0:1]
+text
+  L0: nop;
+  read: $val1 := msg;
+  read: $val2 := msg;
+  if $val1 > $val2 then
+    ERROR: nop
+
+process(1)
+registers
+  $val1 = * : [0:1]
+  $val2 = * : [0:1]
+text
+  L0: nop;
+  read: $val1 := msg;
+  read: $val2 := msg;
+  if $val1 > $val2 then
+    ERROR: nop
+
+
+process(1)
+registers
+  $val1 = * : [0:1]
+  $val2 = * : [0:1]
+text
+  L0: nop;
+  read: $val1 := msg;
+  read: $val2 := msg;
+  if $val1 > $val2 then
+    ERROR: nop
+
+
+process(1)
+registers
+  $val1 = * : [0:1]
+  $val2 = * : [0:1]
+text
+  L0: nop;
+  read: $val1 := msg;
+  read: $val2 := msg;
+  if $val1 > $val2 then
+    ERROR: nop
+
+

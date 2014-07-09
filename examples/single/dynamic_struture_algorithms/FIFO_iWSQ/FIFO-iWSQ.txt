@@ -1,0 +1,70 @@
+#
+# FIFO Working steal queue
+#
+# Idempotent work stealing
+# 
+# 
+# 
+# Memory layout:
+# 0 — H
+# 1 — T
+# 2 — Data
+# 3 - Lock
+
+memory_size 4
+
+thread owner
+initial t00
+
+transition	t00	t01	local 	n 10 
+
+transition 	t01 	pop0	noop
+transition 	t01 	push0	noop
+
+transition	pop0	pop1	read	H	0
+transition 	pop1	pop2	read	T 	1
+transition 	pop2	t01	check	==	H	T
+transition 	pop2	pop3	check 	!=	H	T
+transition	pop3	pop4	read	data	2
+transition	pop4	t01	write	+ H  1	0
+
+transition	push0	push1	read	H	0
+transition	push1 	push2	read	T	1
+transition	push2	push20	check	<	T	n
+transition	push2	t01	check	>=	T	n
+transition	push20	push3	write	1	2
+transition	push3	t01	write	+ T  1 	1
+
+end
+
+
+thread steal
+initial t00
+
+transition	t00	t01	local 	n 10
+
+transition	t01	t1	read	H	0
+transition	t1	t2	read	T	1
+transition	t2	t01	check	==	H	T
+transition	t2	t3	check	!=	H 	T
+transition	t3	t4	read	data	2
+
+transition	t4	t41	lock
+transition	t41	t42	read	rlock	3
+transition 	t42	t43	check	== rlock 0
+transition 	t43	t44	write	1	3
+transition 	t44	t5	unlock
+
+transition	t5	t6	read	H1	0
+transition	t6	t61	check	<	H1	n
+transition	t6	unlock	check 	>=	H1	n	
+transition	t61	t7	check 	==	H1	H
+transition	t61	unlock	check 	!=	H1	H
+
+transition	t7	unlock	write	+ H 1	0
+
+transition	unlock	unlock1	lock
+transition 	unlock1 unlock2	write	0	3
+transition	unlock2	t01	unlock
+		
+end

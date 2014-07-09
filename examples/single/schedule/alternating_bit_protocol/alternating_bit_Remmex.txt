@@ -1,0 +1,64 @@
+int msg = 2;
+int ack = 2;
+
+proctype P0 {
+int t = 0;
+int Lack = 0;
+do
+:: true ->
+	do
+	:: true ->
+		store(msg,0);
+		Lack = loadval(ack);
+		if
+		:: Lack == 0 -> break;
+		:: Lack != 0 -> skip;
+		fi;
+	od;
+	
+	t = 1;
+	
+	do
+	:: true ->
+		store(msg,1);
+		Lack = loadval(ack);
+		if
+		:: Lack == 1 -> break;
+		:: Lack != 1 -> skip;
+		fi;
+	od;
+	
+	t = 0;
+od;
+}
+
+proctype P1 {
+int t = 0;
+int Lmsg = 0;
+do
+:: true ->
+	do
+	:: true ->
+		store(ack,1);
+		Lmsg = loadval(msg);
+		if
+		:: Lmsg == 0 -> break;
+		:: Lmsg != 0 -> skip;
+		fi;
+	od;
+	
+	t = 1;
+	
+	do
+	:: true ->
+		store(ack,0);
+		Lmsg = loadval(msg);
+		if
+		:: Lmsg == 1 -> break;
+		:: Lmsg != 1 -> skip;
+		fi;
+	od;
+	
+	t = 0;
+od;
+}

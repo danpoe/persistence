@@ -1,0 +1,33 @@
+thread t0
+initial q0
+
+transition q0	q1	read	lAck 	0
+transition q1	q2	check	&& == lAck 0 == lSSt 0
+transition q1	q3	check 	&& != lAck 0 != lSSt 0
+
+transition q3	q4	check != lSSt 0
+transition q4	q5	local lSSt	0
+transition q2	q4	check == lSSt 0
+transition q4	q5 	local lSSt	1
+transition q5	q6 	local lSCnt 	+ lSCnt 1
+transition q6	q7	write	lSSt	1
+
+transition q7 	q0	noop
+
+end
+
+
+thread t1
+initial q0
+
+transition q0	q1	read	lMsg 	1
+transition q1	q1	check	&& == lMsg 0 != lRSt 0
+transition q1	q2	check 	&& != lMsg 0 == lRSt 0
+
+transition q2	q3 	local lRSt	lMsg
+transition q3	q4 	local lRCnt 	+ lRCnt 1
+transition q4	q5	write	lRSt	0
+
+transition q5 	q0	noop
+
+end

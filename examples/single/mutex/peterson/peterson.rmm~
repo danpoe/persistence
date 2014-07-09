@@ -1,0 +1,222 @@
+/* 
+# Peterson's mutex algorithm for 4 processes (Filter lock):
+# http://en.wikipedia.org/wiki/Peterson%27s_algorithm#Filter_algorithm:_Peterson.27s_algorithm_for_N_processes
+#
+# // initialization
+# level[N+1] = { 0 };     // current level of processes 1...N. Do not use level[0]
+# waiting[N] = { 0 }; // the waiting process of each level 1...N-1
+# 
+# // code for process #i
+# for(l = 1; l < N; ++l) {
+#    level[i] = l;
+#    waiting[l] = i;
+#    while(waiting[l] == i &&
+#          (there exists k ≠ i, such that level[k] ≥ l)) {
+#        // busy wait
+#    }
+# }
+# 
+# // critical section
+# level[i] = 0; // exit section
+#
+*/
+
+forbidden
+  CS CS * *;
+  CS * CS *;
+  CS * * CS;
+  * CS CS *;
+  * CS * CS;
+  * * CS CS
+
+data
+  turn = * : [0:1]
+  level1 = 0 : [0:4]
+  level2 = 0 : [0:4]
+  level3 = 0 : [0:4]
+  level4 = 0 : [0:4]
+  waiting1 = 0: [0:4]
+  waiting2 = 0: [0:4]
+  waiting3 = 0: [0:4]
+
+process
+registers
+  $w = * : [0:4]
+  $l2 = * : [0:4]
+  $l3 = * : [0:4]
+  $l4 = * : [0:4]
+text
+L0:  write: level1 := 1;
+  write: waiting1 := 1;
+  read: $w := waiting1;
+  read: $l2 := level2;
+  read: $l3 := level3;
+  read: $l4 := level4;
+   
+  L1: if $w = 1 then
+	if  $l2 >= 1 || $l3 >= 1 || $l4 >= 1 then 
+		goto L1;
+  
+  write: level1 := 2;
+  write: waiting2 := 1;
+  read: $w := waiting2;
+  read: $l2 := level2;
+  read: $l3 := level3;
+  read: $l4 := level4;
+   
+  L2: if $w = 1 then
+	if $l2 >= 2 || $l3 >= 2 || $l4 >= 2 then 
+		goto L2;
+
+  write: level1 := 3;
+  write: waiting3 := 1;
+  read: $w := waiting3;
+  read: $l2 := level2;
+  read: $l3 := level3;
+  read: $l4 := level4;
+   
+  L3: if $w = 1 then
+	if $l2 >= 3 || $l3 >= 3 || $l4 >= 3 then 
+		goto L3;
+
+
+  CS: nop;
+  write: level1 := 0;
+  goto L0
+
+process
+registers
+  $w = * : [0:4]
+  $l1 = * : [0:4]
+  $l3 = * : [0:4]
+  $l4 = * : [0:4]
+text
+L0:  write: level2 := 1;
+  write: waiting1 := 2;
+  read: $w := waiting1;
+  read: $l1 := level1;
+  read: $l3 := level3;
+  read: $l4 := level4;
+   
+  L1: if $w = 2 then
+	if $l1 >= 1 || $l3 >= 1 || $l4 >= 1 then 
+		goto L1;
+  
+  write: level2 := 2;
+  write: waiting2 := 2;
+  read: $w := waiting2;
+  read: $l1 := level1;
+  read: $l3 := level3;
+  read: $l4 := level4;
+   
+  L2: if $w = 2 then
+	if $l1 >= 2 || $l3 >= 2 || $l4 >= 2 then 
+		goto L2;
+
+  write: level2 := 3;
+  write: waiting3 := 2;
+  read: $w := waiting3;
+  read: $l1 := level1;
+  read: $l3 := level3;
+  read: $l4 := level4;
+   
+  L3: if $w = 2 then
+	if $l1 >= 3 || $l3 >= 3 || $l4 >= 3 then 
+		goto L3;
+
+
+  CS: nop;
+  write: level2 := 0;
+  goto L0
+
+
+process
+registers
+  $w = * : [0:4]
+  $l1 = * : [0:4]
+  $l2 = * : [0:4]
+  $l4 = * : [0:4]
+text
+L0:  write: level3 := 1;
+  write: waiting1 := 3;
+  read: $w := waiting1;
+  read: $l1 := level1;
+  read: $l2 := level2;
+  read: $l4 := level4;
+   
+  L1: if $w = 3 then
+	if $l1 >= 1 || $l2 >= 1 || $l4 >= 1 then 
+	goto L1;
+  
+  write: level3 := 2;
+  write: waiting2 := 3;
+  read: $w := waiting2;
+  read: $l1 := level1;
+  read: $l2 := level2;
+  read: $l4 := level4;
+   
+  L2: if $w = 3 then
+	if $l1 >= 2 || $l2 >= 2 || $l4 >= 2 then 
+	goto L2;
+
+  write: level3 := 3;
+  write: waiting3 := 3;
+  read: $w := waiting3;
+  read: $l1 := level1;
+  read: $l2 := level2;
+  read: $l4 := level4;
+   
+  L3: if $w = 3 then
+	if $l1 >= 3 || $l2 >= 3 || $l4 >= 3 then 
+	goto L3;
+
+
+  CS: nop;
+  write: level3 := 0;
+  goto L0
+
+
+process
+registers
+  $w = * : [0:4]
+  $l1 = * : [0:4]
+  $l2 = * : [0:4]
+  $l3 = * : [0:4]
+text
+L0:  write: level4 := 1;
+  write: waiting1 := 4;
+  read: $w := waiting1;
+  read: $l1 := level1;
+  read: $l2 := level2;
+  read: $l3 := level3;
+   
+  L1: if $w = 4 then
+	if $l1 >= 1 || $l2 >= 1 || $l3 >= 1 then 
+	goto L1;
+  
+  write: level4 := 2;
+  write: waiting2 := 4;
+  read: $w := waiting2;
+  read: $l1 := level1;
+  read: $l2 := level2;
+  read: $l3 := level3;
+   
+  L2: if $w = 4 then
+	if $l1 >= 2 || $l2 >= 2 || $l3 >= 2 then 
+	goto L2;
+
+  write: level4 := 3;
+  write: waiting3 := 4;
+  read: $w := waiting3;
+  read: $l1 := level1;
+  read: $l2 := level2;
+  read: $l3 := level3;
+   
+  L3: if $w = 4 then
+	if $l1 >= 3 || $l2 >= 3 || $l3 >= 3 then 
+	goto L3;
+
+
+  CS: nop;
+  write: level4 := 0;
+  goto L0

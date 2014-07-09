@@ -1,0 +1,84 @@
+# Burn's algorithm
+# Memory layout:
+# 0 - flag[0]
+# 1 - flag[1]
+# 2 - flag[2]
+
+memory_size 3
+
+thread t0
+
+initial q0
+
+transition q0 	q1 	write 0 0
+
+transition q1	q2	noop
+
+transition q2 	q3 	write 1 0
+
+transition q3 	q4 	noop
+
+transition q4 	q41	read	flag_1 1
+transition q41 	q42	read	flag_2 2
+transition q42	q4 	check  	|| == flag_1 1 == flag_2 1
+transition q42	q5	check 	&& != flag_1 1 != flag_2 1
+
+transition q5 	q0 	write 	0 0
+
+end
+
+
+thread t1
+
+initial q0
+
+transition q0 	q1 	write 0 1
+
+transition q1	q11	read	flag_0	0
+transition q11 	q0	check 	== flag_0 1
+transition q11	q2	check	!= flag_0 1
+
+transition q2 	q3 	write 1 1
+
+transition q3	q31	read	flag_0	0
+transition q31 	q0	check 	== flag_0 1
+transition q31	q4	check	!= flag_0 1
+
+transition q4 	q41	read	flag_2 2
+transition q41	q4 	check  	== flag_2 1
+transition q41	q5	check 	!= flag_2 1
+
+
+transition q5 	q0 	write 	0 1
+
+end
+
+
+thread t2
+
+initial q0
+
+transition q0 	q1 	write 0 2
+
+transition q1	q11	read	flag_0	0
+transition q11	q12	read	flag_1 	1
+transition q12 	q0	check 	|| == flag_0 1 == flag_0 1
+transition q12	q2	check	&& != flag_0 1 != flag_1 1
+
+transition q2 	q3 	write 1 2
+
+transition q3	q31	read	flag_0	0
+transition q31	q32	read	flag_1 	1
+transition q32 	q0	check 	|| == flag_0 1 == flag_0 1
+transition q32	q4	check	&& != flag_0 1 != flag_1 1
+
+transition q4 	q5	noop
+
+
+transition q5 	q0 	write 	0 2
+
+end
+
+
+
+

@@ -1,0 +1,26 @@
+# x - 0
+# y - 1
+# z - 2
+# T1: repeat {x=0; z=1; x=0; y=1;}
+# T2: repeat {y=2; Rx <-x = 0;}
+# Error state: Rx=0; y=2; x=0; z=1
+# 
+# Cycles for happended-before relations:
+# isu&update(x=0), isu&update(z=1), isu(y=2), Rx=x, isu&update(x=0), isu&update(y=1), update(y=2) 
+
+thread t0
+initial q0
+transition q0	q1	write	0	0
+transition q1	q2	write	1	2
+transition q2	q3	write	0	0
+transition q3	q4	write	1	1
+transition q4	q0	noop
+end
+
+thread	t1
+initial q0
+transition q0	q1	write	2	1
+transition q1	q2	read	rx	0
+transition q2	q0	check	== rx  	0
+end
+

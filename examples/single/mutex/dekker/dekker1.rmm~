@@ -1,0 +1,82 @@
+/* Dekker's lock with deadlock protection
+#
+# Dekker's mutex algorithm:
+# http://en.wikipedia.org/wiki/Dekker's_algorithm
+#
+# while (true) {
+# q0:   flag[0] = true;
+# q1:   while (flag[1] == true) {
+# q2:      if (turn ≠ 0) {
+# q3:         flag[0] = false;
+# q4:         while (turn ≠ 0) {
+# q5:         }
+# q6:         flag[0] = true;
+# q7:      }
+# q8:   }
+#  
+#    // critical section
+#    ...
+# q9:   turn    = 1;
+# q10:   flag[0] = false;
+#    // remainder section
+#   }
+
+
+Problem here: 
+ */
+
+forbidden
+  CS CS
+data
+  turn = * : [0:1]
+
+process(1)
+data
+  flag = 0 : [0:1]
+registers
+  $r0 = * : [0:1]
+  $r1 = * : [0:1]
+text
+  L0: write: flag[my] := 1;
+  read: $r0 := flag[0];
+  while $r0 = 1 do {
+    read: $r1 := turn;
+    if $r1 != 0 then{
+      write: flag[my] := 0;
+      while $r1 != 0 do
+        read: $r1 := turn;
+      write: flag[my] := 1
+    };
+    read: $r0 := flag[0]
+  };
+  CS: nop; 
+  write: turn := 1;
+  write: flag[my] := 0;
+  goto L0
+
+process(1)
+data
+  flag = 0 : [0:1]
+registers
+  $r0 = * : [0:1]
+  $r1 = * : [0:1]
+text
+  L0: write: flag[my] := 1;
+  read: $r0 := flag[0];
+  while $r0 = 1 do {
+    read: $r1 := turn;
+    if $r1 != 1 then{
+      write: flag[my] := 0;
+      while $r1 != 1 do
+        read: $r1 := turn;
+      write: flag[my] := 1
+    };
+    read: $r0 := flag[0]
+  };
+  CS: nop; 
+  write: turn := 0;
+  write: flag[my] := 0;
+  goto L0
+  
+
+

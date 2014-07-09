@@ -1,0 +1,20 @@
+To do fence inserting with Memorax, Persist, Trencher, and Musketeer:
+
++ Memorax: ./memorax fencins -a sb --rff filename.rmm
+
++ Persist: ./PERSIST -b -f filename.txt
+	or ./PERSIST -b -fa 2 0 filename.txt
+  	or ./PERSIST -b -fa 1 0 filename.txt
+
++ Trencher: ./trencher -b -f filename.txt
+
++ Musketeer:
+  - ./goto-cc -o filename.gb filename.c 
+  - ./musketeer --mm tso filename.gb 
+  - ./fence-inserter.py x86 fence results.txt 
+
++ Remmex: java -Xss2048k -Xmx1024m -jar remmex.jar -f filename_Rememx.txt -P safety -MM TSO -Mode errorCorrection -e number_processes int1 int2 ... intn -maximalPermissive 
+
+##########################
+#This is the end of file.#
+##########################

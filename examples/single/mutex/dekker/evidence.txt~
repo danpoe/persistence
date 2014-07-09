@@ -1,0 +1,8 @@
+1. effective program verfitification for relaxed memory model: detect bugs
+2. counter-example guided fence insertion under TSO: detect and correct
+3. Trencher  detect and correct(good)
+4: musketeer detect and correct (good)
+
+5: automatic fence insertion
+
+partial coherence abstractions for relaxed memory models: this paper contains result for PSO

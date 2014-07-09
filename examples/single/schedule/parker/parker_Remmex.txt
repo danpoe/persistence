@@ -1,0 +1,303 @@
+int counter = 1;
+int mutex = 0;
+int C = 0;
+int hasend = 0;
+
+proctype p1 {
+int lmutex;
+int error;
+int r0;
+do
+:: load(C,0) ->
+	if
+	:: load(counter,1) -> store(counter,0);
+	:: load(counter,0) -> 
+		lmutex = loadval(mutex);
+		if
+		:: lmutex == 1 -> skip;
+		:: lmutex != 1 -> 
+			LOCK
+			if
+			:: lmutex == 0 -> store(mutex,1);
+			:: lmutex == 2 -> store(mutex,3);
+			:: lmutex == 4 -> store(mutex,5);
+			fi;
+			UNLOCK
+			if
+			:: load(counter,1) ->
+				store(counter,0);
+				lmutex = loadval(mutex);
+				LOCK
+				if
+				:: lmutex == 1 -> store(mutex,0);
+				:: lmutex == 3 -> store(mutex,2);
+				:: lmutex == 5 -> store(mutex,4);
+				fi;
+				UNLOCK
+			:: load(counter,0) -> 
+				LOCK
+				if
+				:: load(mutex,1) -> store(mutex,2);
+				fi;
+				UNLOCK
+				if
+				:: load(mutex,4) ->
+					LOCK
+					store(mutex,1);
+					UNLOCK
+				:: true ->
+					if
+					:: load(hasend,1) ->
+						r0 = loadval(mutex); 
+						if
+						:: r0 != 4 -> error = 1;
+						fi;
+					fi;	
+				fi;
+				store(counter,0);
+				lmutex = loadval(mutex);
+				LOCK
+				if
+				:: lmutex == 1 -> store(mutex,0);
+				:: lmutex == 3 -> store(mutex,2);
+				:: lmutex == 5 -> store(mutex,4);
+				fi;
+				UNLOCK
+			fi;		
+		fi;
+	fi;
+:: load(C,1) -> break;
+od;
+}
+
+proctype p2 {
+
+int lmutex;
+int r0;
+
+if 
+:: true ->
+	LOCK
+	store(C,1);
+	UNLOCK
+
+	LOCK	
+	lmutex = loadval(mutex);
+	if
+	:: lmutex == 0 -> store(mutex,1);
+	:: lmutex == 2 -> store(mutex,3);
+	:: lmutex == 4 -> store(mutex,5);
+	fi;
+	UNLOCK
+	r0 = loadval(counter);
+	store(counter,1);
+	LOCK
+	lmutex = loadval(mutex);
+	if
+	:: lmutex == 1 -> store(mutex,0);
+	:: lmutex == 3 -> store(mutex,2);
+	:: lmutex == 5 -> store(mutex,4);
+	fi;
+	UNLOCK
+	if
+	:: r0 == 0 ->
+		LOCK
+		lmutex = loadval(mutex);
+		if
+		:: lmutex == 0 -> store(mutex,0);
+		:: lmutex == 1 -> store(mutex,1);
+		:: lmutex == 2 -> store(mutex,4);
+		:: lmutex == 3 -> store(mutex,5);
+		fi;
+		UNLOCK
+	:: r0 != 0 -> skip;
+	fi;
+	store(hasend,1);
+fi;
+}
+
+proctype p3 {
+
+int lmutex;
+int r0;
+
+if 
+:: true ->
+	LOCK
+	store(C,1);
+	UNLOCK
+
+	LOCK	
+	lmutex = loadval(mutex);
+	if
+	:: lmutex == 0 -> store(mutex,1);
+	:: lmutex == 2 -> store(mutex,3);
+	:: lmutex == 4 -> store(mutex,5);
+	fi;
+	UNLOCK
+	r0 = loadval(counter);
+	store(counter,1);
+	LOCK
+	lmutex = loadval(mutex);
+	if
+	:: lmutex == 1 -> store(mutex,0);
+	:: lmutex == 3 -> store(mutex,2);
+	:: lmutex == 5 -> store(mutex,4);
+	fi;
+	UNLOCK
+	if
+	:: r0 == 0 ->
+		LOCK
+		lmutex = loadval(mutex);
+		if
+		:: lmutex == 0 -> store(mutex,0);
+		:: lmutex == 1 -> store(mutex,1);
+		:: lmutex == 2 -> store(mutex,4);
+		:: lmutex == 3 -> store(mutex,5);
+		fi;
+		UNLOCK
+	:: r0 != 0 -> skip;
+	fi;
+	store(hasend,1);
+fi;
+}
+
+proctype p4 {
+
+int lmutex;
+int r0;
+
+if 
+:: true ->
+	LOCK
+	store(C,1);
+	UNLOCK
+
+	LOCK	
+	lmutex = loadval(mutex);
+	if
+	:: lmutex == 0 -> store(mutex,1);
+	:: lmutex == 2 -> store(mutex,3);
+	:: lmutex == 4 -> store(mutex,5);
+	fi;
+	UNLOCK
+	r0 = loadval(counter);
+	store(counter,1);
+	LOCK
+	lmutex = loadval(mutex);
+	if
+	:: lmutex == 1 -> store(mutex,0);
+	:: lmutex == 3 -> store(mutex,2);
+	:: lmutex == 5 -> store(mutex,4);
+	fi;
+	UNLOCK
+	if
+	:: r0 == 0 ->
+		LOCK
+		lmutex = loadval(mutex);
+		if
+		:: lmutex == 0 -> store(mutex,0);
+		:: lmutex == 1 -> store(mutex,1);
+		:: lmutex == 2 -> store(mutex,4);
+		:: lmutex == 3 -> store(mutex,5);
+		fi;
+		UNLOCK
+	:: r0 != 0 -> skip;
+	fi;
+	store(hasend,1);
+fi;
+}
+
+proctype p5 {
+
+int lmutex;
+int r0;
+
+if 
+:: true ->
+	LOCK
+	store(C,1);
+	UNLOCK
+
+	LOCK	
+	lmutex = loadval(mutex);
+	if
+	:: lmutex == 0 -> store(mutex,1);
+	:: lmutex == 2 -> store(mutex,3);
+	:: lmutex == 4 -> store(mutex,5);
+	fi;
+	UNLOCK
+	r0 = loadval(counter);
+	store(counter,1);
+	LOCK
+	lmutex = loadval(mutex);
+	if
+	:: lmutex == 1 -> store(mutex,0);
+	:: lmutex == 3 -> store(mutex,2);
+	:: lmutex == 5 -> store(mutex,4);
+	fi;
+	UNLOCK
+	if
+	:: r0 == 0 ->
+		LOCK
+		lmutex = loadval(mutex);
+		if
+		:: lmutex == 0 -> store(mutex,0);
+		:: lmutex == 1 -> store(mutex,1);
+		:: lmutex == 2 -> store(mutex,4);
+		:: lmutex == 3 -> store(mutex,5);
+		fi;
+		UNLOCK
+	:: r0 != 0 -> skip;
+	fi;
+	store(hasend,1);
+fi;
+}
+
+proctype p6 {
+
+int lmutex;
+int r0;
+
+if 
+:: true ->
+	LOCK
+	store(C,1);
+	UNLOCK
+
+	LOCK	
+	lmutex = loadval(mutex);
+	if
+	:: lmutex == 0 -> store(mutex,1);
+	:: lmutex == 2 -> store(mutex,3);
+	:: lmutex == 4 -> store(mutex,5);
+	fi;
+	UNLOCK
+	r0 = loadval(counter);
+	store(counter,1);
+	LOCK
+	lmutex = loadval(mutex);
+	if
+	:: lmutex == 1 -> store(mutex,0);
+	:: lmutex == 3 -> store(mutex,2);
+	:: lmutex == 5 -> store(mutex,4);
+	fi;
+	UNLOCK
+	if
+	:: r0 == 0 ->
+		LOCK
+		lmutex = loadval(mutex);
+		if
+		:: lmutex == 0 -> store(mutex,0);
+		:: lmutex == 1 -> store(mutex,1);
+		:: lmutex == 2 -> store(mutex,4);
+		:: lmutex == 3 -> store(mutex,5);
+		fi;
+		UNLOCK
+	:: r0 != 0 -> skip;
+	fi;
+	store(hasend,1);
+fi;
+}
+
+

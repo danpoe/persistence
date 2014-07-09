@@ -1,0 +1,319 @@
+bool c[4] = {false, false, false, false};
+int n[4] = {0, 0, 0, 0};
+
+proctype P0 {
+int i = 0;
+int count;
+int N = 4;
+int r;
+
+
+do
+:: true ->
+	store(c[i],true);
+	
+	do
+	:: load(n[1],0) ->
+  if
+  :: load(n[2],0) -> 
+	if
+	:: load(n[3],0) -> store(n[i],1); r = 1; break;
+	:: !load(n[3],0) -> skip;
+	fi;
+  :: !load(n[2],0) -> skip;
+  fi;
+	:: load(n[1],1) ->
+  if
+  :: (load(n[2],0) || load(n[2],1)) -> 
+	if
+  	:: (load(n[3],0) || load(n[3],1)) ->  store(n[i],2); r = 2; break;
+	:: (load(n[3],2) || load(n[3],3) || load(n[3],4)) -> skip;
+  	fi;
+  :: (load(n[2],2) || load(n[2],3) || load(n[2],4) ) -> skip;
+  fi;
+	:: load(n[2],1) ->
+  if
+  :: (load(n[3],0) || load(n[3],1)) -> 
+	if	
+	:: (load(n[1],0) || load(n[1],1)) ->  store(n[i],3); r = 3; break;
+	:: (load(n[1],2) || load(n[1],3) || load(n[1],4)) -> skip;
+	fi;
+  :: (load(n[3],2) || load(n[3],3) || load(n[3],4)) -> skip;
+  fi;
+	:: load(n[3],1) ->
+  if
+  :: (load(n[1],0) || load(n[1],1)) -> 
+	if
+  	:: (load(n[2],0) || load(n[2],1)) -> store(n[i],4); r = 4; break;
+	:: (load(n[2],2) || load(n[2],3)|| load(n[2],4)) -> skip;
+	fi;
+  :: (load(n[1],2) || load(n[1],3) || load(n[1],4)) -> skip;
+  fi;
+
+	od;
+	
+	store(c[i],false);
+	count = 0;
+	do
+	:: count < N ->
+		if
+		:: i == count -> skip;
+		:: i != count ->
+			if
+			:: load(c[count],false) -> skip;
+			fi;
+			
+			if
+			:: load(n[count],0) -> skip;
+			:: r == 1 && (load(n[count],1) || load(n[count],2) || load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 2 && (load(n[count],2) || load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 3 && (load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 4 && load(n[count],4) -> skip;
+			fi;
+		fi;
+		count = count + 1;	
+	:: count == N -> break;
+	od;
+	
+	store(n[i],0);
+od;	
+}
+
+proctype P1 {
+int i = 1;
+int count;
+int N = 4;
+int r;
+do
+:: true ->
+	store(c[i],true);
+	do
+	:: load(n[0],0) ->
+  if
+  :: load(n[2],0) -> 
+	if
+  	:: load(n[3],0) -> store(n[i],1); r = 1; break;
+	:: !load(n[3],0) -> skip;
+	fi;
+  :: !load(n[2],0) -> skip;
+  fi;
+	:: load(n[0],1) ->
+  if
+  :: (load(n[2],0) || load(n[2],1)) ->
+	if
+ 	:: (load(n[3],0) || load(n[3],1)) -> store(n[i],2); r = 2; break;
+	:: (load(n[3],2) || load(n[3],3) || load(n[3],4)) -> skip;
+	fi;	
+  :: (load(n[2],2) || load(n[2],3) || load(n[2],4)) -> skip;
+  fi;
+	:: load(n[2],1) ->
+  if
+  :: (load(n[3],0) || load(n[3],1)) ->
+	if
+  	:: (load(n[0],0) || load(n[0],1)) -> store(n[i],3); r = 3; break;
+	:: (load(n[0],2) || load(n[0],3) || load(n[0],4)) -> skip;
+	fi;	
+  :: (load(n[3],2) || load(n[3],3) || load(n[3],4)) -> skip;
+  fi;
+ 	:: load(n[3],1) ->
+  if
+  :: (load(n[0],0) || load(n[0],1)) ->
+	if
+  	:: (load(n[2],0) || load(n[2],1)) -> store(n[i],3); r = 4; break;
+	:: (load(n[2],2) || load(n[2],3) || load(n[2],4)) -> skip;
+	fi;	
+  :: (load(n[0],2) || load(n[0],3) || load(n[0],4)) -> skip;
+  fi;
+
+
+	od;
+	
+	store(c[i],false);
+	count = 0;
+	do
+	:: count < N ->
+		if
+		:: i == count -> skip;
+		:: i != count ->
+			if
+			:: load(c[count],false) -> skip;
+			fi;
+			
+			if
+			:: load(n[count],0) -> skip;
+			:: r == 1 && count > i && (load(n[count],1) || load(n[count],2) || load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 2 && count > i && (load(n[count],2) || load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 3 && count > i && (load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 4 && count > i && load(n[count],4) -> skip;
+
+			:: r == 1 && count < i && (load(n[count],2) || load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 2 && count < i && (load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 3 && count < i && load(n[count],4) -> skip;
+			fi;
+		fi;
+		count = count + 1;	
+	:: count == N -> break;
+	od;
+	
+	store(n[i],0);
+od;	
+}
+
+proctype P2 {
+int i = 2;
+int count;
+int N = 4;
+int r;
+do
+:: true ->
+	store(c[i],true);
+	do
+	:: load(n[0],0) ->
+  if
+  :: load(n[1],0) -> 
+	if
+  	:: load(n[3],0) -> store(n[i],1); r = 1; break;
+	:: !load(n[3],0) -> skip;	
+	fi;
+  :: !load(n[1],0) -> skip;
+  fi;
+	:: load(n[0],1) ->
+  if
+  :: (load(n[1],0) || load(n[1],1)) ->
+	if
+  	:: (load(n[3],0) || load(n[3],1)) -> store(n[i],2); r = 2; break;
+  	:: (load(n[3],2) || load(n[3],3) || load(n[3],4)) -> skip;
+	fi;
+  :: (load(n[1],2) || load(n[1],3) || load(n[1],4)) -> skip;
+  fi;
+	:: load(n[1],1) ->
+  if
+  :: (load(n[3],0) || load(n[3],1)) ->
+	if
+  	:: (load(n[0],0) || load(n[0],1)) -> store(n[i],3); r = 3; break;
+	:: (load(n[0],2) || load(n[0],3) || load(n[0],4)) -> skip;
+	fi;	
+  :: (load(n[3],2) || load(n[3],3) || load(n[3],4)) -> skip;
+  fi;
+	:: load(n[3],1) ->
+  if
+  :: (load(n[0],0) || load(n[0],1)) ->
+	if
+  	:: (load(n[1],0) || load(n[1],1)) -> store(n[i],3); r = 4; break;
+	:: (load(n[1],2) || load(n[1],3) || load(n[1],4)) -> skip;
+	fi;	
+  :: (load(n[0],2) || load(n[0],3) || load(n[0],4)) -> skip;
+  fi;
+	od;
+	
+	store(c[i],false);
+	count = 0;
+	do
+	:: count < N ->
+		if
+		:: i == count -> skip;
+		:: i != count ->
+			if
+			:: load(c[count],false) -> skip;
+			fi;
+			
+			if
+			:: load(n[count],0) -> skip;
+			:: r == 1 && count > i && (load(n[count],1) || load(n[count],2) || load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 2 && count > i && (load(n[count],2) || load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 3 && count > i && (load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 4 && count > i && load(n[count],4) -> skip;
+
+			:: r == 1 && count < i && (load(n[count],2) || load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 2 && count < i && (load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 3 && count < i && load(n[count],4) -> skip;
+			fi;
+		fi;
+		count = count + 1;	
+	:: count == N -> break;
+	od;
+	
+	store(n[i],0);
+od;	
+}
+
+
+proctype P3 {
+int i = 3;
+int count;
+int N = 4;
+int r;
+
+do
+:: true ->
+	store(c[i],true);
+	do
+	:: load(n[0],0) ->
+  if
+  :: load(n[1],0) -> 
+	if
+  	:: load(n[2],0) -> store(n[i],1); r = 1; break;
+	:: !load(n[2],0) -> skip;
+	fi;	
+  :: !load(n[1],0) -> skip;
+  fi;
+	:: load(n[0],1) ->
+  if
+  :: (load(n[1],0) || load(n[1],1)) ->
+	if
+  	:: (load(n[2],0) || load(n[2],1)) -> store(n[i],2); r = 2; break;
+  	:: (load(n[2],2) || load(n[2],3) || load(n[2],4)) -> skip;
+	fi;
+  :: (load(n[1],2) || load(n[1],3) || load(n[1],4)) -> skip;
+  fi;
+	:: load(n[1],1) ->
+  if
+  :: (load(n[2],0) || load(n[2],1)) ->
+	if
+  	:: (load(n[0],0) || load(n[0],1)) -> store(n[i],3); r = 3; break;
+	:: (load(n[0],2) || load(n[0],3) || load(n[0],4)) -> skip;
+	fi;	
+  :: (load(n[2],2) || load(n[2],3) || load(n[2],4)) -> skip;
+  fi;
+	:: load(n[2],1) ->
+  if
+  :: (load(n[0],0) || load(n[0],1)) ->
+	if
+  	:: (load(n[1],0) || load(n[1],1)) -> store(n[i],3); r = 4; break;
+	:: (load(n[1],2) || load(n[1],3) || load(n[1],4)) -> skip;
+	fi;	
+  :: (load(n[0],2) || load(n[0],3) || load(n[0],4)) -> skip;
+  fi;
+	od;
+	store(c[i],false);
+	count = 0;
+	do
+	:: count < N ->
+		if
+		:: i == count -> skip;
+		:: i != count ->
+			if
+			:: load(c[count],false) -> skip;
+			fi;
+			
+			if
+			:: load(n[count],0) -> skip;
+			:: r == 1 && count > i && (load(n[count],1) || load(n[count],2) || load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 2 && count > i && (load(n[count],2) || load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 3 && count > i && (load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 4 && count > i && load(n[count],4) -> skip;
+
+			:: r == 1 && count < i && (load(n[count],2) || load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 2 && count < i && (load(n[count],3) || load(n[count],4)) -> skip;
+			:: r == 3 && count < i && load(n[count],4) -> skip;
+			fi;
+		fi;
+		count = count + 1;	
+	:: count == N -> break;
+	od;
+	
+	store(n[i],0);
+	
+od;
+	
+}

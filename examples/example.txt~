@@ -1,0 +1,20 @@
+
+thread t0
+initial q0
+transition q0	q1	write	3	1
+transition q1	q2	read	rx	0
+transition q2	q0	noop
+end
+
+thread	t1
+initial q0
+transition q0	q1	write	0	0
+transition q1	q2	write	2	1
+transition q2	q0	noop
+end
+
+thread	t2
+initial q0	
+transition q0	q1	write	0	0
+transition q1	q2	read	ry	1
+end

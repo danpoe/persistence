@@ -1,0 +1,159 @@
+forbidden
+  BAD END * * * *;
+  BAD * END * * *;
+  BAD * * END * *;
+  BAD * * * END *;
+  BAD * * * * END
+
+data
+  counter = 1 : [0:1]
+  mutex = 0 : [0:5]
+  /* mutex here serves as both mutex lock and condition variable
+   * protected by the lock.
+   *
+   * 0 - unlocked, unwaited, unsignalled
+   * 1 - locked, unwaited, unsignalled
+   * 2 - unlocked, waited, unsignalled
+   * 3 - locked, waited, unsignalled
+   * 4 - unlocked, waited, signalled
+   * 5 - locked, waited, signalled
+   */
+  C = 0 : [0:1]
+  has_ended = 0 : [0:1]
+
+macro lock(l)
+  either{
+    cas(l,0,1)
+  or
+    cas(l,2,3)
+  or
+    cas(l,4,5)
+  }
+endmacro
+
+macro unlock(l)
+  either{
+    cas(l,1,0)
+  or
+    cas(l,3,2)
+  or
+    cas(l,5,4)
+  }
+endmacro
+
+macro signal(l)
+  either{
+    cas(l,0,0)
+  or
+    cas(l,1,1)
+  or
+    cas(l,2,4)
+  or
+    cas(l,3,5)
+  }
+endmacro
+
+macro cond_wait(l)
+  cas(l,1,2);
+  either{
+    cas(l,4,1)
+  or
+    read: has_ended = 1;
+    read: $r0 := l;
+    assume: $r0 != 4;
+  BAD: nop
+  }
+endmacro
+
+macro park()
+  either{
+    read: counter = 1;
+    write: counter := 0
+  or
+    read: counter = 0;
+    either{
+      read: mutex = 1
+    or
+      lock(mutex);
+      either{
+        read: counter = 1;
+        write: counter := 0;
+        unlock(mutex)
+      or
+        read: counter = 0;
+        cond_wait(mutex);
+        write: counter := 0;
+        unlock(mutex)
+      }
+    }
+  }
+endmacro
+
+macro unpark()
+  lock(mutex);
+  read: $r0 := counter;
+  write: counter := 1;
+  unlock(mutex);
+  if $r0 = 0 then
+    signal(mutex)
+endmacro
+
+process(1)
+registers
+  $r0 = * : [0:5]
+text
+L0:
+  either{
+    read: C = 1
+  or
+    read: C = 0;
+    park();
+    goto L0
+  }
+
+process(1)
+registers
+  $r0 = * : [0:1]
+text
+  locked write: C := 1;
+  unpark();
+  write: has_ended := 1;
+END: nop
+
+process(1)
+registers
+  $r0 = * : [0:1]
+text
+  locked write: C := 1;
+  unpark();
+  write: has_ended := 1;
+END: nop
+
+process(1)
+registers
+  $r0 = * : [0:1]
+text
+  locked write: C := 1;
+  unpark();
+  write: has_ended := 1;
+END: nop
+
+process(1)
+registers
+  $r0 = * : [0:1]
+text
+  locked write: C := 1;
+  unpark();
+  write: has_ended := 1;
+END: nop
+
+
+process(1)
+registers
+  $r0 = * : [0:1]
+text
+  locked write: C := 1;
+  unpark();
+  write: has_ended := 1;
+END: nop
+

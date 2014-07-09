@@ -1,0 +1,50 @@
+/* Dekker's lock with deadlock protection
+#
+# Dekker's mutex algorithm:
+# http://en.wikipedia.org/wiki/Dekker's_algorithm
+#
+# 0: while (true) {
+# 1:   flag[0] = true;
+# 2:   if (flag[1] == true) {     
+# 3:         flag[0] = false;
+# 4:         goto 1;
+# 5:   } 
+# 6:   // critical section
+# 7:   flag[0] = false;
+# 8:  }
+ */
+
+volatile int flag1 = 0, flag2 = 0;
+
+void * thr1(void * arg)
+{
+while (1) {
+L0:   	flag1 = 1;
+  	if (flag2 == 1){
+    		flag1 = 0;
+		goto L0;
+	}
+//CS
+	flag1 = 0;
+}
+}
+
+void * thr2(void * arg)
+{
+while (1) {
+L1:   	flag2 = 1;
+  	if (flag1 == 1){
+    		flag2 = 0;
+		goto L1;
+	}
+//CS
+	flag2 = 0;
+}
+
+int main()
+{
+  __CPROVER_ASYNC_0: thr1(0);
+  __CPROVER_ASYNC_1: thr2(0);
+  return 0;
+}
+

@@ -1,0 +1,184 @@
+/*
+ * Persist.cpp
+ *
+ *  Reused from Trencher and developed by tuan-phong.ngo@it.uu.se for PERSIST tool
+ *
+ */
+
+/*
+ * ----------------------------------------------------------------------------
+ * "THE JUICE-WARE LICENSE" (Revision 42):
+ * <derevenetc@cs.uni-kl.de> wrote this file. As long as you retain this notice
+ * you can do whatever you want with this stuff. If we meet some day, and you
+ * think this stuff is worth it, you can buy me a glass of juice in return.
+ * ----------------------------------------------------------------------------
+ */
+
+#include <cassert>
+#include <ctime>
+#include <fstream>
+#include <iostream>
+#include <stdexcept>
+#include <cstdlib>
+
+#include <boost/chrono.hpp>
+
+#include "Benchmarking.h"
+#include "DotPrinter.h"
+#include "Foreach.h"
+#include "FenceInsertion.h"
+#include "NaiveParser.h"
+#include "Program.h"
+#include "Reduction.h"
+#include "RobustnessChecking.h"
+#include "State.h"
+
+void help() {
+	std::cout << "Command format: ./PERSIST [-b|-nb] [-p|-f|-fa x|-dot|-pdot] file_name" << std::endl
+			<< "Options:" << std::endl
+			<< "  -b     Switch benchmarking mode on (print only execution statistics)." << std::endl
+			<< "  -nb    Switch benchmarking mode off." << std::endl
+			<< "  -p     Check persistence." << std::endl
+			<< "  -f     Do fence insertion for enforcing persistence." << std::endl
+			<< "  -dot   Print the example in dot format." << std::endl
+			<< "  -pdot  Print the example instrumented for persistence checking in dot format." << std::endl
+			<< "  -fa x  Do fence insertion for enforcing persistence, using thread abstraction and x (0, 1, 2, etc.) unrolling loops." << std::endl;
+}
+
+int main(int argc, char **argv) {
+	if (argc <= 1) {
+		help();
+		return 1;
+	}
+
+	try {
+		enum {
+			ROBUSTNESS,
+			FENCES,
+			PRINT_DOT,
+			PRINT_ROBUSTNESS_DOT,
+			FENCE_ABSTRACTION
+		} action = ROBUSTNESS;
+
+		bool benchmarking = false;
+		int loopNum = 0;
+
+		for (int i = 1; i < argc; ++i) {
+			std::string arg = argv[i];
+
+			if (arg == "-p") {
+				action = ROBUSTNESS;
+			} else if (arg == "-f") {
+				action = FENCES;
+			} else if (arg == "-fa") {
+				action = FENCE_ABSTRACTION;
+				i++;
+				char *loopStr = argv[i];
+				loopNum = atoi(loopStr);
+			} else if (arg == "-b") {
+				benchmarking = true;
+			} else if (arg == "-nb") {
+				benchmarking = false;
+			} else if (arg == "-dot") {
+				action = PRINT_DOT;
+			} else if (arg == "-pdot") {
+				action = PRINT_ROBUSTNESS_DOT;
+			} else if (arg.size() >= 1 && arg[0] == '-') {
+				throw std::runtime_error("unknown option: " + arg);
+			} else {
+				wmm::Program program;
+
+				wmm::Statistics::instance().reset();
+				{
+					wmm::NaiveParser parser;
+					std::ifstream in(argv[i]);
+					if (!in) {
+						throw std::runtime_error("can't open file: " + arg);
+					}
+					parser.parse(in, program);
+
+					wmm::Statistics::instance().incThreadsCount(
+							program.threads().size());
+					foreach (wmm::Thread *thread, program.threads()) {
+						wmm::Statistics::instance().incStatesCount(
+								thread->states().size());
+						wmm::Statistics::instance().incTransitionsCount(
+								thread->transitions().size());
+					}
+				}
+
+				auto startTime = boost::chrono::system_clock::now();
+
+				switch (action) {
+				case ROBUSTNESS: {
+					bool feasible = wmm::isAttackFeasible(program, false);
+					if (feasible) {
+						std::cout << "Program IS NOT persist." << std::endl;
+					} else {
+						std::cout << "Program IS persist." << std::endl;
+					}
+					break;
+				}
+				case FENCES: {
+					auto fences = wmm::computeFences(program, false);
+					std::cout << "Computed fences for enforcing persistence ("
+							<< fences.size() << " total):";
+					foreach (const auto &fence, fences) {
+						std::cout << " (" << fence.first->name() << ","
+								<< fence.second->name() << ')';
+					}
+					std::cout << std::endl;
+					break;
+				}
+				case FENCE_ABSTRACTION: {
+					auto fences = wmm::computeFenceAbstraction(program, false,
+							loopNum);
+					std::cout
+							<< "Computed fences for enforcing persistence, using thread abstraction ("
+							<< fences.size() << " total):";
+					foreach (const auto &fence, fences) {
+						std::cout << " (" << fence.first->name() << ","
+								<< fence.second->name() << ')';
+					}
+					std::cout << std::endl;
+					break;
+				}
+				case PRINT_DOT: {
+					wmm::DotPrinter printer;
+					printer.print(std::cout, program);
+					break;
+				}
+				case PRINT_ROBUSTNESS_DOT: {
+					wmm::Program instrumentedProgram;
+					wmm::reduce(program, instrumentedProgram, false);
+					wmm::DotPrinter printer;
+					printer.print(std::cout, instrumentedProgram);
+					break;
+				}
+				default: {
+					assert(!"NEVER REACHED");
+				}
+				}
+
+				auto endTime = boost::chrono::system_clock::now();
+
+				wmm::Statistics::instance().addRealTime(
+						boost::chrono::duration_cast<boost::chrono::milliseconds>(
+								endTime - startTime).count());
+
+				if (benchmarking) {
+					std::cout << "*********************************************"
+							<< std::endl;
+					std::cout << wmm::Statistics::instance() << std::endl;
+					std::cout << "*********************************************"
+							<< std::endl;
+				}
+			}
+		}
+	} catch (const std::exception &exception) {
+		std::cerr << "PERSIST: " << exception.what() << std::endl;
+		return 1;
+	}
+
+	return 0;
+}

@@ -1,0 +1,154 @@
+echo "Doing fence insertion automatically for all examples"
+
+echo "Simple Dekker"
+
+./build/PERSIST -b -f ../examples/single/mutex/simple_dekker/simple_dekker.rmm
+
+./build/trencher -b -f ../examples/single/mutex/simple_dekker/simple_dekker.rmm
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f ../examples/single/mutex/simple_dekker/simple_dekker_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 10 10 10 10 -maximalPermissive
+
+./build/goto-cc -o ../examples/single/mutex/simple_dekker/simple_dekker.gb ../examples/single/mutex/simple_dekker/simple_dekker.c 
+
+./build/musketeer --mm tso ../examples/single/mutex/simple_dekker/simple_dekker.gb
+ 
+./fence-inserter.py x86 fence results.txt 
+ 
+
+echo "Dekker"
+
+./build/PERSIST -b -f ../examples/single/mutex/dekker/dekker.txt
+
+./build/trencher -b -f ../examples/single/mutex/dekker/dekker.txt
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f ../examples/single/mutex/dekker/dekker_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 7 7 7 7 -maximalPermissive
+
+./build/goto-cc -o ../examples/single/mutex/dekker/dekker.gb ../examples/single/mutex/dekker/dekker.c 
+
+./build/musketeer --mm tso ../examples/single/mutex/dekker/dekker.gb
+ 
+./fence-inserter.py x86 fence results.txt 
+
+echo "Peterson"
+
+./build/PERSIST -b -f ../examples/single/mutex/peterson/peterson.txt
+
+./build/trencher -b -f ../examples/single/mutex/peterson/peterson.txt
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f ../examples/single/mutex/peterson/peterson_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 4 4 4 4 -maximalPermissive
+
+
+./build/goto-cc -o ../examples/single/mutex/peterson/peterson.gb ../examples/single/mutex/peterson/peterson.c 
+
+./build/musketeer --mm tso ../examples/single/mutex/peterson/peterson.gb
+ 
+./fence-inserter.py x86 fence results.txt 
+
+
+echo "Lamport Bakery 3 processes"
+
+./build/PERSIST -b -f ../examples/single/mutex/bakery3/bakery3.txt
+
+./build/trencher -b -f ../examples/single/mutex/bakery3/bakery3.txt
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f ../examples/single/mutex/bakery3/bakery3_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 28 28 28 -maximalPermissive
+
+
+./build/goto-cc -o ../examples/single/mutex/bakery3/bakery3.gb ../examples/single/mutex/bakery3/bakery3.c
+
+./build/musketeer --mm tso ../examples/single/mutex/bakery3/bakery3.gb
+ 
+./fence-inserter.py x86 fence results.txt 
+
+
+echo "Lamport Bakery 4 processes"
+
+./build/PERSIST -b -f ../examples/single/mutex/bakery4/bakery4.txt
+
+./build/trencher -b -f ../examples/single/mutex/bakery4/bakery4.txt
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f ../examples/single/mutex/bakery4/bakery4_Remmex.txt safety -MM TSO -Mode errorCorrection -e 2 51 51 51 51 -maximalPermissive
+
+./build/goto-cc -o ../examples/single/mutex/bakery4/bakery4.gb ../examples/single/mutex/bakery4/bakery4.c
+
+./build/musketeer --mm tso ../examples/single/mutex/bakery4/bakery4.gb
+ 
+./fence-inserter.py x86 fence results.txt 
+
+
+###############################################
+###############################################
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/dijkstra.txt -P safety -MM TSO -Mode errorCorrection -e 2 3 3 3 3 -maximalPermissive
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/burns.txt -P safety -MM TSO -Mode errorCorrection -e 2 9 3 3 3 3 -maximalPermissive
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/szymanski.txt -P safety -MM TSO -Mode errorCorrection -e 2 24 25 -maximalPermissive
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/szymanski4.txt -P safety -MM TSO -Mode errorCorrection -e 2 33 35 36 37 -maximalPermissive
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/fast_mutex.txt -P safety -MM TSO -Mode errorCorrection -e 2 36 36 -maximalPermissive
+
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/fast_mutex3.txt -P safety -MM TSO -Mode errorCorrection -e 2 39 39 39 -maximalPermissive
+
+
+
+
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/seqlock.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 26 26 26  -maximalPermissive
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/arbiter_2.txt -P safety -MM TSO -Mode errorCorrection -e 2 0 25 -maximalPermissive 
+
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/pgsql.txt -P safety -MM TSO -Mode errorCorrection -e 1 13 100 100 100 100 100 -maximalPermissive
+
+
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/incr_seq.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 3 3 3 3 3  -maximalPermissive 
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/spinlock.txt -P safety -MM TSO -Mode errorCorrection -e 2 9 9 -maximalPermissive 
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/ticket_spinlock.txt -P safety -MM TSO -Mode errorCorrection -e 2 14 14 -maximalPermissive 
+
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/sense_reversing_barrier.txt -P safety -MM TSO -Mode errorCorrection -e 2 0 4 -e 2 4 0  -maximalPermissive
+
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/clh_queue_lock.txt -P safety -MM TSO -Mode errorCorrection -e 2 15 15 15 15 -maximalPermissive
+
+
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/alternating_bit.txt -P safety -MM TSO -Mode errorCorrection -e 2 3 12 -e 2 12 3 -maximalPermissive
+
+
+java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/task_scheduling.txt -P safety -MM TSO -Mode errorCorrection -e 2 0 100 100 100 100 26 100 100 100 100 -e 2 100 0 100 100 100 26 100 100 100 100 -e 2 100 100 0 100 100 26 100 100 100 100 -e 2 100 100 100 0 100 26 100 100 100 100 -e 2 100 100 100 100 0 26 100 100 100 100    -maximalPermissive
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/inline_pgsql.txt -P safety -MM TSO -Mode errorCorrection -e 1 10 100 100 100 100 100 100 100 -e 1 100 10 100 100 100 100 100 100 -e 1 100 100 10 100 100 100 100 100 -e 1 100 100 100 10 100 100 100 100 -e 1 100 100 100 100 10 100 100 100 -e 1 100 100 100 100 100 10 100 100 -e 1 100 100 100 100 100 100 10 100 -e 1 100 100 100 100 100 100 100 10 -maximalPermissive
+
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/nbw_w_5r.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 15 15 15 15 15 -maximalPermissive
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/nbw_w_wr.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 27 -maximalPermissive
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/dc_locking.txt -P safety -MM TSO -Mode errorCorrection -e 1 12 100 100 100 100 100 -e 1 22 100 100 100 100 100 -e 1 100 12 100 100 100 100 -e 1 100 22 100 100 100 100 -e 1 100 100 12 100 100 100 -e 1 100 100 22 100 100 100 -e 1 100 100 100 12 100 100 -e 1 100 100 100 22 100 100 -e 1 100 100 100 100 12 100 -e 1 100 100 100 100 22 100 -e 1 100 100 100 100 100 12 -e 1 100 100 100 100 100 22 -maximalPermissive
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/parker.txt -P safety -MM TSO -Mode errorCorrection -e 2 50 1 100 100 100 100 -e 2 50 100 1 100 100 100 -e 2 50 100 100 1 100 100 -e 2 50 100 100 100 1 100 -e 2 50 100 100 100 100 1 -maximalPermissive
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/write+r.txt -P safety -MM TSO -Mode errorCorrection -e 2 8 13 100 100 100 -e 2 8 100 13 100 100 -e 2 8 100 100 13 100 -e 2 8 100 100 100 13  -maximalPermissive
+
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/r+detour.txt -P safety -MM TSO -Mode errorCorrection -e 2 11 100 13 100 100 -e 2 11 100 100 13 100 -e 2 11 100 100 100 13 -e 2 100 11  13 100 100 -e 2 100 11  100 13 100 -e 2 100 11  100 100 13     -maximalPermissive
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/r+detours.txt -P safety -MM TSO -Mode errorCorrection -e 3 14 100 100 9 9 -e 3 100 14 100 9 9 -e 3 100 100 14 9 9 -maximalPermissive
+
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/write+r+coherence.txt -P safety -MM TSO -Mode errorCorrection -e 3 12 100 100 100 8 7 -e 3 1000 12 100 100 8 7  -e 3 100 1000 12 100 8 7 -e 3 100 100 100 12 8 7 -maximalPermissive
+
+
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/sb+detours.txt -P safety -MM TSO -Mode errorCorrection -e 3 12 100 8 12 100 100 -e 3 12 100 8 100 12 100 -e 3 12 100 8 100 100 12 -e 3 100 12 8 12 100 100 -e 3 100 12 8 100 12 100 -e 3 100 12 8 100 100 12 -maximalPermissive
+
+java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/sb+detours+coherence.txt -P safety -MM TSO -Mode errorCorrection -e 4 14 100 13 100 9 8 -e 4 14 100 100 13 9 8 -e 4 100 14 13 100 9 8 -e 4 100 14 100 13 9 8 -maximalPermissive
+
+
+

@@ -1,0 +1,191 @@
+/* Szymanski's algorithm for two processes 
+
+http://en.wikipedia.org/wiki/Szymanski%27s_Algorithm
+
+#Entry protocol
+flag[self] ← 1                    #Standing outside waiting room
+await(all flag[1..N] ∈ {0, 1, 2}) #Wait for open door
+flag[self] ← 3                    #Standing in doorway
+if any flag[1..N] = 1:            #Another process is waiting to enter
+    flag[self] ← 2                #Waiting for other processes to enter
+    await(any flag[1..N] = 4)     #Wait for a process to enter and close the door
+ 
+flag[self] ← 4                    #The door is closed
+await(all flag[1..self-1] ∈ {0, 1})   #Wait for everyone of lower ID to finish exit protocol
+ 
+#Critical section
+#...
+ 
+#Exit protocol
+await(all flag[self+1..N] ∈ {0, 1, 4}) #Ensure everyone in the waiting room has
+                                       #realized that the door is supposed to be closed
+flag[self] ← 0 #Leave. Reopen door if nobody is still in the waiting room
+
+*/
+
+forbidden
+  CS CS * *;
+  CS * CS *;
+  CS * * CS;
+  * CS CS *;
+  * CS * CS;
+  * * CS CS
+
+process(1)
+data
+  flag = 0 : [0:5]
+registers
+  $flag0 = 0 : [0:5]
+  $flag1 = 0 : [0:5]
+  $flag2 = 0 : [0:5]
+text
+L0: write: flag[my] := 1;
+L1:  read: $flag0 := flag[0];
+  read: $flag1 := flag[1];
+  read: $flag2 := flag[2];
+  if $flag0 >= 3 || $flag1 >= 3 || $flag2 >= 3 then {
+    goto L1 
+  };
+  write: flag[my] := 3;
+  read: $flag0 := flag[0];
+  read: $flag1 := flag[1];
+  read: $flag2 := flag[2];
+  if $flag0 = 1 || $flag1 = 1 || $flag2 = 1 then {
+     write: flag[my] := 2;
+L2:  read: $flag0 := flag[0];
+     read: $flag1 := flag[1];
+     read: $flag2 := flag[2];
+     if $flag0 < 4 && $flag1 < 4 && $flag2 < 4 then goto L2
+  };
+  write: flag[my] := 4;
+CS: nop;
+  read: $flag0 := flag[0];
+  read: $flag1 := flag[1];
+  read: $flag2 := flag[2];
+L3: if $flag0 = 3 || $flag0 = 2 || $flag1 = 3 || $flag1 = 2 || $flag2 = 3 || $flag2 = 2 then {
+      goto L3 
+  };
+  write: flag[my] := 0;
+  goto L0
+  
+
+process(1)
+data
+  flag = 0 : [0:5]
+registers
+  $flag0 = 0 : [0:5]
+  $flag1 = 0 : [0:5]
+  $flag2 = 0 : [0:5]
+text
+L0: write: flag[my] := 1;
+L1:  read: $flag0 := flag[0];
+  read: $flag1 := flag[1];
+  read: $flag2 := flag[2];
+  if $flag0 >= 3 || $flag1 >= 3 || $flag2 >= 3 then {
+    goto L1 
+  };
+  write: flag[my] := 3;
+  read: $flag0 := flag[0];
+  read: $flag1 := flag[1];
+  read: $flag2 := flag[2];
+  if $flag0 = 1 || $flag1 = 1 || $flag2 = 1 then {
+     write: flag[my] := 2;
+L2:  read: $flag0 := flag[0];
+     read: $flag1 := flag[1];
+     read: $flag2 := flag[2];
+     if $flag0 < 4 && $flag1 < 4 && $flag2 < 4 then goto L2
+  };
+  write: flag[my] := 4;
+L3:  read: $flag0 := flag[0];
+  if  $flag0 != 0 && $flag0 != 1 then {
+      goto L3 
+  };
+
+CS: nop;
+  read: $flag1 := flag[1];
+  read: $flag2 := flag[2];
+L4: if  $flag1 = 3 || $flag1 = 2 || $flag2 = 3 || $flag2 = 2 then {
+      goto L4 
+  };
+  write: flag[my] := 0;
+  goto L0
+
+
+process(1)
+data
+  flag = 0 : [0:5]
+registers
+  $flag0 = 0 : [0:5]
+  $flag1 = 0 : [0:5]
+  $flag2 = 0 : [0:5]
+text
+L0: write: flag[my] := 1;
+L1:  read: $flag0 := flag[0];
+  read: $flag1 := flag[1];
+  read: $flag2 := flag[2];
+  if $flag0 >= 3 || $flag1 >= 3 || $flag2 >= 3 then {
+    goto L1 
+  };
+  write: flag[my] := 3;
+  read: $flag0 := flag[0];
+  read: $flag1 := flag[1];
+  read: $flag2 := flag[2];
+  if $flag0 = 1 || $flag1 = 1 || $flag2 = 1 then {
+     write: flag[my] := 2;
+L2:  read: $flag0 := flag[0];
+     read: $flag1 := flag[1];
+     read: $flag2 := flag[2];
+     if $flag0 < 4 && $flag1 < 4 && $flag2 < 4 then goto L2
+  };
+  write: flag[my] := 4;
+L3:  read: $flag0 := flag[0];
+  read: $flag1 := flag[1];	
+  if  $flag0 != 0 && $flag0 != 1  then goto L3 
+  else if $flag1 != 0 && $flag1 != 1 then goto L3;
+        
+CS: nop;
+  read: $flag2 := flag[2];
+L4: if  $flag2 = 3 || $flag2 = 2 then {
+      goto L4 
+  };
+  write: flag[my] := 0;
+  goto L0
+
+
+process(1)
+data
+  flag = 0 : [0:5]
+registers
+  $flag0 = 0 : [0:5]
+  $flag1 = 0 : [0:5]
+  $flag2 = 0 : [0:5]
+text
+L0: write: flag[my] := 1;
+L1:  read: $flag0 := flag[0];
+  read: $flag1 := flag[1];
+  read: $flag2 := flag[2];
+  if $flag0 >= 3 || $flag1 >= 3 || $flag2 >= 3 then {
+    goto L1 
+  };
+  write: flag[my] := 3;
+  read: $flag0 := flag[0];
+  read: $flag1 := flag[1];
+  read: $flag2 := flag[2];
+  if $flag0 = 1 || $flag1 = 1 || $flag2 = 1 then {
+     write: flag[my] := 2;
+L2:  read: $flag0 := flag[0];
+     read: $flag1 := flag[1];
+     read: $flag2 := flag[2];
+     if $flag0 < 4 && $flag1 < 4 && $flag2 < 4 then goto L2
+  };
+  write: flag[my] := 4;
+L3:  read: $flag0 := flag[0];
+  read: $flag1 := flag[1];	
+  read: $flag2 := flag[2];
+  if  $flag0 != 0 && $flag0 != 1 then goto L3
+  else if $flag1 != 0 && $flag1 != 1 then goto L3
+       else if $flag2 != 0 && $flag2 != 1 then goto L3;
+
+CS: nop;
+  write: flag[my] := 0;
+  goto L0

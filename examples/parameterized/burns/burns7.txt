@@ -1,0 +1,223 @@
+# Burn's algorithm
+# Memory layout:
+# 0 - flag[0]
+# 1 - flag[1]
+# 2 - flag[2]
+# 3 - flag[2]
+# 4 - flag[3]
+# 5 - flag[4]
+# 6 - flag[5]
+
+memory_size 7
+
+thread t0
+
+initial q0
+
+transition q0 	q1 	write 0 0
+
+transition q1	q2	noop
+
+transition q2 	q3 	write 1 0
+
+transition q3 	q4 	noop
+
+transition q4 	q41	read	flag_1 1
+transition q41 	q42	read	flag_2 2
+transition q42 	q43	read	flag_3 3
+transition q43	q44	read	flag_4 4
+transition q44	q45	read	flag_5 5
+transition q45	q46	read	flag_6 6
+transition q46	q4 	check   || || || || || == flag_1 1 == flag_2 1 == flag_3 1 == flag_4 1 == flag_5 1 == flag_6 1
+transition q46	q5	check 	&& && && && && != flag_1 1 != flag_2 1 != flag_3 1 != flag_4 1 != flag_5 1 != flag_6 1
+
+transition q5 	q0 	write 	0 0
+
+end
+
+
+thread t1
+
+initial q0
+
+transition q0 	q1 	write 0 1
+
+transition q1	q11	read	flag_0	0
+transition q11 	q0	check 	== flag_0 1
+transition q11	q2	check	!= flag_0 1
+
+transition q2 	q3 	write 1 1
+
+transition q3	q31	read	flag_0	0
+transition q31 	q0	check 	== flag_0 1
+transition q31	q4	check	!= flag_0 1
+
+transition q4 	q41	read	flag_2 2
+transition q41 	q42	read	flag_3 3
+transition q42	q43	read	flag_4 4
+transition q43	q44	read	flag_5 5
+transition q44	q45	read	flag_6 6
+transition q45	q4 	check  	|| || || || == flag_2 1 == flag_3 1 == flag_4 1 == flag_5 1 == flag_6 1
+transition q45	q5	check 	&& && && && != flag_2 1 != flag_3 1 != flag_4 1 != flag_5 1 != flag_6 1
+
+
+transition q5 	q0 	write 	0 1
+
+end
+
+
+thread t2
+
+initial q0
+
+transition q0 	q1 	write 0 2
+
+transition q1	q11	read	flag_0	0
+transition q11	q12	read	flag_1 	1
+transition q12 	q0	check 	|| == flag_0 1 == flag_1 1
+transition q12	q2	check	&& != flag_0 1 != flag_1 1
+
+transition q2 	q3 	write 1 2
+
+transition q3	q31	read	flag_0	0
+transition q31	q32	read	flag_1 	1
+transition q32 	q0	check 	|| == flag_0 1 == flag_1 1
+transition q32	q4	check	&& != flag_0 1 != flag_1 1
+
+transition q4 	q41	read	flag_3 3
+transition q41 	q42	read	flag_4 4
+transition q42 	q43	read	flag_5 5
+transition q43	q44	read	flag_6 6
+transition q44	q4	check	|| || || == flag_3 1 == flag_4 1 == flag_5 1 == flag_6 1
+transition q44	q5	check	&& && && != flag_3 1 != flag_4 1 != flag_5 1 != flag_6 1
+
+
+transition q5 	q0 	write 	0 2
+
+end
+
+thread t3
+
+initial q0
+
+transition q0 	q1 	write 0 3
+
+transition q1	q11	read	flag_0	0
+transition q11	q12	read	flag_1 	1
+transition q12	q13	read	flag_2 	2
+transition q13 	q0	check 	|| || == flag_0 1 == flag_1 1 == flag_2 1
+transition q13	q2	check	&& && != flag_0 1 != flag_1 1 != flag_2 1
+
+transition q2 	q3 	write 1 3
+
+transition q3	q31	read	flag_0	0
+transition q31	q32	read	flag_1 	1
+transition q32	q33	read	flag_2 	2
+transition q33 	q0	check 	|| || == flag_0 1 == flag_1 1 == flag_2 1
+transition q33	q4	check	&& && != flag_0 1 != flag_1 1 != flag_2 1
+
+transition q4 	q41	read	flag_4	4
+transition q41	q42	read	flag_5	5
+transition q42	q43	read	flag_6 	6
+transition q43	q4	check	|| || == flag_4 1 == flag_5 1 == flag_6 1
+transition q43	q5	check	&& && != flag_4 1 != flag_5 1 != flag_6 1
+
+transition q5 	q0 	write 	0 3
+
+end
+
+thread t4
+
+initial q0
+
+transition q0 	q1 	write 0 4
+
+transition q1	q11	read	flag_0	0
+transition q11	q12	read	flag_1 	1
+transition q12	q13	read	flag_2 	2
+transition q13	q14	read	flag_3 	3
+transition q14 	q0	check 	|| || || == flag_0 1 == flag_1 1 == flag_2 1 == flag_3 1
+transition q14	q2	check	&& && && != flag_0 1 != flag_1 1 != flag_2 1 != flag_3 1
+
+transition q2 	q3 	write 1 4
+
+transition q3	q31	read	flag_0	0
+transition q31	q32	read	flag_1 	1
+transition q32	q33	read	flag_2 	2
+transition q33	q34	read	flag_3 	3
+transition q34 	q0	check 	|| || || == flag_0 1 == flag_1 1 == flag_2 1 == flag_3 1
+transition q34	q4	check	&& && && != flag_0 1 != flag_1 1 != flag_2 1 != flag_3 1
+
+transition q4 	q41	read	flag_5	5
+transition q41	q42	read	flag_6 	6
+transition q42	q4	check	|| == flag_5 1 == flag_6 1
+transition q42	q5	check	&& != flag_5 1 != flag_6 1
+
+transition q5 	q0 	write 	0 4
+
+end
+thread t5
+
+initial q0
+
+transition q0 	q1 	write 0 5
+
+transition q1	q11	read	flag_0	0
+transition q11	q12	read	flag_1 	1
+transition q12	q13	read	flag_2 	2
+transition q13	q14	read	flag_3 	3
+transition q14	q15	read	flag_4 	4
+transition q15 	q0	check 	|| || || || == flag_0 1 == flag_1 1 == flag_2 1 == flag_3 1 == flag_4 1
+transition q15	q2	check	&& && && && != flag_0 1 != flag_1 1 != flag_2 1 != flag_3 1 != flag_4 1
+
+transition q2 	q3 	write 1 5
+
+transition q3	q31	read	flag_0	0
+transition q31	q32	read	flag_1 	1
+transition q32	q33	read	flag_2 	2
+transition q33	q34	read	flag_3 	3
+transition q34	q35	read	flag_4 	4
+transition q35 	q0	check 	|| || || || == flag_0 1 == flag_1 1 == flag_2 1 == flag_3 1 == flag_4 1
+transition q35	q4	check	&& && && && != flag_0 1 != flag_1 1 != flag_2 1 != flag_3 1 != flag_4 1
+
+transition q4 	q41	read	flag_6	6
+transition q41	q4	check 	== flag_6 1
+transition q41	q5	check 	!= flag_6 1
+
+transition q5 	q0 	write 	0 5
+
+end
+
+thread t6
+
+initial q0
+
+transition q0 	q1 	write 0 6
+
+transition q1	q11	read	flag_0	0
+transition q11	q12	read	flag_1 	1
+transition q12	q13	read	flag_2 	2
+transition q13	q14	read	flag_3 	3
+transition q14	q15	read	flag_4 	4
+transition q15	q16	read	flag_5	5
+transition q16 	q0	check 	|| || || || || == flag_0 1 == flag_1 1 == flag_2 1 == flag_3 1 == flag_4 1 == flag_5 1
+transition q16	q2	check	&& && && && && != flag_0 1 != flag_1 1 != flag_2 1 != flag_3 1 != flag_4 1 != flag_5 1
+
+transition q2 	q3 	write 1 6
+
+transition q3	q31	read	flag_0	0
+transition q31	q32	read	flag_1 	1
+transition q32	q33	read	flag_2 	2
+transition q33	q34	read	flag_3 	3
+transition q34	q35	read	flag_4 	4
+transition q35	q36	read	flag_5	5
+transition q36 	q0	check 	|| || || || || == flag_0 1 == flag_1 1 == flag_2 1 == flag_3 1 == flag_4 1 == flag_5 1
+transition q36	q4	check	&& && && && && != flag_0 1 != flag_1 1 != flag_2 1 != flag_3 1 != flag_4 1 != flag_5 1
+
+transition q4 	q5	noop
+
+transition q5 	q0 	write 	0 6
+
+end
+
+

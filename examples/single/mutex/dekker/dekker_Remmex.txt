@@ -1,0 +1,150 @@
+int want0;
+int want1;
+int want2;
+int want3;
+int turn;
+
+proctype p0 {
+int lwant1; 
+int lwant2;
+int lwant3;
+	
+do
+:: true ->
+		store(want0, 1);
+		lwant1 = loadval(want1);
+		lwant2 = loadval(want2);
+		lwant3 = loadval(want3);
+		do
+		:: lwant1 == 1 || lwant2 == 1 || lwant3 == 1 ->
+			if
+			:: load(turn,1) || load(turn,2) || load(turn,3)  ->
+				store(want0, 0);
+				do
+				:: load(turn,1) || load(turn,2) || load(turn,3) -> skip;
+				:: load(turn,0) -> break;
+				od;
+				
+				store(want0, 1);
+				lwant1 = loadval(want1);
+				lwant2 = loadval(want2);
+				lwant3 = loadval(want3);
+		
+			:: load(turn, 0)  -> skip;
+			fi;
+			
+		:: lwant1 == 0 && lwant2 == 0 && lwant3 == 0 -> break;
+		od;
+		
+		store(turn, 1);
+		store(want0, 0);
+od;
+}
+
+proctype p1 {
+int lwant0; 
+int lwant2;
+int lwant3;
+	
+do
+:: true ->
+		store(want1, 1);
+		lwant0 = loadval(want0);
+		lwant2 = loadval(want2);
+		lwant3 = loadval(want3);
+		do
+		:: lwant0 == 1 || lwant2 == 1 || lwant3 == 1 ->
+			if
+			:: load(turn,0) || load(turn,2) || load(turn,3)  ->
+				store(want1, 0);
+				do
+				:: load(turn,0) || load(turn,2) || load(turn,3) -> skip;
+				:: load(turn,1) -> break;
+				od;
+				
+				store(want1, 1);
+				lwant0 = loadval(want0);
+				lwant2 = loadval(want2);
+				lwant3 = loadval(want3);
+			:: load(turn, 1)  -> skip;
+			fi;
+			
+		:: lwant0 == 0 && lwant2 == 0 && lwant3 == 0 -> break;
+		od;
+		
+		store(turn, 2);
+		store(want1, 0);
+od;
+}
+
+proctype p2 {
+int lwant1; 
+int lwant0;
+int lwant3;
+	
+do
+:: true ->
+		store(want2, 1);
+		lwant1 = loadval(want1);
+		lwant0 = loadval(want0);
+		lwant3 = loadval(want3);
+		do
+		:: lwant1 == 1 || lwant0 == 1 || lwant3 == 1 ->
+			if
+			:: load(turn,1) || load(turn,0) || load(turn,3)  ->
+				store(want2, 0);
+				do
+				:: load(turn,1) || load(turn,0) || load(turn,3) -> skip;
+				:: load(turn,2) -> break;
+				od;
+				
+				store(want2, 1);
+				lwant1 = loadval(want1);
+				lwant0 = loadval(want0);
+				lwant3 = loadval(want3);
+			:: load(turn, 2)  -> skip;
+			fi;
+			
+		:: lwant1 == 0 && lwant0 == 0 && lwant3 == 0 -> break;
+		od;
+		
+		store(turn, 3);
+		store(want2, 0);
+od;
+}
+
+proctype p3 {
+int lwant1; 
+int lwant0;
+int lwant2;
+	
+do
+:: true ->
+		store(want3, 1);
+		lwant1 = loadval(want1);
+		lwant0 = loadval(want0);
+		lwant2 = loadval(want2);
+		do
+		:: lwant1 == 1 || lwant0 == 1 || lwant2 == 1 ->
+			if
+			:: load(turn,1) || load(turn,0) || load(turn,2)  ->
+				store(want3, 0);
+				do
+				:: load(turn,1) || load(turn,0) || load(turn,2) -> skip;
+				:: load(turn,3) -> break;
+				od;
+				
+				store(want3, 1);
+				lwant1 = loadval(want1);
+				lwant0 = loadval(want0);
+				lwant2 = loadval(want2);
+			:: load(turn, 3)  -> skip;
+			fi;
+			
+		:: lwant1 == 0 && lwant0 == 0 && lwant2 == 0 -> break;
+		od;
+		
+		store(turn, 0);
+		store(want3, 0);
+od;
+}

@@ -1,0 +1,29 @@
+# x - 0
+# y - 0
+# T1: repeat { x=0; Ry <-y =2}
+# T2: repeat {x=0;y=2;}
+# T3: repeat {y=3; Rx <- x = 0}
+# error state: x=0; y=3, Rx=0, Ry=3
+#
+# Cycles for happended-before relation:
+
+
+thread t0
+initial q0
+transition q0	q1	write	0	0
+transition q1	q2	read	ry	1
+transition q2	q0	check	== ry  3
+end
+
+thread	t1
+initial q0
+transition q0	q1	write	0	0
+transition q1	q0	write	2	1
+end
+
+thread t2
+initial q0
+transition q0	q1	write	3	1
+transition q1	q2	read	rx	0
+transition q2	q0	check 	== rx 	0
+end

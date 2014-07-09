@@ -1,0 +1,80 @@
+int want1;
+int want2;
+int want3;
+int want4;
+
+
+proctype p1 {
+int lwant2; 
+int lwant3;
+int lwant4;
+	
+do
+:: true ->
+		store(want1, 1);
+		lwant2 = loadval(want2);
+		lwant3 = loadval(want3);
+		lwant4 = loadval(want4);
+		if
+		:: lwant2 == 1 || lwant3 == 1 || lwant4 == 1 -> store(want1, 0);	
+		:: lwant2 == 0 && lwant3 == 0 && lwant4 == 0 -> store(want1, 0);
+		fi;
+od;
+}
+
+
+proctype p2 {
+int lwant1; 
+int lwant3;
+int lwant4;
+
+do
+:: true ->
+		store(want2, 1);
+		lwant1 = loadval(want1);
+		lwant3 = loadval(want3);
+		lwant4 = loadval(want4);
+		if
+		:: lwant1 == 1 || lwant3 == 1 || lwant4 == 1 -> store(want2, 0);
+		:: lwant1 == 0 && lwant3 == 0 && lwant4 == 0 -> store(want2, 0);
+		fi;
+od;
+}
+
+
+proctype p3 {
+int lwant1; 
+int lwant2;
+int lwant4;
+
+do
+:: true ->
+		store(want3, 1);
+		lwant1 = loadval(want1);
+		lwant2 = loadval(want2);
+		lwant4 = loadval(want4);
+		if
+		:: lwant1 == 1 || lwant2 == 1 || lwant4 == 1 -> store(want3, 0);
+		:: lwant1 == 0 && lwant2 == 0 && lwant4 == 0 -> store(want3, 0);
+		fi;
+od;
+}
+
+
+proctype p4 {
+int lwant1; 
+int lwant2;
+int lwant3;
+
+do
+:: true ->
+		store(want4, 1);
+		lwant1 = loadval(want1);
+		lwant2 = loadval(want2);
+		lwant3 = loadval(want3);
+		if
+		:: lwant1 == 1 || lwant2 == 1 || lwant3 == 1 -> store(want4, 0);
+		:: lwant1 == 0 && lwant2 == 0 && lwant3 == 0 -> store(want4, 0);
+		fi;
+od;
+}

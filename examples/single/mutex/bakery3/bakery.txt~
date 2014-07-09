@@ -1,0 +1,126 @@
+# Lamport's bakery algorithm for 3 processes
+# http://en.wikipedia.org/wiki/Lamport's_bakery_algorithm
+# Memory layout:
+# 0 - c[0]
+# 1 - c[1]
+# 2 - c[2]
+# 3 - n[0]
+# 4 - n[1]
+# 5 - n[2]
+
+thread t0
+initial q0
+
+transition q0 q1 write 1 0
+
+transition q1 	q1_1 read n1 4
+transition q1_1	q1_2 read n2 5
+transition q1_2	q13 check <= n1 n2
+transition q1_2	q14  check > n1 n2
+transition q13	q2 local max n2
+transition q14	q2 local max n1
+
+transition q2 q3 local max + max 1
+transition q3 q4 write max 3
+transition q4 q5 write 0 0
+
+transition q5 q6 read chk 1
+transition q6 q7 check == chk 0
+transition q6 q5 check != chk 0
+
+transition q7 q71 read n0 3
+transition q71 q72 read	n1 4
+transition q72 q7 check && > n1 0 < n1 n0	 
+transition q72 q8 check || <= n1 0 >= n1 n0
+
+transition q8 q9 read chk 2
+transition q9 q10 check == chk 0
+transition q9 q8 check != chk 0
+
+transition q10 q101 read n0 3
+transition q101 q102 read n2 5
+transition q102 q10 check && > n2 0 < n2 n0	 
+transition q102 q11 check || <= n2 0 >= n2 n0
+
+transition q11	q12 noop
+transition q12	q0 write	0	3
+end
+
+
+
+thread t1
+initial q0
+
+transition q0 q1 write 1 1
+
+transition q1 	q1_1 read n0 3
+transition q1_1	q1_2 read n2 5
+transition q1_2	q13 check <= n0 n2
+transition q12	q14  check > n0 n2
+transition q13	q2 local max n2
+transition q14	q2 local max n0
+
+transition q2 q3 local max + max 1
+transition q3 q4 write max 4
+transition q4 q5 write 0 1
+
+transition q5 q6 read chk 0
+transition q6 q7 check == chk 0
+transition q6 q5 check != chk 0
+
+transition q7 q71 read n0 3
+transition q71 q72 read	n1 4
+transition q72 q7 check && > n0 0 || < n0 n1  == n0 n1	 
+transition q72 q8 check || <= n0 0 && >= n0 n1 != n0 n1
+
+transition q8 q9 read chk 2
+transition q9 q10 check == chk 0
+transition q9 q8 check != chk 0
+
+transition q10 q101 read n1 4
+transition q101 q102 read n2 5
+transition q102 q10 check && > n2 0 < n2 n1	 
+transition q102 q11 check || <= n2 0 >= n2 n1
+
+transition q11	q12 noop
+transition q12	q0 write	0	4
+end
+
+
+thread t2
+initial q0
+
+transition q0 q1 write 1 2
+
+transition q1 	q1_1 read n0 3
+transition q1_1	q1_2 read n1 4
+transition q1_2	q13 check <= n0 n1
+transition q12	q14  check > n0 n1
+transition q13	q2 local max n1
+transition q14	q2 local max n0
+
+transition q2 q3 local max + max 1
+transition q3 q4 write max 5
+transition q4 q5 write 0 2
+
+transition q5 q6 read chk 0
+transition q6 q7 check == chk 0
+transition q6 q5 check != chk 0
+
+transition q7 q71 read n0 3
+transition q71 q72 read	n2 5
+transition q72 q7 check && > n0 0 || < n0 n2  == n0 n2	 
+transition q72 q8 check || <= n0 0 && >= n0 n2 != n0 n2
+
+transition q8 q9 read chk 1
+transition q9 q10 check == chk 0
+transition q9 q8 check != chk 0
+
+transition q10 q101 read n1 4
+transition q101 q102 read n2 5
+transition q102 q10 check && > n1 0 || < n1 n2  == n1 n2	 
+transition q102 q11 check || <= n1 0 && >= n1 n2  != n1 n2
+
+transition q11	q12 noop
+transition q12	q0 write	0	5
+end

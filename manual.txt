@@ -1,0 +1,216 @@
+This document explains how to run Persist, and custermize input files.
+
+1. Persist's directory
+================
+
+Persist's directory structure is as following:
+    Persist
+            + src
+            + build (after compiling Persist)
+                - PERSIST executable file
+            + examples
+                - single
+			... algorithms in Table 1
+                - parameterized
+                	... algorithms in Figure 17
+
+In examples directory of downloaded files we have many algorithms in *_Remmex.txt to test with Remmex, *.txt files to test with Persist/Trencher, *.c files to test with Musketeer, *.rmm files to test with Memorax.
+
+In all following parts, we suppose that we stay in the build directory.
+
+2. Running commands
+================
+
+Command format: ./PERSIST [-b] [-p|-f|-fa n|-dot|-pdot] file
+
+Options:
+	-b     With benchmarking mode
+	-p     Persistence checking without fence insertion
+	-f     Precise fence insertion
+	-fa e n Fence insertion with Thread abstraction: e is 1 (example 1) or 2 (example 2), n refinements         
+        -dot   Print input program in dot format
+	-pdot  Print instrumented program in dot format
+	file   Input file                       -
+If you do not remember options, running the tool without arguments, ./PERSIST, will give the full list of supported command-line options.
+
+3. Command examples
+================
+
+Some command examples (supposed that you are in the build directory):
+    + ./PERSIST -p ../examples/path/peterson.txt (persistence checking)
+    + ./PERSIST -b -p ../examples/path/dekker.txt	(persistence checking with benchmark)
+    + ./PERSIST -b -f ../examples/path/peterson.txt (fence insertion with benchmark)
+    ./PERSIST -fa 2 0 ../examples/path/peterson.txt (fence insertion with thread abstraction type 2 and 0 refinements)
+    ./PERSIST -dot ../examples/path/peterson.txt (printing the example's automata in dot format)
+    ./PERSIST -dot ../examples/path/dekker.txt | dot -Tpdf > dekker.pdf (print the example's automata in PDF format)
+    ./PERSIST -pdot ../examples/path/peterson.txt (print the example's instrumented automata in dot format)
+
+3. Example demo
+================
+
+Here we consider an example in C code that is a simple version of Dekker algorithm, and then express it as an input file for Persist. We interpret the result that is returned by Persist.
+
+3.1. C code:
+volatile int x1, x2;
+
+void thread1(void* arg) {
+    while (1) {
+        x1 = 1;
+        if (x2) {};
+        //Critical section 1;
+    }
+}
+
+void thread2(void* arg) {
+    while (1) {
+        x2 = 1;
+        if (x1) {};
+        //Critical section 2;
+
+    }
+
+}
+
+3.2. Input file demo.txt
+
+# Address 1 for x1, 2 for x2
+thread t1
+
+    initial q0
+    transition q0 q1 write 1 1
+    transition q1 q2 read r0 2
+    transition q2 q3 check == r0 0
+    transition q3 q0 noop
+
+end
+
+thread t2
+
+    initial q0
+    transition q0 q1 write 1 2
+    transition q1 q2 read r0 1
+    transition q2 q3 check == r0 0
+    transition q3 q0 noop
+
+end
+
+3.3 Output result
+
+Command: ./PERSIST -b -f ../examples/demo.txt
++++++++++++++++++++++++++++++++++++++++++++++++
++ The size of optimal fence set   : 2         +
++   t1                            : q1        +
++   t2                            : q1        +
++++++++++++++++++++++++++++++++++++++++++++++++
++ Number of processes             : 2         +
++ Number of states                : 8         +
++ Number of transitions           : 8         +
++ Number of fences                : 2         +
++ Code2Code translation time (ms) : 177       +
++ Compilation time (ms)           : 1646      +
++ Verification time (ms)          : 113       +
++ Sequential running time (ms)    : 1936      +
++ Running time (ms):              : 1007      +
++++++++++++++++++++++++++++++++++++++++++++++++
+
+3.4 Interpret the output result
+
++ We are doing fence insertion with benchmark to make the program persist.
++ The program is not persist. It needs a minimal set of 2 fences to guarantee persistence.
++ We have information about the program: 2 threads, 8 states, 8 transitions.
++ We need 1.007 seconds to code-to-code translate, compile, verify, and find an optimal set of fence.
++ We use SPIN as backend verification tool. The sequential time for code-to-code translation to Promela file is 0.177 seconds; for compilation of Promela files to C files and then to executable files is 1.646 seconds. The sequential time for verification by running executable files is 0.113 seconds. The total sequential time for all code-to-code translation, compilation, and verification is 1.936 seconds.
+
+4. Innput file
+================
+
+4.1 Input file format
+
+Input file format from top to bottom is as following:
+        Comment_1 section (optional)
+        Memory's size section (optinal)
+        Thread_1 section (required)
+        Comment_2 section (optional)
+        Thread_2 section (optional)
+        ...
+        Comment_n section (optional)
+        Thread_n section (optional)
+
+4.2 Comment section
+
+    + This section is optional.
+    + Comment section is a list of comment lines.
+    + A comment line (remember the space between # and your text):
+        # your comment text here
+    + Example: # my comment line 1
+
+4.3 Memory's size section
+
+    + This section is optional. However, because the default shared memory's size is 10, if you want to use more than 10 shared variables in your programs, you must explicitly state your memory's size to guarantee the correctness of Persist's results. Also notice that memory always starts from address 0.
+    + Use this instruction to declare shared memory's size:
+        memory_size integer_number
+    + Example: memory_size 20
+
+4.4 Thread section
+
+    + Thread section format from top to bottom is as following:
+    thread thread_type number_of_threads (optional)
+        initial initial_state
+        transition state_i state_j instructions
+    end
+
+    + You can explicitly create number_of_threads threads of type thread_type. If you do not indicate number_of_threads, Persist creates 1 thread of type thread_type.
+    
+    + The following kinds of instructions exist:
+        - write <value-expr> <addr-expr>: write to memory
+        - read <reg-name> <addr-expr>: read from memory
+        - mfence: flush the write buffers
+        - local <reg-name> <value-expr>: local assignment
+        - check <expr>: assertion, executable only if <expr> is non-zero
+        - noop: always executable, has no effect
+        - lock: flush the buffers, get an exclusive permission to write/read memories
+        - unlock: flush the buffers, allow others to write/read memories
+
+    + Expressions of instructions are written in prefix notation. The following kinds of expressions exist:
+        - a string name of a register <reg-name> (without space)
+        - an integer constant
+        - a unary expression: ! (logical NOT)
+        - a binary expression: ==, !=, <, <=, >, >=, &&, | |, +, -, *, &
+
+4.5 Putting all together
+
+# Simplified Dekker's mutex algorithm.
+#
+# The algorithm IS NOT persist.
+#
+# Thread 1:
+# while (1) { x1 = 1; if (x2) {}; //CS 1;}
+#
+# Thread 2:
+# while (1) { x2 = 1; if (x1) {}; //CS 2;}
+#
+# Shared variables: 1->x1, 2->x2
+
+# Use addresses 1 and 2, but memory starts from 0
+
+memory_size 3
+
+thread t1
+initial q0
+transition q0 q1 write 1 1
+transition q1 q2 read r0 2
+transition q2 q3 check == r0 0
+transition q3 q0 noop
+end
+
+thread t2
+initial q0
+transition q0 q1 write 1 2
+transition q1 q2 read r0 1
+transition q2 q3 check == r0 0
+transition q3 q0 noop
+end
+
+##########################
+#This is the end of file.#
+##########################

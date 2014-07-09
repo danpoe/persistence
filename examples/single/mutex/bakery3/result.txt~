@@ -1,0 +1,75 @@
+Trencher = Persist = 4
+
+
+[root@localhost build]# ./PERSIST -b -f 2 ../examples/postgresql/bakery/bakery.txt
+Computed fences for enforcing persistence (4 total): (t0,q1) (t0,q5) (t1,q1) (t1,q5)
+*********************************************
+ Thread number: 2
+ State number: 20
+ Transition number: 24
+ PotentialAttackNum: 12
+ InfeasibleAttackNum: 0
+ InfeasibleAttackNum: 0
+ FeasibleAttackNum: 0
+ Fence number: 4
+ SpinTime in miliseconds: 344
+ CompilerTime in miliseconds: 7784
+ VerifierTime in miliseconds: 2331
+ SeqRealTime in miliseconds: 10459
+ RealTime in milisecond: 7774
+*********************************************
+
+
+[root@localhost build]# ./trencher -b -f  ../examples/postgresql/bakery/bakery.txtfilename ../examples/postgresql/bakery/bakery.txt action 1 threadsCount 2 statesCount 20 transitionsCount 24 potentialAttacksCount 118 infeasibleAttacksCount1 38 infeasibleAttacksCount2 22 feasibleAttacksCount 58 fencesCount 4 spinTime 1849 compilerTime 42630 verifierTime 7660 cpuTime 170 realTime 26451
+
+
+Memorax
+
+out of memory with -a pb -k 4 --cegar
+
+
+Mustketeer
+
+
+[root@localhost build]# ./goto-cc -o ../examples/postgresql/bakery/bakery.gb ../examples/postgresql/bakery/bakery.c
+[root@localhost build]# ./musketeer --mm tso ../examples/postgresql/bakery/bakery.gb 
+Reading GOTO program from ../examples/postgresql/bakery/bakery.gb
+Adding CPROVER library
+Partial Inlining
+Function Pointer Removal
+Pointer Analysis
+Fence detection for tso via critical cycles and ILP
+Adding weak memory (TSO) Instrumentation
+--------
+Temporary variables added
+Dependencies analysis enabled
+Number of threads detected: 2
+Graph with 22 nodes has 1 interesting SCCs
+Number of reads: 14
+Number of writes: 8
+Number of wse: 0
+Number of rfe/fre: 22
+Number of goto-instructions: 65
+Abstract event graph computed
+
+cycles collected: 107 cycles found
+i: 4463 mat_size: 4462
+Optimal solution found
+minimal cost: 24
+0 -> 1 : fence
+(between file ../examples/postgresql/bakery/bakery.c line 49 function thr1 and file ../examples/postgresql/bakery/bakery.c line 50 function thr1
+13 -> 14 : fence
+(between file ../examples/postgresql/bakery/bakery.c line 69 function thr2 and file ../examples/postgresql/bakery/bakery.c line 71 function thr2
+10 -> 11 : fence
+(between file ../examples/postgresql/bakery/bakery.c line 67 function thr2 and file ../examples/postgresql/bakery/bakery.c line 68 function thr2
+3 -> 4 : fence
+(between file ../examples/postgresql/bakery/bakery.c line 51 function thr1 and file ../examples/postgresql/bakery/bakery.c line 53 function thr1
+13 -> 15 : fence
+(between file ../examples/postgresql/bakery/bakery.c line 69 function thr2 and file ../examples/postgresql/bakery/bakery.c line 73 function thr2
+12 -> 14 : fence
+(between file ../examples/postgresql/bakery/bakery.c line 68 function thr2 and file ../examples/postgresql/bakery/bakery.c line 71 function thr2
+2 -> 4 : fence
+(between file ../examples/postgresql/bakery/bakery.c line 50 function thr1 and file ../examples/postgresql/bakery/bakery.c line 53 function thr1
+3 -> 5 : fence
+(between file ../examples/postgresql/bakery/bakery.c line 51 function thr1 and file ../examples/postgresql/bakery/bakery.c line 55 function thr1
+

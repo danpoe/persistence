@@ -1,0 +1,225 @@
+int req;
+int turn;
+
+
+proctype arbiter1 {	
+int lreq;
+do
+:: true ->
+		lreq = loadval(req);
+		store(req, lreq);
+od;
+}
+
+proctype arbiter2 {	
+int lreq;
+do
+:: true ->
+		lreq = loadval(req);
+		store(req, lreq);
+od;
+}
+
+proctype arbiter3 {	
+int lreq;
+do
+:: true ->
+		lreq = loadval(req);
+		store(req, lreq);
+od;
+}
+
+proctype arbiter4 {	
+int lreq;
+do
+:: true ->
+		lreq = loadval(req);
+		store(req, lreq);
+od;
+}
+
+proctype arbiter5 {	
+int lreq;
+do
+:: true ->
+		lreq = loadval(req);
+		store(req, lreq);
+od;
+}
+
+proctype client1 {
+int run1 = 1;	
+int run2 = 1;
+do
+:: true ->
+  do
+  :: run1 == 1 ->
+		store(req, 1);
+		if
+		:: load(turn,1) -> run1 = 0;	
+		:: load(turn,2) -> skip;
+		:: load(turn,0) -> skip;
+		fi;
+  :: run1 == 0 -> break;
+  od;
+
+  do
+  :: run2 == 1 ->
+		store(req, 2);
+		if
+		:: load(turn,0) -> skip;
+    		:: load(turn,1) -> skip;	
+		:: load(turn,2) -> run2 = 0;
+		fi;
+  :: run2 == 0 -> break;
+  od;
+
+  if
+  :: load(turn,1) -> run1 = 0; run2 = 0;
+  :: load(turn,0) -> run1 = 1; run2 = 1;
+  :: load(turn,2) -> run1 = 1; run2 = 1;
+  fi;
+od;
+}
+
+
+proctype client2 {
+int run1 = 1;	
+int run2 = 1;
+do
+:: true ->
+  do
+  :: run1 == 1 ->
+		store(req, 1);
+		if
+		:: load(turn,1) -> run1 = 0;	
+		:: load(turn,2) -> skip;
+		:: load(turn,0) -> skip;
+		fi;
+  :: run1 == 0 -> break;
+  od;
+
+  do
+  :: run2 == 1 ->
+		store(req, 2);
+		if
+		:: load(turn,0) -> skip;
+    		:: load(turn,1) -> skip;	
+		:: load(turn,2) -> run2 = 0;
+		fi;
+  :: run2 == 0 -> break;
+  od;
+
+  if
+  :: load(turn,1) -> run1 = 0; run2 = 0;
+  :: load(turn,0) -> run1 = 1; run2 = 1;
+  :: load(turn,2) -> run1 = 1; run2 = 1;
+  fi;
+od;
+}
+
+proctype client3 {
+int run1 = 1;	
+int run2 = 1;
+do
+:: true ->
+  do
+  :: run1 == 1 ->
+		store(req, 1);
+		if
+		:: load(turn,1) -> run1 = 0;	
+		:: load(turn,2) -> skip;
+		:: load(turn,0) -> skip;
+		fi;
+  :: run1 == 0 -> break;
+  od;
+
+  do
+  :: run2 == 1 ->
+		store(req, 2);
+		if
+		:: load(turn,0) -> skip;
+    		:: load(turn,1) -> skip;	
+		:: load(turn,2) -> run2 = 0;
+		fi;
+  :: run2 == 0 -> break;
+  od;
+
+  if
+  :: load(turn,1) -> run1 = 0; run2 = 0;
+  :: load(turn,0) -> run1 = 1; run2 = 1;
+  :: load(turn,2) -> run1 = 1; run2 = 1;
+  fi;
+od;
+}
+
+proctype client4 {
+int run1 = 1;	
+int run2 = 1;
+do
+:: true ->
+  do
+  :: run1 == 1 ->
+		store(req, 1);
+		if
+		:: load(turn,1) -> run1 = 0;	
+		:: load(turn,2) -> skip;
+		:: load(turn,0) -> skip;
+		fi;
+  :: run1 == 0 -> break;
+  od;
+
+  do
+  :: run2 == 1 ->
+		store(req, 2);
+		if
+		:: load(turn,0) -> skip;
+    		:: load(turn,1) -> skip;	
+		:: load(turn,2) -> run2 = 0;
+		fi;
+  :: run2 == 0 -> break;
+  od;
+
+  if
+  :: load(turn,1) -> run1 = 0; run2 = 0;
+  :: load(turn,0) -> run1 = 1; run2 = 1;
+  :: load(turn,2) -> run1 = 1; run2 = 1;
+  fi;
+od;
+}
+
+proctype client5 {
+int run1 = 1;	
+int run2 = 1;
+do
+:: true ->
+  do
+  :: run1 == 1 ->
+		store(req, 1);
+		if
+		:: load(turn,1) -> run1 = 0;	
+		:: load(turn,2) -> skip;
+		:: load(turn,0) -> skip;
+		fi;
+  :: run1 == 0 -> break;
+  od;
+
+  do
+  :: run2 == 1 ->
+		store(req, 2);
+		if
+		:: load(turn,0) -> skip;
+    		:: load(turn,1) -> skip;	
+		:: load(turn,2) -> run2 = 0;
+		fi;
+  :: run2 == 0 -> break;
+  od;
+
+  if
+  :: load(turn,1) -> run1 = 0; run2 = 0;
+  :: load(turn,0) -> run1 = 1; run2 = 1;
+  :: load(turn,2) -> run1 = 1; run2 = 1;
+  fi;
+od;
+}
+

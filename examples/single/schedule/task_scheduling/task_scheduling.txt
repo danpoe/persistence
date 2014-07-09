@@ -1,0 +1,108 @@
+# Task scheduling
+# 0 - req
+# 1 - turn
+
+
+thread	t0
+initial q0
+transition q0	q1	write	1	0
+transition q1	q2	read	lturn 	1
+transition q2	q0	check 	!= lturn 1
+transition q2	q3	check 	== lturn 1
+transition q3	q4	write	2	0
+transition q4	q5	read	lturn 	1
+transition q5	q3	check 	!= lturn 2
+transition q5	q6	check 	== lturn 2
+transition q6	q0	read	lturn 	1	
+end
+
+
+thread	t1
+initial q0
+transition q0	q1	write	1	0
+transition q1	q2	read	lturn 	1
+transition q2	q0	check 	!= lturn 1
+transition q2	q3	check 	== lturn 1
+transition q3	q4	write	2	0
+transition q4	q5	read	lturn 	1
+transition q5	q3	check 	!= lturn 2
+transition q5	q6	check 	== lturn 2
+transition q6	q0	read	lturn 	1	
+end
+
+
+thread	t2
+initial q0
+transition q0	q1	write	1	0
+transition q1	q2	read	lturn 	1
+transition q2	q0	check 	!= lturn 1
+transition q2	q3	check 	== lturn 1
+transition q3	q4	write	2	0
+transition q4	q5	read	lturn 	1
+transition q5	q3	check 	!= lturn 2
+transition q5	q6	check 	== lturn 2
+transition q6	q0	read	lturn 	1	
+end
+
+thread	t3
+initial q0
+transition q0	q1	write	1	0
+transition q1	q2	read	lturn 	1
+transition q2	q0	check 	!= lturn 1
+transition q2	q3	check 	== lturn 1
+transition q3	q4	write	2	0
+transition q4	q5	read	lturn 	1
+transition q5	q3	check 	!= lturn 2
+transition q5	q6	check 	== lturn 2
+transition q6	q0	read	lturn 	1	
+end
+
+thread	t4
+initial q0
+transition q0	q1	write	1	0
+transition q1	q2	read	lturn 	1
+transition q2	q0	check 	!= lturn 1
+transition q2	q3	check 	== lturn 1
+transition q3	q4	write	2	0
+transition q4	q5	read	lturn 	1
+transition q5	q3	check 	!= lturn 2
+transition q5	q6	check 	== lturn 2
+transition q6	q0	read	lturn 	1	
+end
+
+
+
+thread t5
+initial q0
+transition q0	q1	read	lreq	0
+transition q1	q2	read	lturn 	1
+transition  q2	q0	noop
+end
+
+thread t6
+initial 0
+transition q0	q1	read	lreq	0
+transition q1	q2	read	lturn 	1
+transition  q2	q0	noop
+end
+
+thread t7
+initial q0
+transition q0	q1	read	lreq	0
+transition q1	q2	read	lturn 	1
+transition  q2	q0	noop
+end
+
+thread t8
+initial q0
+transition q0	q1	read	lreq	0
+transition q1	q2	read	lturn 	1
+transition  q2	q0	noop
+end
+
+thread t9
+initial q0
+transition q0	q1	read	lreq	0
+transition q1	q2	read	lturn 	1
+transition  q2	q0	noop
+end

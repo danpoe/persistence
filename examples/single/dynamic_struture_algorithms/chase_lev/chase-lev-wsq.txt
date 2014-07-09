@@ -1,0 +1,112 @@
+#
+# Chase-Lev WSQ
+#
+# Dynamic circular work-stealing deque
+# http://dl.acm.org/citation.cfm?id=1073974
+# 
+# This is the version in section 2
+# 
+# This program needs 1 fence to be SC.
+# 
+#
+# Memory layout:
+# 0 — H
+# 1 — T
+# 2 — L
+# 3 — Item
+# 4 - Lock
+
+thread worker
+initial t00
+
+transition	t00	t0	local 	limit	10000 
+
+transition 	t0 	pop0	noop
+transition 	t0 	push0	noop
+
+
+transition	pop0	pop1	read	T	1
+transition	pop1	pop2	local	T  - T 1
+transition	pop2	pop3	write	T	1
+
+transition	pop3	pop4	read	H	0
+transition	pop4	pop5	check	<   T 	H
+transition	pop4	pop7	check	>=  T   H
+
+transition	pop5	pop6	write 	H 	1
+transition	pop6	end	noop
+
+transition	pop7	pop71	read	item	3
+transition	pop71	end	check	>  T   H
+transition	pop71	pop8	check	==  T   H
+
+transition	pop8	pop10	lock
+transition	pop10	pop11	read  	H1	0
+transition	pop11	pop121	check  ==  H1	H
+transition	pop11	pop15	check  !=  H1	H
+
+transition	pop121	pop12 	check	<	H	limit
+transition	pop121	pop15 	check	>=	H	limit			
+
+transition	pop12	pop13	write   +  H  1 0
+transition	pop13	pop14	unlock
+transition	pop14	pop141	write   +  H  1 1
+transition	pop141	end	noop
+
+transition	pop15	end	unlock
+
+transition	push0	push1	read	T	1
+
+transition	push1	push11	check	<	T	limit
+transition	push1	end	check	>=	T	limit
+
+transition	push11	push2	write	1	3
+transition	push2	end	write	+ T 1	1
+
+transition	end	t0 	noop
+
+end
+
+
+thread steal
+initial steal00
+
+transition	steal00	steal0	local 	limit	10000 
+
+transition	steal0	steal1	read	T	1
+transition	steal1	steal2	read	H	0
+
+transition	steal2	end	check   >=  H 	T
+transition	steal2	steal3	check   <  H 	T
+
+transition	steal3	steal4	read	item	3
+
+transition	steal4	steal5	lock
+
+transition	steal4	steal41	lock
+transition	steal41	steal42	read	rlock	4
+transition 	steal42	steal43	check	== rlock 0
+transition 	steal43	steal44	write	1	4
+transition 	steal44	steal5	unlock
+
+transition	steal5	steal6	read  	H1	0
+transition	steal6	steal71	check  ==  H1	H
+transition	steal6	steal10	check  !=  H1	H
+
+transition	steal71	steal7	check	<	H 	limit
+transition	steal71	steal10	check	>=	H 	limit	
+
+transition	steal7	steal8	write   +  H  1 0
+transition	steal8	steal9	unlock
+transition	steal9	end	noop
+
+transition	steal10	end	unlock
+
+transition	steal10	steal101	lock
+transition 	steal101 steal102	write	0	4
+transition	steal102	end	unlock
+
+
+transition	end steal0	noop
+
+end

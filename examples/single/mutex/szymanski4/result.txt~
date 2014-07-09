@@ -1,0 +1,109 @@
+Trencher 8
+
+[phong@localhost build]$ ./trencher -b -f  ../examples/postgresql/szymansky/szymanski.txt
+filename ../examples/postgresql/szymansky/szymanski.txt action 1 threadsCount 2 statesCount 28 transitionsCount 36 potentialAttacksCount 5062 infeasibleAttacksCount1 2488 infeasibleAttacksCount2 790 feasibleAttacksCount 1784 fencesCount 8 spinTime 64043 compilerTime 1520227 verifierTime 95322 cpuTime 6180 realTime 847237
+
+
+
+Persist 8
+
+[phong@localhost build]$ ./PERSIST -b -f 2 ../examples/postgresql/szymansky/szymanski.txt
+Computed fences for enforcing persistence (8 total): (t0,q7) (t0,q10) (t0,q1) (t0,q4) (t1,q7) (t1,q1) (t1,q4) (t1,q10)
+*********************************************
+ Thread number: 2
+ State number: 28
+ Transition number: 36
+ PotentialAttackNum: 22
+ InfeasibleAttackNum: 0
+ InfeasibleAttackNum: 0
+ FeasibleAttackNum: 0
+ Fence number: 8
+ SpinTime in miliseconds: 569
+ CompilerTime in miliseconds: 12722
+ VerifierTime in miliseconds: 786
+ SeqRealTime in miliseconds: 14077
+ RealTime in milisecond: 8499
+*********************************************
+
+
+
+Memorax 2
+
+[phong@localhost build]$ memorax fencins -a sb ../examples/postgresql/szymansky//szymanski.rmm
+Found 6 synchronization sets:
+Totally 5 unique synchronizations:
+A: Lock write: L35 P0: write: flag[P0] := 1
+
+B: Lock write: L40 P0: write: flag[P0] := 3
+
+C: Lock write: L65 P1: write: flag[P1] := 1
+
+D: Lock write: L70 P1: write: flag[P1] := 3
+
+E: Lock write: L80 P1: write: flag[P1] := 4
+
+Synchronization sets:
+#0: {(A|B), (C|D|E)}
+Total time to insert fences: 0.4 s
+
+
+
+[phong@localhost build]$ memorax fencins -a pb --cegar  ../examples/postgresql/tests/szymansky/szymanski.rmm
+Found 1 synchronization set:
+Totally 0 unique synchronizations:
+Synchronization sets:
+#0: {}
+Total time to insert fences: 0.0 s
+
+
+
+Musketeer 14
+
+[phong@localhost build]$ ./goto-cc -o ../examples/postgresql/tests/szymanski/szymanski.gb ../examples/postgresql/tests/szymanski/szymanski.c
+[phong@localhost build]$ ./musketeer --mm tso ../examples/postgresql/tests/szymanski/szymanski.gb
+Reading GOTO program from ../examples/postgresql/tests/szymanski/szymanski.gb
+Adding CPROVER library
+Partial Inlining
+Function Pointer Removal
+Pointer Analysis
+Fence detection for tso via critical cycles and ILP
+Adding weak memory (TSO) Instrumentation
+--------
+Temporary variables added
+Dependencies analysis enabled
+Number of threads detected: 2
+Graph with 18 nodes has 1 interesting SCCs
+Number of reads: 8
+Number of writes: 10
+Number of wse: 0
+Number of rfe/fre: 40
+Number of goto-instructions: 63
+Abstract event graph computed
+
+cycles collected: 63 cycles found
+i: 2251 mat_size: 2250
+Optimal solution found
+minimal cost: 33
+0 -> 1 : fence
+(between file ../examples/postgresql/tests/szymanski/szymanski.c line 6 function thr1 and file ../examples/postgresql/tests/szymanski/szymanski.c line 8 function thr1
+9 -> 10 : fence
+(between file ../examples/postgresql/tests/szymanski/szymanski.c line 30 function thr2 and file ../examples/postgresql/tests/szymanski/szymanski.c line 32 function thr2
+11 -> 12 : fence
+(between file ../examples/postgresql/tests/szymanski/szymanski.c line 34 function thr2 and file ../examples/postgresql/tests/szymanski/szymanski.c line 35 function thr2
+13 -> 14 : fence
+(between file ../examples/postgresql/tests/szymanski/szymanski.c line 36 function thr2 and file ../examples/postgresql/tests/szymanski/szymanski.c line 37 function thr2
+15 -> 16 : fence
+(between file ../examples/postgresql/tests/szymanski/szymanski.c line 41 function thr2 and file ../examples/postgresql/tests/szymanski/szymanski.c line 43 function thr2
+2 -> 3 : fence
+(between file ../examples/postgresql/tests/szymanski/szymanski.c line 10 function thr1 and file ../examples/postgresql/tests/szymanski/szymanski.c line 11 function thr1
+4 -> 5 : fence
+(between file ../examples/postgresql/tests/szymanski/szymanski.c line 12 function thr1 and file ../examples/postgresql/tests/szymanski/szymanski.c line 14 function thr1
+6 -> 7 : fence
+(between file ../examples/postgresql/tests/szymanski/szymanski.c line 17 function thr1 and file ../examples/postgresql/tests/szymanski/szymanski.c line 22 function thr1
+9 -> 12 : fence
+(between file ../examples/postgresql/tests/szymanski/szymanski.c line 30 function thr2 and file ../examples/postgresql/tests/szymanski/szymanski.c line 35 function thr2
+11 -> 14 : fence
+(between file ../examples/postgresql/tests/szymanski/szymanski.c line 34 function thr2 and file ../examples/postgresql/tests/szymanski/szymanski.c line 37 function thr2
+13 -> 16 : fence
+(between file ../examples/postgresql/tests/szymanski/szymanski.c line 36 function thr2 and file ../examples/postgresql/tests/szymanski/szymanski.c line 43 function thr2
+

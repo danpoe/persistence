@@ -1,0 +1,153 @@
+int flag[4] = {0,0,0,0};
+int turn = 1;
+
+proctype P1 {
+	int i = 1;
+	int lturn;
+	do
+	:: true ->
+		do
+		:: true ->
+			store(flag[i-1],1);
+			lturn = loadval(turn);
+	
+			do
+			:: lturn == 1 -> break;
+			:: lturn != 1 ->
+				if
+				:: load(flag[lturn-1],0) -> store(turn,i);
+				:: load(flag[lturn-1],1) || load(flag[lturn-1],2) -> skip;
+				fi;
+			od;
+			store(flag[i-1],2);
+			
+			if
+			:: load(flag[1],2) -> skip;
+			:: load(flag[1],1) || load(flag[1],0) -> 
+				if
+				:: load(flag[2],2) -> skip;
+				:: load(flag[2],1) || load(flag[2],0) ->
+					if
+					:: load(flag[3],2) -> skip;
+					:: load(flag[3],1) || load(flag[3],0) -> break;
+					fi; 
+				fi;
+			fi;
+		od;
+		
+		store(flag[i-1],0);
+	od;
+}
+
+proctype P2 {
+	int i = 2;
+	int lturn;
+	do
+	:: true ->
+		do
+		:: true ->
+			store(flag[i-1],1);
+			lturn = loadval(turn);
+			do
+			:: lturn == 2 -> break;
+			:: lturn != 2 ->
+				if
+				:: load(flag[lturn-1],0) -> store(turn,i);
+				:: load(flag[lturn-1],1) || load(flag[lturn-1],2) -> skip;
+				fi;
+			od;
+			store(flag[i-1],2);
+			
+			if
+			:: load(flag[2],2) -> skip;
+			:: load(flag[2],1) || load(flag[2],0) -> 
+				if
+				:: load(flag[0],2) -> skip;
+				:: load(flag[0],1) || load(flag[0],0) ->
+					if
+					:: load(flag[3],2) -> skip;
+					:: load(flag[3],1) || load(flag[3],0) -> break;
+					fi; 
+				fi;
+			fi;
+		od;
+		
+		store(flag[i-1],0);
+	od;
+}
+
+
+proctype P3 {
+	int i = 3;
+	int lturn;
+	do
+	:: true ->
+		do
+		:: true ->
+			store(flag[i-1],1);
+			lturn = loadval(turn);
+			do
+			:: lturn == 3 -> break;
+			:: lturn != 3 ->
+				if
+				:: load(flag[lturn-1],0) -> store(turn,i);
+				:: load(flag[lturn-1],1) || load(flag[lturn-1],2) -> skip;
+				fi;
+			od;
+			store(flag[i-1],2);
+			
+			if
+			:: load(flag[1],2) -> skip;
+			:: load(flag[1],1) || load(flag[1],0) -> 
+				if
+				:: load(flag[3],2) -> skip;
+				:: load(flag[3],1) || load(flag[3],0) ->
+					if
+					:: load(flag[0],2) -> skip;
+					:: load(flag[0],1) || load(flag[0],0) -> break;
+					fi; 
+				fi;
+			fi;
+		od;
+		
+		store(flag[i-1],0);
+	od;
+}
+
+
+proctype P4 {
+	int i = 4;
+	int lturn;
+	do
+	:: true ->
+		do
+		:: true ->
+			store(flag[i-1],1);
+			lturn = loadval(turn);
+			do
+			:: lturn == 4 -> break;
+			:: lturn != 4 ->
+				if
+				:: load(flag[lturn-1],0) -> store(turn,i);
+				:: load(flag[lturn-1],1) || load(flag[lturn-1],2) -> skip;
+				fi;
+			od;
+			store(flag[i-1],2);
+			
+			if
+			:: load(flag[1],2) -> skip;
+			:: load(flag[1],1) || load(flag[1],0) -> 
+				if
+				:: load(flag[2],2) -> skip;
+				:: load(flag[2],1) || load(flag[2],0) ->
+					if
+					:: load(flag[0],2) -> skip;
+					:: load(flag[0],1) || load(flag[0],0) -> break;
+					fi; 
+				fi;
+			fi;
+		od;
+		
+		store(flag[i-1],0);
+	od;
+}

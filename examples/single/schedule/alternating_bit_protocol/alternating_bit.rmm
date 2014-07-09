@@ -1,0 +1,52 @@
+forbidden
+  L2 L2;
+  L3 L3
+
+data
+  msg = 2 : [0:2]
+  ack = 2 : [0:2]
+  moved = 0 : [0:1]
+
+process(1)
+data 
+   t = 0 : [0:1]
+
+registers
+  $a = 0 : [0:2]
+  $moved = 0: [0:1]
+text
+  L0: nop; 
+  L1: write: msg := 0;
+L11:   read: $a := ack;
+L12:   if $a != 0 then
+      goto L1;
+   
+L2: nop;
+   
+L21:    write: msg := 1;
+L22:   read: $a := ack;
+L23:   if $a != 1 then
+	      goto L21;
+L3: nop;
+  goto L0
+
+process(1)
+registers
+  $m = 0 : [0:2]
+text
+  L0: nop; 
+  L1: write: ack := 1;
+L11:   read: $m := msg;
+L12:   if $m != 0 then
+      goto L1;
+
+L2: nop;
+
+L21 : write: ack := 0;
+L22:   read: $m := msg;
+L23:   if $m != 1 then
+      	goto L21;
+L3: nop;
+
+goto L0
+

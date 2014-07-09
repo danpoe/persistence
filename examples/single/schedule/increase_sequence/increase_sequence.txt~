@@ -1,0 +1,52 @@
+#
+# Increase sequence
+#
+# msg - 0
+
+thread t0
+initial q0
+transition q0	q1	local limit 10
+transition q1	q2	local i	 1
+transition q2	q3	check <= i limit
+transition q3	q4	write	i 0
+transition q4	q3	noop
+transition q3	q5	local i + 1 i
+transition q5	q2 	noop
+end
+
+thread t1
+initial q0
+transition q0	q1	write	0	0
+transition q1	q2	read	lval1 	0
+transition q2	q3	read	lval2	0
+end
+
+thread t2
+initial q0
+transition q0	q1	write	0	0
+transition q1	q2	read	lval1 	0
+transition q2	q3	read	lval2	0
+end
+
+thread t3
+initial q0
+transition q0	q1	write	0	0
+transition q1	q2	read	lval1 	0
+transition q2	q3	read	lval2	0
+end
+
+thread t4
+initial q0
+transition q0	q1	write	0	0
+transition q1	q2	read	lval1 	0
+transition q2	q3	read	lval2	0
+end
+
+thread t5
+initial q0
+transition q0	q1	write	0	0
+transition q1	q2	read	lval1 	0
+transition q2	q3	read	lval2	0
+end
+
+

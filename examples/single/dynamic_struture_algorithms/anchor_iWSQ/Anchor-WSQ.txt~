@@ -1,0 +1,116 @@
+#
+# Anchor Working steal queue
+#
+# Dynamic synthesis for relaxed memory models
+# 
+# 
+# 
+# Memory layout:
+# 
+# 0 — Head
+# 1 — Size
+# 2 — Tag
+# 3 — Data
+
+memory_size 4
+
+thread owner
+initial t0
+
+transition	t0	t01	local limit	10000 
+transition	t01	t1	local size	10 
+
+transition 	t1 	pop0	noop
+transition 	t1 	push0	noop
+
+transition	pop0	pop1	read	H	0
+transition 	pop1	pop2	read	S 	1
+transition 	pop2	pop3	read	G 	2
+
+transition	pop3	pop4 	check	==	S	0
+transition 	pop3	t1	check 	!=	S	0
+
+transition	pop4	pop5	read	data	3
+transition	pop5	t6 	lock
+
+transition	t6	t7 	read	H1	0
+transition 	t7	t8	read	S1 	1
+transition 	t8	t9	read	G1 	2
+transition	t9	t10	check	==	H 	H1
+transition	t9	unlock	check !=	H 	H1
+transition	t10	t11	check	==	S 	S1
+transition	t10	unlock	check !=	S 	S1
+transition	t11	t12	check	==	G 	G1
+transition	t11	unlock	check !=	G 	G1
+
+transition	unlock	t1	unlock
+
+transition	t12	pop6	write	H	0
+transition	pop6	pop7	write	- S 1	1
+transition	pop7	unlock	write	G	2
+
+transition	push0	push1	read	H	0
+transition	push1	push2	read	S	1
+transition	push2	push21	check 	<	S	size
+transition	push2	t1	check	>=	S	size
+transition	push21	tt6	read	G	2
+
+transition	tt6	tt61	check	<	G	limit
+transition	tt6	t1	check	>=	G	limit
+
+transition	tt61	tt62	lock
+transition	tt62	tt7 	read	H1	0
+transition 	tt7	tt8	read	S1 	1
+transition 	tt8	tt9	read	G1 	2
+transition	tt9	tt10	check	==	H 	H1
+transition	tt9	unlock	check !=	H 	H1
+transition	tt10	tt11	check	==	S 	S1
+transition	tt10	unlock	check !=	S 	S1
+transition	tt11	tt12	check	==	G 	G1
+transition	tt11	unlock	check !=	G 	G1
+
+
+transition	tt12	push4	write	1	3
+transition	push4	push5	write	H	0
+transition	push5	push6	write	+ S 1 	1
+transition	push6	unlock	write	+ G 1	2
+
+end
+
+
+thread steal
+initial t0
+
+transition	t00	t0	local limit	10000
+
+transition	t0	t1	read	H	0
+transition 	t1	t2	read	S 	1
+transition 	t2	t3	read	G 	2
+
+transition	t3	t4 	check	==	S	0
+transition 	t3	t0	check 	!=	S	0
+
+transition	t4	t5	read	data	3
+
+transition	t5	t6	lock
+transition	t6	t7 	read	H1	0
+transition 	t7	t8	read	S1 	1
+transition 	t8	t9	read	G1 	2
+transition	t9	t10	check	==	H 	H1
+transition	t9	unlock	check !=	H 	H1
+transition	t10	t11	check	==	S 	S1
+transition	t10	unlock	check !=	S 	S1
+transition	t11	t121	check	==	G 	G1
+transition	t11	unlock	check !=	G 	G1
+
+transition	t121	t12	check	< 	H	limit
+transition	t121	unlock 	check	>=	H	limit
+
+transition 	t12	t13	write	+ H 1	0
+transition	t13	t14	write	- S 1	1
+transition	t14	t15	write	G	2
+transition	t15	t0 	unlock	
+
+transition	unlock	t0	unlock
+
+end

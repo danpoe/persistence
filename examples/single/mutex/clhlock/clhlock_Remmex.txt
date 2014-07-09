@@ -1,0 +1,138 @@
+bool mem[5] = {false, false, false, false, false};
+int lock = 0;
+
+proctype P0 {
+int i=1;
+int p=1;
+int LOClock=0;
+
+do
+:: true ->
+	store(mem[i],true);
+	LOClock = loadval(lock);
+	
+	do
+	:: true ->
+		LOCK
+		if
+		:: load(lock, LOClock) ->
+			store(lock, p);
+			UNLOCK
+			break;
+		:: !load(lock, LOClock) ->
+			UNLOCK
+		fi;
+	od;
+	
+	p = LOClock;
+	
+	if
+	:: load(mem[p],false) -> skip;
+	fi;
+	
+	store(mem[i],false);
+	i = p;
+od;
+}
+
+proctype P1 {	
+int i=2;
+int p=2;
+int LOClock=0;
+
+do
+:: true ->
+	store(mem[i],true);
+	LOClock = loadval(lock);
+	
+	do
+	:: true ->
+		LOCK
+		if
+		:: load(lock, LOClock) ->
+			store(lock, p);
+			UNLOCK
+			break;
+		:: !load(lock, LOClock) ->
+			UNLOCK
+		fi;
+	od;
+	
+	p = LOClock;
+	
+	if
+	:: load(mem[p],false) -> skip;
+	fi;
+	
+	store(mem[i],false);
+	i = p;
+od;
+}
+
+proctype P2 {	
+int i=3;
+int p=3;
+int LOClock=0;
+
+do
+:: true ->
+	store(mem[i],true);
+	LOClock = loadval(lock);
+	
+	do
+	:: true ->
+		LOCK
+		if
+		:: load(lock, LOClock) ->
+			store(lock, p);
+			UNLOCK
+			break;
+		:: !load(lock, LOClock) ->
+			UNLOCK
+		fi;
+	od;
+	
+	p = LOClock;
+	
+	if
+	:: load(mem[p],false) -> skip;
+	fi;
+	
+	store(mem[i],false);
+	i = p;
+od;
+}
+
+proctype P4 {	
+int i=4;
+int p=4;
+int LOClock=0;
+
+do
+:: true ->
+	store(mem[i],true);
+	LOClock = loadval(lock);
+	
+	do
+	:: true ->
+		LOCK
+		if
+		:: load(lock, LOClock) ->
+			store(lock, p);
+			UNLOCK
+			break;
+		:: !load(lock, LOClock) ->
+			UNLOCK
+		fi;
+	od;
+	
+	p = LOClock;
+	
+	if
+	:: load(mem[p],false) -> skip;
+	fi;
+	
+	store(mem[i],false);
+	i = p;
+od;
+}

@@ -1,0 +1,52 @@
+int x = 0;
+
+
+proctype p1 {
+int tmp;
+int tmp2;
+int cs = 0;
+do
+:: true ->
+	LOCK
+	tmp = loadval(x);
+	tmp2 = tmp - 1;
+	store(x,tmp2);
+	UNLOCK
+	
+	if
+	:: tmp > 0 -> cs = 1; store(x,1);
+	:: tmp <= 0 -> 
+		do
+		:: tmp <= 0 -> tmp = loadval(x);
+		:: tmp > 0 -> break;
+		od;
+	fi;
+
+od;
+}
+
+
+proctype p2 {
+int tmp;
+int tmp2;
+int cs = 0;
+do
+:: true ->
+	LOCK
+	tmp = loadval(x);
+	tmp2 = tmp - 1;
+	store(x,tmp2);
+	UNLOCK
+	
+	if
+	:: tmp > 0 -> cs = 1; store(x,1);
+	:: tmp <= 0 -> 
+		do
+		:: tmp <= 0 -> tmp = loadval(x);
+		:: tmp > 0 -> break;
+		od;
+	fi;
+
+od;
+}
+

@@ -1,0 +1,168 @@
+int c = 0;
+int x;
+int y;
+
+
+proctype p1 {
+int r0; 
+int r1; 
+int r2 = 0;	
+int limit = 1000;
+do
+:: true ->
+    	r2 = 0;
+  	do
+  	:: r2 < limit ->
+		r0 = loadval(c);
+		r1 = r0 + 1;
+		store(c, r1);
+		store(x, 1);
+		store(y, 1);
+		r2 = r0 + 2;
+		store(c, r2);
+  	:: r2 == limit -> break;
+  	od;
+od;
+}
+
+
+proctype p21 {
+int run1 = 1;
+int run2 = 1;
+int c0;
+int c01;
+int c1;
+int x1;
+int y1;
+int error = 0;
+do
+:: true ->
+       run1 = 1;
+       run2 = 1;
+       do
+       :: run1 == 1 ->
+ 		if
+		:: run2 == 1 ->
+			c0 = loadval(c);
+			c01 = c0;
+			c01 = c01 - (c01/2)*2;
+			if
+			:: c01 == 0 -> run2 = 0;
+			:: c01 != 0 -> skip;
+			fi;
+		:: run2 != 1 -> 
+			break;	
+		fi;
+
+		x1 = loadval(x);
+		y1 = loadval(y);
+		c1 = loadval(c);
+
+		if
+		:: c1 == c0 -> 
+				run1 = 0;
+ 				c1 = c1 - (c1/2)*2; 
+				if
+				:: c1 == 0 -> error = 1;
+				:: c1 == 1 -> skip; 
+				fi;
+		:: c1 != c0 -> skip;
+		fi;
+	:: run1 != 1 -> break;
+        od;
+od;
+}
+
+proctype p22 {
+int run1 = 1;
+int run2 = 1;
+int c0;
+int c01;
+int c1;
+int x1;
+int y1;
+int error = 0;
+do
+:: true ->
+       run1 = 1;
+       run2 = 1;
+       do
+       :: run1 == 1 ->
+ 		if
+		:: run2 == 1 ->
+			c0 = loadval(c);
+			c01 = c0;
+			c01 = c01 - (c01/2)*2;
+			if
+			:: c01 == 0 -> run2 = 0;
+			:: c01 != 0 -> skip;
+			fi;
+		:: run2 != 1 -> 
+			break;	
+		fi;
+
+		x1 = loadval(x);
+		y1 = loadval(y);
+		c1 = loadval(c);
+
+		if
+		:: c1 == c0 -> 
+				run1 = 0;
+ 				c1 = c1 - (c1/2)*2; 
+				if
+				:: c1 == 0 -> error = 1;
+				:: c1 == 1 -> skip; 
+				fi;
+		:: c1 != c0 -> skip;
+		fi;
+	:: run1 != 1 -> break;
+        od;
+od;
+}
+
+proctype p23 {
+int run1 = 1;
+int run2 = 1;
+int c0;
+int c01;
+int c1;
+int x1;
+int y1;
+int error = 0;
+do
+:: true ->
+       run1 = 1;
+       run2 = 1;
+       do
+       :: run1 == 1 ->
+ 		if
+		:: run2 == 1 ->
+			c0 = loadval(c);
+			c01 = c0;
+			c01 = c01 - (c01/2)*2;
+			if
+			:: c01 == 0 -> run2 = 0;
+			:: c01 != 0 -> skip;
+			fi;
+		:: run2 != 1 -> 
+			break;	
+		fi;
+
+		x1 = loadval(x);
+		y1 = loadval(y);
+		c1 = loadval(c);
+
+		if
+		:: c1 == c0 -> 
+				run1 = 0;
+ 				c1 = c1 - (c1/2)*2; 
+				if
+				:: c1 == 0 -> error = 1;
+				:: c1 == 1 -> skip; 
+				fi;
+		:: c1 != c0 -> skip;
+		fi;
+	:: run1 != 1 -> break;
+        od;
+od;
+}

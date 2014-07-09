@@ -1,0 +1,47 @@
+volatile int mem[3]={0,0,0}, lock=0;
+
+void * thr0(void * arg)
+{
+  int i=1, p=1, lock_; 
+  while (1) {
+	mem[i] = 1;
+	lock_ = lock;
+	__CPROVER_atomic_begin();
+	if (lock == lock_)
+		lock = p;	
+	__CPROVER_atomic_end();
+	p = lock_;
+	while (mem[p] != 0) {;}
+	mem[i] = 0;
+	i = p;
+  }
+}
+
+
+void * thr1(void * arg)
+{
+  int i=2, p=2, lock_; 
+  while (1) {
+	mem[i] = 1;
+	lock_ = lock;
+	__CPROVER_atomic_begin(); 
+	if (lock == lock_)
+		lock = p;	
+	__CPROVER_atomic_end();
+	p = lock_;
+	while (mem[p] != 0) {;}
+	mem[i] = 0;
+	i = p;
+  }
+}
+
+
+int main()
+{
+  __CPROVER_ASYNC_0: thr0(0);
+  __CPROVER_ASYNC_1: thr1(0);
+//thr2(0);
+
+return 0;
+}
+

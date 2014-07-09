@@ -1,0 +1,88 @@
+#
+# LIFO Working steal queue
+#
+# Dynamic synthesis for relaxed memory models
+# 
+# IS robust.
+# 
+# 
+# Memory layout:
+# 
+# 0 — Tail
+# 1 — Tag
+# 2 — Data
+
+memory_size 3
+
+thread owner
+initial t0 
+
+transition 	t0 	t1	local 	n	10000	
+transition 	t1 	pop0	noop
+transition 	t1 	push0	noop
+
+transition	pop0	pop1	read	T	0
+transition 	pop1	pop2	read	tag 	1
+transition	pop2	t4	read 	data	2
+
+transition	t4 	t5	lock	
+transition 	t5	t6	read	T1	0
+transition 	t6	t7	read	tag1 	1
+transition	t7	unlock	check	!=	T1	T
+transition	t7	t8	check	==	T1	T
+transition	t8	unlock	check	!=	tag1	tag
+transition	t8	t9	check	==	tag1	tag
+
+transition	t9	pop4	write	- T 1	0
+transition	pop4	unlock	write	tag	1
+
+transition	unlock	t1	unlock
+
+transition	push0	push1	read	T	0
+transition	push1	push2	read	tag	1
+transition	push2	push3	check 	< 	T	n
+transition	push2	t1	check 	>= 	T	n
+
+transition	push3	tt4	write	1 	2
+
+transition	tt4 	tt5	lock	
+transition 	tt5	tt6	read	T1	0
+transition 	tt6	tt7	read	tag1 	1
+transition	tt7	unlock	check	!=	T1	T
+transition	tt7	tt8	check	==	T1	T
+transition	tt8	unlock	check	!=	tag1	tag
+transition	tt8	tt9	check	==	tag1	tag
+
+transition	tt9	push5	write 	+ T 1	0
+transition	push5	unlock	write	+ tag 1	1
+
+end
+
+
+thread steal
+initial t0
+
+transition 	t0 	t01	local 	n	10000	
+
+transition 	t01	t1	read	T	0
+transition 	t1	t2	read	tag 	1
+
+transition	t2	t0	check 	==	T	0
+transition	t2	t3	check  	!= 	T	0
+transition 	t3	t4	read	data	2
+
+transition	t4 	t5	lock	
+transition 	t5	t6	read	T1	0
+transition 	t6	t7	read	tag1 	1
+transition	t7	unlock	check	!=	T1	T
+transition	t7	t8	check	==	T1	T
+transition	t8	unlock	check	!=	tag1	tag
+transition	t8	t9	check	==	tag1	tag
+
+transition	t9	t11	write 	- T 1	0
+transition	t11	unlock	write	tag	1
+
+transition	unlock	t0	unlock	
+
+
+end

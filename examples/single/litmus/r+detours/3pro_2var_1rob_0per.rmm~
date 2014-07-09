@@ -1,0 +1,68 @@
+/*
+# x - 0
+# z - 1
+# T1: z=3; Rx <-x =0
+# T2: x=0; z=2;
+# T3: x=0
+# error state: x=0; z=3, Rx=0
+#
+# Cycles for happended-before relation:
+# isu&update(x=0,t3), isu(z=3), Rx=x, isu&update(x=0,t2), isu&update(z=2), update(z=3)
+ */
+
+forbidden
+  L2 L2 L2
+data
+  x = 0 : [0:3]
+  z = 0 : [0:3]
+
+process(1)
+registers
+  $rx = * : [0:3]
+  $rx1 = * : [0:3]
+  $rz = * : [0:3]
+	
+text
+  L0: write: z := 3 
+  L1:  read: $rx := x;
+  if $rx != 0 then {
+      goto L1
+  };
+  read: $rx1 := x;
+  read: $rz := z;
+  if $rx = 0 && $rx1 = 0 && $rz = 3 then {
+	L2: nop
+  };
+
+  goto L0
+
+process(1)
+registers
+  $rx = * : [0:3]
+  $rz = * : [0:3]
+text
+  L0: write: x := 0;
+  write: z := 2;
+  read: $rx := x;
+  read: $rz := z;
+  if $rx = 0 && $rz = 3 then {
+	L2: nop
+  };
+
+   goto L0
+
+
+process(1)
+registers
+  $rx = * : [0:3]
+  $rz = * : [0:3]
+text
+  L0: write: x := 0;
+  read: $rx := x;
+  read: $rz := z;
+  if $rx = 0 && $rz = 3 then {
+	L2: nop
+  };
+
+   goto L0
+

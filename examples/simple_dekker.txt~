@@ -1,0 +1,16 @@
+
+
+thread t0
+initial q0
+
+transition q0	q1	noop
+tranition  q1 q11	read	x	0	
+transition q1	q1	write	1	1
+end
+
+thread t1
+initial q0
+transition q0	q1	noop
+transition q1	q11	read	y	1	
+transition q1	q1	write	1	0
+end

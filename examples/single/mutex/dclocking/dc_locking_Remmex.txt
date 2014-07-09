@@ -1,0 +1,154 @@
+int s0 = 0;
+int p = 0;
+
+proctype p1 {
+int error = 0;
+do
+:: true -> 
+	if
+	:: load(p,0) ->
+		LOCK
+		if
+		:: load(p,0) ->
+			if
+			:: load(s0,0) -> store(s0,1); store(p,1);
+			:: load(s0,1) -> error = 1;
+			fi;
+		:: load(p,1) -> skip;
+		fi;
+		UNLOCK
+	:: load(p,1) -> skip;
+	fi;
+
+	if
+	:: load(p,1) -> skip;
+	:: load(p,0) -> error = 1;
+	fi;
+od;
+}
+
+proctype p2 {
+int error = 0;
+do
+:: true -> 
+	if
+	:: load(p,0) ->
+		LOCK
+		if
+		:: load(p,0) ->
+			if
+			:: load(s0,0) -> store(s0,1); store(p,1);
+			:: load(s0,1) -> error = 1;
+			fi;
+		:: load(p,1) -> skip;
+		fi;
+		UNLOCK
+	:: load(p,1) -> skip;
+	fi;
+	if
+	:: load(p,1) -> skip;
+	:: load(p,0) -> error = 1;
+	fi;
+od;
+}
+
+proctype p3 {
+int error = 0;
+do
+:: true -> 
+	if
+	:: load(p,0) ->
+		LOCK
+		if
+		:: load(p,0) ->
+			if
+			:: load(s0,0) -> store(s0,1); store(p,1);
+			:: load(s0,1) -> error = 1;
+			fi;
+		:: load(p,1) -> skip;
+		fi;
+		UNLOCK
+	:: load(p,1) -> skip;
+	fi;
+	if
+	:: load(p,1) -> skip;
+	:: load(p,0) -> error = 1;
+	fi;
+od;
+}
+
+
+proctype p4 {
+int error = 0;
+do
+:: true -> 
+	if
+	:: load(p,0) ->
+		LOCK
+		if
+		:: load(p,0) ->
+			if
+			:: load(s0,0) -> store(s0,1); store(p,1);
+			:: load(s0,1) -> error = 1;
+			fi;
+		:: load(p,1) -> skip;
+		fi;
+		UNLOCK
+	:: load(p,1) -> skip;
+	fi;
+	if
+	:: load(p,1) -> skip;
+	:: load(p,0) -> error = 1;
+	fi;
+od;
+}
+
+proctype p5 {
+int error = 0;
+do
+:: true -> 
+	if
+	:: load(p,0) ->
+		LOCK
+		if
+		:: load(p,0) ->
+			if
+			:: load(s0,0) -> store(s0,1); store(p,1);
+			:: load(s0,1) -> error = 1;
+			fi;
+		:: load(p,1) -> skip;
+		fi;
+		UNLOCK
+	:: load(p,1) -> skip;
+	fi;
+	if
+	:: load(p,1) -> skip;
+	:: load(p,0) -> error = 1;
+	fi;
+od;
+}
+
+proctype p6 {
+int error = 0;
+do
+:: true -> 
+	if
+	:: load(p,0) ->
+		LOCK
+		if
+		:: load(p,0) ->
+			if
+			:: load(s0,0) -> store(s0,1); store(p,1);
+			:: load(s0,1) -> error = 1;
+			fi;
+		:: load(p,1) -> skip;
+		fi;
+		UNLOCK
+	:: load(p,1) -> skip;
+	fi;
+	if
+	:: load(p,1) -> skip;
+	:: load(p,0) -> error = 1;
+	fi;
+od;
+}

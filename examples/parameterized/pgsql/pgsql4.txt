@@ -1,0 +1,88 @@
+# 0: latch
+# 1: work_to_do
+# 2: flag: to force waiter starting before waker
+
+# Waiter:
+# for (;;)
+#   ResetLatch();  //latch = 0
+#   if (work_to_do)
+#	work_to_do = 0
+#	//Do work
+#   WaitLatch();  // while (latch != 1) {}
+#
+# Waker:
+# for (;;)
+#	work_to_do = 1;
+#       SetLatch(); // if latch == 1 return; else latch == 1
+
+# Result: 3 fence for Persit, 3 fence for Trencher 
+# Musketeer: 3 fences. 
+
+thread waiter1
+
+initial q0
+
+transition q0	q1	write	0	0
+
+transition q1	q2	read	toDo	1
+transition q2	q3	check == toDo 	1
+transition q3	q4	write	0	1
+transition q2	q4 	check != toDo 	1
+	
+transition q4 	q5 	read 	latch 	0
+transition q5	q4	check == latch 	0
+transition q5	q6 	check != latch 	0
+
+transition q6	q0	noop
+
+end
+
+thread waiter2
+
+initial q0
+
+transition q0	q1	write	0	0
+
+transition q1	q2	read	toDo	1
+transition q2	q3	check == toDo 	1
+transition q3	q4	write	0	1
+transition q2	q4 	check != toDo 	1
+	
+transition q4 	q5 	read 	latch 	0
+transition q5	q4	check == latch 	0
+transition q5	q6 	check != latch 	0
+
+transition q6	q0	noop
+
+end
+
+
+
+thread waker1
+
+initial q0
+transition q0	q1	write	1	1
+
+transition q1 	q2	read	latch	0
+transition q2	q3	check != latch 	1
+transition q3 	q4 	write 	1	0
+transition q2	q4	check == latch 	1
+
+transition q4	q0	noop	
+end
+
+thread waker2
+
+initial q0
+transition q0	q1	write	1	1
+
+transition q1 	q2	read	latch	0
+transition q2	q3	check != latch 	1
+transition q3 	q4 	write 	1	0
+transition q2	q4	check == latch 	1
+
+transition q4	q0	noop	
+end
+
+
+

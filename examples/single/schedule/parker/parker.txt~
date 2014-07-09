@@ -1,0 +1,174 @@
+#
+# A model of the example revealing bug in the Parker class:
+#
+# D. Dice. A race in locksupport park() arising from weak memory models.
+# https://blogs.oracle.com/dave/entry/a_race_in_locksupport_park, Nov 2009.
+#
+# Thread parker executes: while (cond != 0) park();
+# Thread unparker executes: cond = 1; unpark(T1);
+#
+#
+# Memory layout:
+# 0 — cond 
+# 1 — counter
+# 2 - mutex
+
+# Result: 1, 1, 
+
+thread parker
+initial q0
+transition	q0	q1	read	cond	0
+transition	q1	end	check	== cond 0
+transition	q1	q2	check	!= cond 0
+
+transition	q2	q3	read	counter	1
+transition	q3	q4	check	> counter	0
+transition	q4	q0	write	0	1
+
+transition	q3	q5	check	== counter 0
+transition	q5	q6	lock
+transition	q6	q7 	read	mutex	2
+transition	q7	q8	check	== mutex	0
+transition	q8	q9	write	1	2
+transition	q9	q10	unlock
+transition	q7	q11 	check 	!= mutex	0
+transition	q11	q12	unlock
+transition	q12	q0	noop
+
+transition	q10	q13	read	counter	1
+transition	q13	q14	check	!= counter 0
+transition	q14	q15 	write	0	1
+transition	q15	q0	write	0	2 
+
+transition	q13	q16	check	== counter 0
+transition	q16	q17	lock
+transition	q17	q18	read mutex	2
+transition 	q18	q19	check 	== mutex 1
+transition	q19	q20	write	0	0
+transition	q20	q21	write	0	2
+transition	q21	q22 	unlock
+transition	q22	q23	lock
+transition	q23	q24	read	cond	0
+transition	q24	q25	check	== cond 1
+transition	q25	q26	write	1	2
+transition	q26	q0	unlock
+		
+end
+
+thread unparker1
+initial q0
+transition	q0	q1	write	1	0
+transition	q1	q2	mfence
+
+transition	q2	q3	lock
+transition	q3	q4	read	mutex	2
+transition 	q4	q5	check	== mutex	 0
+transition	q5	q6 	write	1	2
+transition	q6	q7	unlock 
+
+transition	q7	q8	read	s	1
+transition	q8	q9	write	1	1
+
+transition	q9	q10	lock
+transition	q10	q11	write	0	2
+transition	q11	q12	unlock
+
+transition	q12	q13	check	< s 	1
+transition	q13	q14	write	1	0
+end
+
+thread unparker2
+initial q0
+transition	q0	q1	write	1	0
+transition	q1	q2	mfence
+
+transition	q2	q3	lock
+transition	q3	q4	read	mutex	2
+transition 	q4	q5	check	== mutex	 0
+transition	q5	q6 	write	1	2
+transition	q6	q7	unlock 
+
+transition	q7	q8	read	s	1
+transition	q8	q9	write	1	1
+
+transition	q9	q10	lock
+transition	q10	q11	write	0	2
+transition	q11	q12	unlock
+
+transition	q12	q13	check	< s 	1
+transition	q13	q14	write	1	0
+end
+
+thread unparker3
+initial q0
+transition	q0	q1	write	1	0
+transition	q1	q2	mfence
+
+transition	q2	q3	lock
+transition	q3	q4	read	mutex	2
+transition 	q4	q5	check	== mutex	 0
+transition	q5	q6 	write	1	2
+transition	q6	q7	unlock 
+
+transition	q7	q8	read	s	1
+transition	q8	q9	write	1	1
+
+transition	q9	q10	lock
+transition	q10	q11	write	0	2
+transition	q11	q12	unlock
+
+transition	q12	q13	check	< s 	1
+transition	q13	q14	write	1	0
+end
+
+thread unparker4
+initial q0
+transition	q0	q1	write	1	0
+transition	q1	q2	mfence
+
+transition	q2	q3	lock
+transition	q3	q4	read	mutex	2
+transition 	q4	q5	check	== mutex	 0
+transition	q5	q6 	write	1	2
+transition	q6	q7	unlock 
+
+transition	q7	q8	read	s	1
+transition	q8	q9	write	1	1
+
+transition	q9	q10	lock
+transition	q10	q11	write	0	2
+transition	q11	q12	unlock
+
+transition	q12	q13	check	< s 	1
+transition	q13	q14	write	1	0
+end
+
+thread unparker5
+initial q0
+transition	q0	q1	write	1	0
+transition	q1	q2	mfence
+
+transition	q2	q3	lock
+transition	q3	q4	read	mutex	2
+transition 	q4	q5	check	== mutex	 0
+transition	q5	q6 	write	1	2
+transition	q6	q7	unlock 
+
+transition	q7	q8	read	s	1
+transition	q8	q9	write	1	1
+
+transition	q9	q10	lock
+transition	q10	q11	write	0	2
+transition	q11	q12	unlock
+
+transition	q12	q13	check	< s 	1
+transition	q13	q14	write	1	0
+end
+
+thread	setup
+initial q0
+transition 	q0	q1	lock
+transition	q1	q2	write	0	0
+transition	q2	q3	write	1	1
+transition	q2	q3	unlock	
+end

@@ -1,0 +1,119 @@
+/* Problematic code from PostgreSQL
+
+// Waiter:
+// for (;;)
+//   
+//   ResetLatch();  //latch = 0
+//   if (work_to_do)
+//	//Do work
+//   assert(latch is not set by Waiter (end of line) || latch is 0 || word_to_do == 1);
+//   WaitLatch();  // while (latch != 1) {}
+//
+// Waker:
+// for (;;)
+//	work_to_do = 1;
+//       SetLatch(); // if latch == 1 return; else latch == 1
+*/
+
+/* We want waker in a loop */
+
+forbidden
+  BAD * * * * *
+
+data
+  latch = * : [0:1]
+  work = 0 : [0:1]
+  latch_set = 0 : [0:1]
+
+process
+registers
+  $l = 0 : [0:1]
+  $ls = 0 : [0:1]
+  $w = 0 : [0:2]
+text
+  L0:
+  write: latch := 0;
+
+  either{
+    read: work = 0
+  or
+    read: work = 1;
+    write: work := 0;
+    $w := 1
+  };
+  read: $ls := latch_set;
+  read: $l := latch;
+  if $ls = 1 && $l = 0 && $w = 0 then goto BAD;
+  read: latch = 1;
+  goto L0;
+BAD: nop
+
+process
+text
+L0:
+  write: latch_set := 0;
+  write: work := 1;
+  either{
+    read: latch = 1
+  or
+    read: latch = 0;
+    write: latch := 1
+  };
+  write: latch_set := 1;
+  goto L0
+
+process
+text
+L0:
+  write: latch_set := 0;
+  write: work := 1;
+  either{
+    read: latch = 1
+  or
+    read: latch = 0;
+    write: latch := 1
+  };
+  write: latch_set := 1;
+  goto L0
+
+process
+text
+L0:
+  write: latch_set := 0;
+  write: work := 1;
+  either{
+    read: latch = 1
+  or
+    read: latch = 0;
+    write: latch := 1
+  };
+  write: latch_set := 1;
+  goto L0
+
+process
+text
+L0:
+  write: latch_set := 0;
+  write: work := 1;
+  either{
+    read: latch = 1
+  or
+    read: latch = 0;
+    write: latch := 1
+  };
+  write: latch_set := 1;
+  goto L0
+
+process
+text
+L0:
+  write: latch_set := 0;
+  write: work := 1;
+  either{
+    read: latch = 1
+  or
+    read: latch = 0;
+    write: latch := 1
+  };
+  write: latch_set := 1;
+  goto L0

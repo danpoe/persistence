@@ -1,0 +1,87 @@
+Trencher = Persist = 5
+
+[phong@localhost build]$ ./trencher -b -f ../examples/postgresql/burns/burns.txt
+filename ../examples/postgresql/burns/burns.txt action 1 threadsCount 3 statesCount 27 transitionsCount 36 potentialAttacksCount 148 infeasibleAttacksCount1 52 infeasibleAttacksCount2 29 feasibleAttacksCount 67 fencesCount 5 spinTime 2240 compilerTime 56405 verifierTime 4152 cpuTime 270 realTime 34329
+[phong@localhost build]$ ./PERSIST -b -f 2 ../examples/postgresql/burns/burns.txt
+Computed fences for enforcing persistence (5 total): (t0,q2) (t1,q4) (t1,q1) (t2,q1) (t2,q6)
+*********************************************
+ Thread number: 3
+ State number: 27
+ Transition number: 36
+ PotentialAttackNum: 11
+ InfeasibleAttackNum: 0
+ InfeasibleAttackNum: 0
+ FeasibleAttackNum: 0
+ Fence number: 5
+ SpinTime in miliseconds: 290
+ CompilerTime in miliseconds: 6565
+ VerifierTime in miliseconds: 523
+ SeqRealTime in miliseconds: 7378
+ RealTime in milisecond: 4622
+*********************************************
+
+
+Memorax 3
+
+[phong@localhost build]$ memorax fencins -a sb ../examples/postgresql/burns/burns.rmm
+Found 1 synchronization set:
+Totally 3 unique synchronizations:
+A: Lock write: L31 P0: write: flag[P0] := 1
+
+B: Lock write: L58 P1: write: flag[P1] := 1
+
+C: Lock write: L94 P2: write: flag[P2] := 1
+
+Synchronization sets:
+#0: {A, B, C}
+Total time to insert fences: 14.3 s
+
+
+Musketeer 10
+
+[phong@localhost build]$ ./goto-cc -o ../examples/postgresql/burns/burns.bg ../examples/postgresql/burns/burns.c
+[phong@localhost build]$ ./musketeer --mm tso ../examples/postgresql/burns/burns.bg 
+Reading GOTO program from ../examples/postgresql/burns/burns.bg
+Adding CPROVER library
+Partial Inlining
+Function Pointer Removal
+Pointer Analysis
+Fence detection for tso via critical cycles and ILP
+Adding weak memory (TSO) Instrumentation
+--------
+Temporary variables added
+Dependencies analysis enabled
+Number of threads detected: 3
+Graph with 17 nodes has 1 interesting SCCs
+Number of reads: 9
+Number of writes: 8
+Number of wse: 6
+Number of rfe/fre: 21
+Number of goto-instructions: 68
+Abstract event graph computed
+
+cycles collected: 126 cycles found
+i: 5901 mat_size: 5900
+Optimal solution found
+minimal cost: 30
+1 -> 2 : fence
+(between file ../examples/postgresql/burns/burns.c line 26 function thr0 and file ../examples/postgresql/burns/burns.c line 27 function thr0
+10 -> 11 : fence
+(between file ../examples/postgresql/burns/burns.c line 51 function thr2 and file ../examples/postgresql/burns/burns.c line 52 function thr2
+13 -> 14 : fence
+(between file ../examples/postgresql/burns/burns.c line 53 function thr2 and file ../examples/postgresql/burns/burns.c line 54 function thr2
+4 -> 5 : fence
+(between file ../examples/postgresql/burns/burns.c line 35 function thr1 and file ../examples/postgresql/burns/burns.c line 36 function thr1
+6 -> 7 : fence
+(between file ../examples/postgresql/burns/burns.c line 37 function thr1 and file ../examples/postgresql/burns/burns.c line 38 function thr1
+4 -> 7 : fence
+(between file ../examples/postgresql/burns/burns.c line 35 function thr1 and file ../examples/postgresql/burns/burns.c line 38 function thr1
+6 -> 8 : fence
+(between file ../examples/postgresql/burns/burns.c line 37 function thr1 and file ../examples/postgresql/burns/burns.c line 39 function thr1
+10 -> 14 : fence
+(between file ../examples/postgresql/burns/burns.c line 51 function thr2 and file ../examples/postgresql/burns/burns.c line 54 function thr2
+1 -> 3 : fence
+(between file ../examples/postgresql/burns/burns.c line 26 function thr0 and file ../examples/postgresql/burns/burns.c line 27 function thr0
+0 -> 2 : fence
+(between file ../examples/postgresql/burns/burns.c line 25 function thr0 and file ../examples/postgresql/burns/burns.c line 27 function thr0
+

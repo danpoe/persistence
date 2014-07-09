@@ -1,0 +1,304 @@
+int latch1 = 1;
+int flag1 = 1;
+int latch2 = 0;
+int flag2 = 0;
+
+
+proctype p1 {
+int llatch;
+int lflag;
+int error = 0;
+
+do
+:: load(latch1,1) -> break;
+:: load(latch1,0) -> skip;
+od;
+
+do
+:: true ->
+		llatch = loadval(latch1);
+		lflag = loadval(flag1);
+		if
+		:: (llatch == 1 && lflag == 0) -> error = 1;
+		:: (llatch !=1 || lflag != 0) -> skip;
+		fi;
+
+		store(latch1,0);
+		if
+		:: load(flag1,1) ->
+			store(flag1,0);
+			store(flag2,1);
+			if
+			:: load(latch2,0) -> store(latch2,1);
+			:: load(latch2,1) -> skip;
+			fi;
+		:: load(flag1,0) -> skip;
+		fi;
+		do
+		:: load(latch1,0) -> skip;
+		:: load(latch1,1) -> break;
+		od;
+od;
+}
+
+
+proctype p2 {
+int llatch;
+int lflag;
+int error = 0;
+
+do
+:: load(latch2,1) -> break;
+:: load(latch2,0) -> skip;
+od;
+
+do
+:: true ->
+		llatch = loadval(latch2);
+		lflag = loadval(flag2);
+		if
+		:: llatch == 1 && lflag == 0 -> error = 1;
+		:: llatch !=1 || lflag != 0 -> skip;
+		fi;
+
+		store(latch2,0);
+		if
+		:: load(flag2,1) ->
+			store(flag2,0);
+			store(flag1,1);
+			if
+			:: load(latch1,0) -> store(latch1,1);
+			:: load(latch1,1) -> skip;
+			fi;
+		:: load(flag2,0) -> skip;
+		fi;
+		do
+		:: load(latch2,0) -> skip;
+		:: load(latch2,1) -> break;
+		od;
+od;
+}
+
+proctype p3 {
+int llatch;
+int lflag;
+int error = 0;
+
+do
+:: load(latch2,1) -> break;
+:: load(latch2,0) -> skip;
+od;
+
+do
+:: true ->
+		llatch = loadval(latch2);
+		lflag = loadval(flag2);
+		if
+		:: llatch == 1 && lflag == 0 -> error = 1;
+		:: llatch !=1 || lflag != 0 -> skip;
+		fi;
+
+		store(latch2,0);
+		if
+		:: load(flag2,1) ->
+			store(flag2,0);
+			store(flag1,1);
+			if
+			:: load(latch1,0) -> store(latch1,1);
+			:: load(latch1,1) -> skip;
+			fi;
+		:: load(flag2,0) -> skip;
+		fi;
+		do
+		:: load(latch2,0) -> skip;
+		:: load(latch2,1) -> break;
+		od;
+od;
+}
+
+proctype p4 {
+int llatch;
+int lflag;
+int error = 0;
+
+do
+:: load(latch2,1) -> break;
+:: load(latch2,0) -> skip;
+od;
+
+do
+:: true ->
+		llatch = loadval(latch2);
+		lflag = loadval(flag2);
+		if
+		:: llatch == 1 && lflag == 0 -> error = 1;
+		:: llatch !=1 || lflag != 0 -> skip;
+		fi;
+
+		store(latch2,0);
+		if
+		:: load(flag2,1) ->
+			store(flag2,0);
+			store(flag1,1);
+			if
+			:: load(latch1,0) -> store(latch1,1);
+			:: load(latch1,1) -> skip;
+			fi;
+		:: load(flag2,0) -> skip;
+		fi;
+		do
+		:: load(latch2,0) -> skip;
+		:: load(latch2,1) -> break;
+		od;
+od;
+}
+
+proctype p5 {
+int llatch;
+int lflag;
+int error = 0;
+
+do
+:: load(latch2,1) -> break;
+:: load(latch2,0) -> skip;
+od;
+
+do
+:: true ->
+		llatch = loadval(latch2);
+		lflag = loadval(flag2);
+		if
+		:: llatch == 1 && lflag == 0 -> error = 1;
+		:: llatch !=1 || lflag != 0 -> skip;
+		fi;
+
+		store(latch2,0);
+		if
+		:: load(flag2,1) ->
+			store(flag2,0);
+			store(flag1,1);
+			if
+			:: load(latch1,0) -> store(latch1,1);
+			:: load(latch1,1) -> skip;
+			fi;
+		:: load(flag2,0) -> skip;
+		fi;
+		do
+		:: load(latch2,0) -> skip;
+		:: load(latch2,1) -> break;
+		od;
+od;
+}
+
+proctype p6 {
+int llatch;
+int lflag;
+int error = 0;
+
+do
+:: load(latch2,1) -> break;
+:: load(latch2,0) -> skip;
+od;
+
+do
+:: true ->
+		llatch = loadval(latch2);
+		lflag = loadval(flag2);
+		if
+		:: llatch == 1 && lflag == 0 -> error = 1;
+		:: llatch !=1 || lflag != 0 -> skip;
+		fi;
+
+		store(latch2,0);
+		if
+		:: load(flag2,1) ->
+			store(flag2,0);
+			store(flag1,1);
+			if
+			:: load(latch1,0) -> store(latch1,1);
+			:: load(latch1,1) -> skip;
+			fi;
+		:: load(flag2,0) -> skip;
+		fi;
+		do
+		:: load(latch2,0) -> skip;
+		:: load(latch2,1) -> break;
+		od;
+od;
+}
+
+
+proctype p7 {
+int llatch;
+int lflag;
+int error = 0;
+
+do
+:: load(latch2,1) -> break;
+:: load(latch2,0) -> skip;
+od;
+
+do
+:: true ->
+		llatch = loadval(latch2);
+		lflag = loadval(flag2);
+		if
+		:: llatch == 1 && lflag == 0 -> error = 1;
+		:: llatch !=1 || lflag != 0 -> skip;
+		fi;
+
+		store(latch2,0);
+		if
+		:: load(flag2,1) ->
+			store(flag2,0);
+			store(flag1,1);
+			if
+			:: load(latch1,0) -> store(latch1,1);
+			:: load(latch1,1) -> skip;
+			fi;
+		:: load(flag2,0) -> skip;
+		fi;
+		do
+		:: load(latch2,0) -> skip;
+		:: load(latch2,1) -> break;
+		od;
+od;
+}
+
+
+proctype p8 {
+int llatch;
+int lflag;
+int error = 0;
+
+do
+:: load(latch2,1) -> break;
+:: load(latch2,0) -> skip;
+od;
+
+do
+:: true ->
+		llatch = loadval(latch2);
+		lflag = loadval(flag2);
+		if
+		:: llatch == 1 && lflag == 0 -> error = 1;
+		:: llatch !=1 || lflag != 0 -> skip;
+		fi;
+
+		store(latch2,0);
+		if
+		:: load(flag2,1) ->
+			store(flag2,0);
+			store(flag1,1);
+			if
+			:: load(latch1,0) -> store(latch1,1);
+			:: load(latch1,1) -> skip;
+			fi;
+		:: load(flag2,0) -> skip;
+		fi;
+		do
+		:: load(latch2,0) -> skip;
+		:: load(latch2,1) -> break;
+		od;
+od;
+}

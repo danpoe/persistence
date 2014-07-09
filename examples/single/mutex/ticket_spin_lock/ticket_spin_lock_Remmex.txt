@@ -1,0 +1,56 @@
+int x = 0;
+int y = 0;
+
+proctype p1 {
+int tkt;
+int tkt2;
+int r;
+int r2;
+int limit = 4;
+
+do
+:: true ->
+	LOCK
+	tkt = loadval(y);
+	if 
+	:: tkt <= limit -> skip;
+	:: tkt > limit -> break; 
+	fi;	
+	tkt2 = tkt + 1;	
+	store(y,tkt2);
+	UNLOCK
+	
+	r = loadval(x);
+	do
+	:: r == tkt -> r2 = r + 1; store(x,r2); break;
+	:: r != tkt -> r = loadval(x);
+	od;
+od;
+}
+
+
+proctype p1 {
+int tkt;
+int tkt2;
+int r;
+int r2;
+int limit = 4;
+do
+:: true ->
+	LOCK
+	tkt = loadval(y);
+	if 
+	:: tkt <= limit -> skip;
+	:: tkt > limit -> break; 
+	fi;
+	tkt2 = tkt + 1;
+	store(y,tkt2);
+	UNLOCK
+	
+	r = loadval(x);
+	do
+	:: r == tkt -> r2 = r + 1; store(x,r2); break;
+	:: r != tkt -> r = loadval(x);
+	od;
+od;
+}

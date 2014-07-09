@@ -1,0 +1,150 @@
+bool b[3] = {false,false,false};
+int x = 0;
+int y = 0;
+
+proctype P1 {
+	bool flag;
+	int i = 1;
+	do
+	:: true ->	
+		flag = false;
+		store(b[i-1], true);
+		store(x,i);
+		if
+		:: load(y,1) || load(y,2) || load(y,3) ->
+			store(b[i-1], false);
+			if
+			:: load(y,0) -> skip;
+			fi;
+			flag = true;
+		:: load(y,0) ->
+			store(y,i);
+			if
+			:: load(x,3-i) || load(x,3) ->
+				store(b[i-1],false);
+				if
+				:: load(b[2-i],false) -> skip;
+				fi;
+
+				if
+				:: load(b[2],false) -> skip;
+				fi;
+
+				if
+				:: load(y,3-i) || load(y,3) ->
+					if
+					:: load(y,0) -> skip;
+					fi;
+					flag = true;
+				:: load(y,i) -> skip;
+				:: load(y,0) -> flag = true;
+				fi;
+			:: load(x,i) -> skip;
+			fi;
+		fi;
+		
+		if
+		:: flag -> skip;
+		:: !flag ->
+			store(y,0);
+			store(b[i-1],false);
+		fi;		
+	od;				
+}
+
+proctype P2 {
+	bool flag;
+	int i = 2;
+	do
+	:: true ->	
+		flag = false;
+		store(b[i-1], true);
+		store(x,i);
+		if
+		:: load(y,1) || load(y,2) || load(y,3) ->
+			store(b[i-1], false);
+			if
+			:: load(y,0) -> skip;
+			fi;
+			flag = true;
+		:: load(y,0) ->
+			store(y,i);
+			if
+			:: load(x,3-i) || load(x,3) ->
+				store(b[i-1],false);
+				if
+				:: load(b[2-i],false) -> skip;
+				fi;
+				if
+				:: load(b[2],false) -> skip;
+				fi;
+				if
+				:: load(y,3-i) || load(y,3) ->
+					if
+					:: load(y,0) -> skip;
+					fi;
+					flag = true;
+				:: load(y,i) -> skip;
+				:: load(y,0) -> flag = true;
+				fi;
+			:: load(x,i) -> skip;
+			fi;
+		fi;
+		
+		if
+		:: flag -> skip;
+		:: !flag ->
+			store(y,0);
+			store(b[i-1],false);
+		fi;		
+	od;		
+}
+
+
+proctype P3 {
+	bool flag;
+	int i = 3;
+	do
+	:: true ->	
+		flag = false;
+		store(b[i-1], true);
+		store(x,i);
+		if
+		:: load(y,1) || load(y,2) || load(y,3) ->
+			store(b[i-1], false);
+			if
+			:: load(y,0) -> skip;
+			fi;
+			flag = true;
+		:: load(y,0) ->
+			store(y,i);
+			if
+			:: load(x,1) || load(x,2) ->
+				store(b[i-1],false);
+				if
+				:: load(b[1],false) -> skip;
+				fi;
+				if
+				:: load(b[0],false) -> skip;
+				fi;
+				if
+				:: load(y,1) || load(y,2) ->
+					if
+					:: load(y,0) -> skip;
+					fi;
+					flag = true;
+				:: load(y,i) -> skip;
+				:: load(y,0) -> flag = true;
+				fi;
+			:: load(x,3) -> skip;
+			fi;
+		fi;
+		
+		if
+		:: flag -> skip;
+		:: !flag ->
+			store(y,0);
+			store(b[i-1],false);
+		fi;		
+	od;		
+}

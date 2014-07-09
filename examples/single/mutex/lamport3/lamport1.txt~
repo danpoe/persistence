@@ -1,0 +1,101 @@
+#
+# Lamport's fast mutex algorithm 2, as presented in
+#
+# L. Lamport. A fast mutual exclusion algorithm. ACM Trans. Comput.
+# Syst., 5(1), 1987.
+# Algorithm 2 
+#
+
+#
+# Memory layout:
+# 0 — x
+# 1 — y
+# 3 - b1
+# 4 - b2
+
+# Result: trencher 4, Persist 8, musketeer 14 
+
+thread t1
+initial q00
+transition 	q00	q0	local 	flag	0
+transition	q0	q1	write	1	3
+transition 	q1	q2	write 	1	0
+
+transition	q2	q3	read	y	1
+transition	q3	q4	check !=  y	0
+transition	q3	q7 	check == y	0
+
+transition	q4	q5	write	0	3
+transition	q5	q6	read	y	1
+transition	q6	q5	check 	!= y	0
+transition	q6	q6_1	check 	== y 	0
+transition 	q6_1	q17	local 	flag	1
+
+transition	q7	q8	write	1	1
+transition	q8	q9	read	x	0
+transition	q9	q17	check 	== x	1
+
+transition	q9	q10	check 	!= x	1
+transition	q10	q11	write	0	3
+
+transition	q11	q12	read	b2	4
+transition	q12	q11	check >= b2	1
+transition	q12	q13	check == b2 	0
+
+transition 	q13	q14	read	y	1
+transition	q14	q17	check == y	1
+transition	q14	q15	check == y	2
+transition 	q14	q14_1	check == y	0
+transition	q14_1	q17	local 	flag	1
+
+transition	q15	q16	read	y	1
+transition	q16	q16_1	check	== y	0
+transition 	q16_1	q17	local 	flag	1
+transition	q16	q15	check != y	0 
+
+transition 	q17	q19	check	== flag 1
+transition	q17	q17_1	check	!= flag 1
+
+transition	q17_1	q18	write	0	1
+transition	q18	q19	write	0	3
+
+transition	q19	q0	noop
+
+end
+
+thread t2
+initial q0
+transition	q0	q1	write	1	4
+transition 	q1	q2	write 	2	0
+
+transition	q2	q3	read	y	1
+transition	q3	q4	check !=  y	0
+transition	q3	q7 	check == y	0
+
+transition	q4	q5	write	0	4
+transition	q5	q6	read	y	1
+transition	q6	q5	check 	!= y	0
+transition	q6	q0	check 	== y 	0
+
+transition	q7	q8	write	2	1
+transition	q8	q9	read	x	0
+transition	q9	q17	check 	== x	2
+
+transition	q9	q10	check 	!= x	2
+transition	q10	q11	write	0	4
+transition	q11	q12	read	b1	3
+transition	q12	q11	check >= b1	1
+transition	q12	q13	check == b1 	0
+transition 	q13	q14	read	y	1
+transition	q14	q17	check == y	2
+transition	q14	q15	check != y	2
+transition	q15	q16	read	y	1
+transition	q16	q0	check	== y	0
+transition	q16	q15	check != y	0 
+
+transition	q17	q18	write	0	1
+transition	q18	q19	write	0	4
+
+transition	q19	q0	noop
+end
+

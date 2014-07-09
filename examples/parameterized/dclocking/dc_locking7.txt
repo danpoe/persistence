@@ -1,0 +1,193 @@
+# Double checked lazy initialisation
+# Is it correct under TSO model to guarantee that initialisation is one and access 
+# initialised object
+# Program is ROBUST
+# p - 0
+# l - 1
+
+thread t0
+
+initial t0
+
+transition 	t0	t1	read	p 	0 	
+transition	t1	t2	check	==  	p	0
+transition	t1	t11	check 	!=	p	0
+
+transition	t2	t3	lock
+transition	t3	t4	read 	l 	1
+transition	t4	t5	check 	== 	l 	0
+transition	t5	t6	write	1	1
+transition	t6	t7	unlock
+
+transition	t7	t8	read	p	0
+transition	t8	t9	check	==	p	0
+transition	t8	t10	check	!=	p	0
+
+transition	t9	t10	write	1	0
+
+transition	t10	t11	write	0	1
+
+transition	t11	t0	read 	p	0
+
+end
+
+
+thread t1
+
+initial t0
+
+transition 	t0	t1	read	p 	0 	
+transition	t1	t2	check	==  	p	0
+transition	t1	t11	check 	!=	p	0
+
+transition	t2	t3	lock
+transition	t3	t4	read 	l 	1
+transition	t4	t5	check 	== 	l 	0
+transition	t5	t6	write	1	1
+transition	t6	t7	unlock
+
+transition	t7	t8	read	p	0
+transition	t8	t9	check	==	p	0
+transition	t8	t10	check	!=	p	0
+
+transition	t9	t10	write	1	0
+
+transition	t10	t11	write	0	1
+
+transition	t11	t0	read 	p	0
+
+end
+
+
+thread t2
+
+initial t0
+
+transition 	t0	t1	read	p 	0 	
+transition	t1	t2	check	==  	p	0
+transition	t1	t11	check 	!=	p	0
+
+transition	t2	t3	lock
+transition	t3	t4	read 	l 	1
+transition	t4	t5	check 	== 	l 	0
+transition	t5	t6	write	1	1
+transition	t6	t7	unlock
+
+transition	t7	t8	read	p	0
+transition	t8	t9	check	==	p	0
+transition	t8	t10	check	!=	p	0
+
+transition	t9	t10	write	1	0
+
+transition	t10	t11	write	0	1
+
+transition	t11	t0	read 	p	0
+
+end
+
+thread t3
+
+initial t0
+
+transition 	t0	t1	read	p 	0 	
+transition	t1	t2	check	==  	p	0
+transition	t1	t11	check 	!=	p	0
+
+transition	t2	t3	lock
+transition	t3	t4	read 	l 	1
+transition	t4	t5	check 	== 	l 	0
+transition	t5	t6	write	1	1
+transition	t6	t7	unlock
+
+transition	t7	t8	read	p	0
+transition	t8	t9	check	==	p	0
+transition	t8	t10	check	!=	p	0
+
+transition	t9	t10	write	1	0
+
+transition	t10	t11	write	0	1
+
+transition	t11	t0	read 	p	0
+
+end
+
+
+thread t4
+
+initial t0
+
+transition 	t0	t1	read	p 	0 	
+transition	t1	t2	check	==  	p	0
+transition	t1	t11	check 	!=	p	0
+
+transition	t2	t3	lock
+transition	t3	t4	read 	l 	1
+transition	t4	t5	check 	== 	l 	0
+transition	t5	t6	write	1	1
+transition	t6	t7	unlock
+
+transition	t7	t8	read	p	0
+transition	t8	t9	check	==	p	0
+transition	t8	t10	check	!=	p	0
+
+transition	t9	t10	write	1	0
+
+transition	t10	t11	write	0	1
+
+transition	t11	t0	read 	p	0
+
+end
+
+
+thread t5
+
+initial t0
+
+transition 	t0	t1	read	p 	0 	
+transition	t1	t2	check	==  	p	0
+transition	t1	t11	check 	!=	p	0
+
+transition	t2	t3	lock
+transition	t3	t4	read 	l 	1
+transition	t4	t5	check 	== 	l 	0
+transition	t5	t6	write	1	1
+transition	t6	t7	unlock
+
+transition	t7	t8	read	p	0
+transition	t8	t9	check	==	p	0
+transition	t8	t10	check	!=	p	0
+
+transition	t9	t10	write	1	0
+
+transition	t10	t11	write	0	1
+
+transition	t11	t0	read 	p	0
+
+end
+
+
+thread t6
+
+initial t0
+
+transition 	t0	t1	read	p 	0 	
+transition	t1	t2	check	==  	p	0
+transition	t1	t11	check 	!=	p	0
+
+transition	t2	t3	lock
+transition	t3	t4	read 	l 	1
+transition	t4	t5	check 	== 	l 	0
+transition	t5	t6	write	1	1
+transition	t6	t7	unlock
+
+transition	t7	t8	read	p	0
+transition	t8	t9	check	==	p	0
+transition	t8	t10	check	!=	p	0
+
+transition	t9	t10	write	1	0
+
+transition	t10	t11	write	0	1
+
+transition	t11	t0	read 	p	0
+
+end

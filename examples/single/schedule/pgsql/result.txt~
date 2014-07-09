@@ -1,0 +1,172 @@
+Inline_pgsql
+==========================
+
+Trencher = Persist = 0
+
+./PERSIST -b -f 2 ../examples/postgresql/pgsql/inline_pgsql.txt
+Computed fences for enforcing persistence (0 total):
+*********************************************
+ Thread number: 3
+ State number: 27
+ Transition number: 32
+ PotentialAttackNum: 2
+ InfeasibleAttackNum: 0
+ InfeasibleAttackNum: 0
+ FeasibleAttackNum: 0
+ Fence number: 0
+ SpinTime in miliseconds: 83
+ CompilerTime in miliseconds: 1679
+ VerifierTime in miliseconds: 52
+ SeqRealTime in miliseconds: 1814
+ RealTime in milisecond: 937
+*********************************************
+
+./trencher -b -f  ../examples/postgresql/pgsql/inline_pgsql.txt
+filename ../examples/postgresql/pgsql/inline_pgsql.txt action 1 threadsCount 3 statesCount 27 transitionsCount 32 potentialAttacksCount 24 infeasibleAttacksCount1 8 infeasibleAttacksCount2 16 feasibleAttacksCount 0 fencesCount 0 spinTime 436 compilerTime 10810 verifierTime 435 cpuTime 30 realTime 5872
+
+
+
+Memorax
+
+out of memory
+ memorax reach -a sb ../examples/postgresql/pgsql/inline_pgsql.rmm 
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+
+[phong@localhost build]$ memorax fencins -a pb --cegar  ../examples/postgresql/pgsql/inline_pgsql.rmm 
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+
+[phong@localhost build]$ memorax fencins -a pb --cegar  ../examples/postgresql/pgsql/pgsql.rmm
+Found 1 synchronization set:
+Totally 2 unique synchronizations:
+A: Lock write: L34 P0: write: latch := 0
+
+B: Lock write: L52 P1: write: work := 1
+
+Synchronization sets:
+#0: {A, B}
+Total time to insert fences: 0.8 s
+
+out of memory with -sb pgsql.rmm
+
+
+Musketeer
+
+[root@localhost build]# ./goto-cc -o ../examples/postgresql/pgsql/inline_pgsql.gb ../examples/postgresql/pgsql/inline_pgsql.c
+[root@localhost build]# ./musketeer --mm tso ../examples/postgresql/pgsql/inline_pgsql.gb 
+Reading GOTO program from ../examples/postgresql/pgsql/inline_pgsql.gb
+Adding CPROVER library
+Partial Inlining
+Function Pointer Removal
+Pointer Analysis
+Fence detection for tso via critical cycles and ILP
+Adding weak memory (TSO) Instrumentation
+--------
+Temporary variables added
+Dependencies analysis enabled
+Number of threads detected: 2
+Graph with 14 nodes has 1 interesting SCCs
+Number of reads: 6
+Number of writes: 8
+Number of wse: 4
+Number of rfe/fre: 6
+Number of goto-instructions: 55
+Abstract event graph computed
+
+cycles collected: 6 cycles found
+i: 50 mat_size: 49
+Optimal solution found
+minimal cost: 15
+1 -> 2 : fence
+(between file ../examples/postgresql/pgsql/inline_pgsql.c line 14 function worker_1 and file ../examples/postgresql/pgsql/inline_pgsql.c line 15 function worker_1
+5 -> 6 : fence
+(between file ../examples/postgresql/pgsql/inline_pgsql.c line 19 function worker_1 and file ../examples/postgresql/pgsql/inline_pgsql.c line 22 function worker_1
+12 -> 13 : fence
+(between file ../examples/postgresql/pgsql/inline_pgsql.c line 39 function worker_2 and file ../examples/postgresql/pgsql/inline_pgsql.c line 42 function worker_2
+3 -> 6 : fence
+(between file ../examples/postgresql/pgsql/inline_pgsql.c line 17 function worker_1 and file ../examples/postgresql/pgsql/inline_pgsql.c line 22 function worker_1
+4 -> 6 : fence
+(between file ../examples/postgresql/pgsql/inline_pgsql.c line 18 function worker_1 and file ../examples/postgresql/pgsql/inline_pgsql.c line 22 function worker_1
+
+
+Original version pgsql
+=======================
+Trencher = 3 = Persist
+[phong@localhost build]$ ./PERSIST -b -f 2 ../examples/postgresql/pgsql/pgsql.txt
+Computed fences for enforcing persistence (3 total): (waiter,q1) (waiter,q4) (waker,q1)
+*********************************************
+ Thread number: 2
+ State number: 13
+ Transition number: 15
+ PotentialAttackNum: 5
+ InfeasibleAttackNum: 0
+ InfeasibleAttackNum: 0
+ FeasibleAttackNum: 0
+ Fence number: 3
+ SpinTime in miliseconds: 181
+ CompilerTime in miliseconds: 2323
+ VerifierTime in miliseconds: 188
+ SeqRealTime in miliseconds: 2692
+ RealTime in milisecond: 1652
+*********************************************
+[phong@localhost build]$ ./trencher -b -f ../examples/postgresql/pgsql/pgsql.txt
+filename ../examples/postgresql/pgsql/pgsql.txt action 1 threadsCount 2 statesCount 13 transitionsCount 15 potentialAttacksCount 9 infeasibleAttacksCount1 1 infeasibleAttacksCount2 3 feasibleAttacksCount 5 fencesCount 3 spinTime 228 compilerTime 3812 verifierTime 356 cpuTime 10 realTime 2968
+
+
+Musketeer  3
+
+[phong@localhost build]$ ./musketeer --mm tso ../examples/postgresql/pgsql/pgsql.gb 
+Reading GOTO program from ../examples/postgresql/pgsql/pgsql.gb
+Adding CPROVER library
+Partial Inlining
+Function Pointer Removal
+Pointer Analysis
+Fence detection for tso via critical cycles and ILP
+Adding weak memory (TSO) Instrumentation
+--------
+Temporary variables added
+Dependencies analysis enabled
+Number of threads detected: 2
+Graph with 7 nodes has 1 interesting SCCs
+Number of reads: 3
+Number of writes: 4
+Number of wse: 2
+Number of rfe/fre: 3
+Number of goto-instructions: 42
+Abstract event graph computed
+
+cycles collected: 7 cycles found
+i: 71 mat_size: 70
+Optimal solution found
+minimal cost: 9
+0 -> 1 : fence
+(between file ../examples/postgresql/pgsql/pgsql.c line 26 function waiter and file ../examples/postgresql/pgsql/pgsql.c line 29 function waiter
+2 -> 3 : fence
+(between file ../examples/postgresql/pgsql/pgsql.c line 32 function waiter and file ../examples/postgresql/pgsql/pgsql.c line 36 function waiter
+4 -> 5 : fence
+(between file ../examples/postgresql/pgsql/pgsql.c line 46 function waker and file ../examples/postgresql/pgsql/pgsql.c line 49 function waker
+
+Memorax
+
+[phong@localhost build]$ memorax fencins -a pb --cegar  ../examples/postgresql/tests/pgsql/pgsql.rmm
+Found 1 synchronization set:
+Totally 2 unique synchronizations:
+A: Lock write: L34 P0: write: latch := 0
+
+B: Lock write: L52 P1: write: work := 1
+
+Synchronization sets:
+#0: {A, B}
+Total time to insert fences: 0.9 s
+
+
+[phong@localhost build]$ memorax fencins -a sb  ../examples/postgresql/tests/pgsql/pgsql.rmm
+Found 1 synchronization set:
+Totally 0 unique synchronizations:
+Synchronization sets:
+#0: {}
+Total time to insert fences: 106.3 s
+
+
+

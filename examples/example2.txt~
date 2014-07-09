@@ -1,0 +1,36 @@
+# x - 0
+# y - 1
+# z - 2
+
+thread t0
+initial q0
+transition q0	q1	write	1	0
+transition q1	q2	write	2	0
+end
+
+thread	t1
+initial q0
+transition q0	q1	write	1	1
+transition q1	q2	read	rz 	2
+transition q2	q3	check	== rz 	0
+end
+
+thread	t2
+initial q0	
+transition q0	q1	read	rx	0
+transition q1	q2	check	== rx 	1
+transition q1	q3	check	== rx 	2
+transition q1	q4	check	== rx 	0
+
+transition q2	q21	write	1	2
+transition q21	q5	noop
+
+transition q3	q31	write	1	2
+transition q31	q5	noop
+
+transition q4	q5	noop
+
+transition q5	q6	read	ry	1
+transition q6	q7	chekc	== ry 	0
+
+end

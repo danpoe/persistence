@@ -1,0 +1,83 @@
+# Dijkstra's lock
+# We tested with many threads 
+# Memory layout:
+# N - turn
+# 0 - flag[0]
+# 1 - flag[1]
+# ...
+# N - number of threads in system
+
+memory_size 4
+
+thread t0
+initial q0
+
+transition q0 	q1 	write 	1 0
+
+transition q1 	q2 	read 	turn 3
+
+transition q2 	q3 	check 	== turn 0
+transition q2 	q21 	check 	!= turn 0 
+transition q21 	q22 	read 	flag_turn turn
+transition q22 	q1 	check 	!= flag_turn 0
+transition q22 	q23 	check 	== flag_turn 0 
+transition q23 	q1 	write 	0  3 
+
+transition q3 	q4 	write 	2  0
+
+transition q4	q41	read	flag_1	1
+transition q41	q42	read	flag_2 	2
+transition q42	q0	check	|| == flag_1 2 == flag_2 2
+transition q42	q5	check	&& != flag_1 2 != flag_2 2
+
+transition q5	q0	write	0 0
+end
+
+thread t1
+initial q0
+
+transition q0 	q1 	write 	1 1
+
+transition q1 	q2 	read 	turn 3
+
+transition q2 	q3 	check 	== turn 1
+transition q2 	q21 	check 	!= turn 1 
+transition q21 	q22 	read 	flag_turn turn
+transition q22 	q1 	check 	!= flag_turn 0
+transition q22 	q23 	check 	== flag_turn 0 
+transition q23 	q1 	write 	1  3 
+
+transition q3 	q4 	write 	2  1
+
+transition q4	q41	read	flag_0	0
+transition q41	q42	read	flag_2 	2
+transition q42	q0	check	|| == flag_0 2 == flag_2 2
+transition q42	q5	check	&& != flag_0 2 != flag_2 2
+
+transition q5	q0	write	0 1
+end
+
+thread t2
+initial q0
+
+transition q0 	q1 	write 	1 2
+
+transition q1 	q2 	read 	turn 3
+
+transition q2 	q3 	check 	== turn 2
+transition q2 	q21 	check 	!= turn 2 
+transition q21 	q22 	read 	flag_turn turn
+transition q22 	q1 	check 	!= flag_turn 0
+transition q22 	q23 	check 	== flag_turn 0 
+transition q23 	q1 	write 	2  3 
+
+transition q3 	q4 	write 	2  2
+
+transition q4	q41	read	flag_1	1
+transition q41	q42	read	flag_0 	0
+transition q42	q0	check	|| == flag_1 2 == flag_0 2
+transition q42	q5	check	&& != flag_1 2 != flag_0 2
+
+transition q5	q0	write	0 2
+end
+
