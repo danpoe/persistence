@@ -1,11 +1,16 @@
 
-Persist is a tool that checks the Persistent property of concurrent programs under Total-Store-Order (TSO) memory model such as in Intel x86 and prevent non-intended behaviours by inserting a minimal set of fences.
+Persist is a tool that checks the Persistent property of concurrent programs under Total-Store-Order (TSO) memory model 
+such as in Intel x86 and prevents non-intended behaviours by inserting a minimal set of fences.
 
-Persistence is a weaker definition than data race, and defined by program order and total store order. Keeping a program persist under TSO guarantees sequential consistent properties of the program.
+Persistence is a weaker definition than data race, and defined by program order and total store order. Keeping a program 
+persist under TSO guarantees sequential consistent properties of the program. Another way to avoid non-intended 
+behaviours of programs is keeping it Robust. Robustness is based on program order, store order, and read-from relations 
+that is considered in many previous approaches. The stronger one of Robustness and Persistence is Triangular race free 
+(TRF).
 
-Another way to avoid non-intended behaviours of programs is keeping it Robust. Robustness is based on program order, store order, and read-from relations that is considered in many previous approaches.
-
-One of important differences between Persistence and Robust that we can verify persistent properties of programs with abstraction that make our tool is more scalable, especially with algorithms of multiple processes that are common in concurrent system.
+One of important differences between Persistence and Robust that we can verify persistent properties of programs 
+with abstraction making our tool is more scalable, especially with algorithms of multiple processes that are common 
+in concurrent system.
 
 ##########################
 #This is the end of file.#
