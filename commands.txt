@@ -13,7 +13,8 @@ To do fence inserting with Memorax, Persist, Trencher, and Musketeer:
   - ./musketeer --mm tso filename.gb 
   - ./fence-inserter.py x86 fence results.txt 
 
-+ Remmex: java -Xss2048k -Xmx1024m -jar remmex.jar -f filename_Rememx.txt -P safety -MM TSO -Mode errorCorrection -e number_processes int1 int2 ... intn -maximalPermissive 
++ Remmex: java -Xss2048k -Xmx1024m -jar remmex.jar -f filename_Rememx.txt -P safety -MM TSO -Mode errorCorrection 
+-e number_processes int1 int2 ... intn -maximalPermissive 
 
 ##########################
 #This is the end of file.#
