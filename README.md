@@ -1,9 +1,13 @@
 persistence
 ===========
 
-Source code for Persist
+Persist is a tool that checks the Persistent property of concurrent programs under Total-Store-Order (TSO) memory model such as in Intel x86 and prevent non-intended behaviours by inserting a minimal set of fences.
 
-You can find instructions how to istall, run, and reproduce all results in Table 1 and Figure 17 of then paper using material provided in this package. Here is list of files and folders:
+Persistence is a weaker definition than data race, and defined by program order and total store order. Keeping a program persist under TSO guarantees sequential consistent properties of the program. Another way to avoid non-intended behaviours of programs is keeping it Robust. Robustness is based on program order, store order, and read-from relations that is considered in many previous approaches. The stronger one of Robustness and Persistence is Triangular race free (TRF).
+
+One of important differences between Persistence and Robust that we can verify persistent properties of programs with abstraction that make our tool is more scalable, especially with algorithms of multiple processes that are common in concurrent system.
+
+Source code for Persist: You can find instructions how to istall, run, and reproduce all results in Table 1 and Figure 17 of then paper using material provided in this package. Here is list of files and folders:
 
 + Readmefirst.txt: this current file.
 + install.txt: how to download and install Persist.
