@@ -14,14 +14,15 @@ Persist's directory structure is as following:
                 - parameterized
                 	... algorithms in Figure 17
 
-In examples directory of downloaded files we have many algorithms in *_Remmex.txt to test with Remmex, *.txt files to test with Persist/Trencher, *.c files to test with Musketeer, *.rmm files to test with Memorax.
+In examples directory of downloaded files we have many algorithms in *_Remmex.txt to test with Remmex, *.txt files to 
+test with Persist/Trencher, *.c files to test with Musketeer, *.rmm files to test with Memorax.
 
 In all following parts, we suppose that we stay in the build directory.
 
 2. Running commands
 ================
 
-Command format: ./PERSIST [-b] [-p|-f|-fa n|-dot|-pdot] file
+Command format: ./PERSIST [-b] [-p|-f|-fa e n|-dot|-pdot] file
 
 Options:
 	-b     With benchmarking mode
@@ -31,7 +32,8 @@ Options:
         -dot   Print input program in dot format
 	-pdot  Print instrumented program in dot format
 	file   Input file                       -
-If you do not remember options, running the tool without arguments, ./PERSIST, will give the full list of supported command-line options.
+If you do not remember options, running the tool without arguments, ./PERSIST, will give the full list of supported 
+command-line options.
 
 3. Command examples
 ================
@@ -48,7 +50,8 @@ Some command examples (supposed that you are in the build directory):
 3. Example demo
 ================
 
-Here we consider an example in C code that is a simple version of Dekker algorithm, and then express it as an input file for Persist. We interpret the result that is returned by Persist.
+Here we consider an example in C code that is a simple version of Dekker algorithm, and then express it as an input file 
+for Persist. We interpret the result that is returned by Persist.
 
 3.1. C code:
 volatile int x1, x2;
@@ -118,8 +121,12 @@ Command: ./PERSIST -b -f ../examples/demo.txt
 + We are doing fence insertion with benchmark to make the program persist.
 + The program is not persist. It needs a minimal set of 2 fences to guarantee persistence.
 + We have information about the program: 2 threads, 8 states, 8 transitions.
-+ We need 1.007 seconds to code-to-code translate, compile, verify, and find an optimal set of fence.
-+ We use SPIN as backend verification tool. The sequential time for code-to-code translation to Promela file is 0.177 seconds; for compilation of Promela files to C files and then to executable files is 1.646 seconds. The sequential time for verification by running executable files is 0.113 seconds. The total sequential time for all code-to-code translation, compilation, and verification is 1.936 seconds.
++ We need 1.007 seconds to all code-to-code translate, compile, verify, and find an optimal set of fences. The total 
+sequential time for all code-to-code translation, compilation, verification, and finding an optimal set of fence is 
+1.936 seconds.
++ We use SPIN as backend verification tool. The sequential time for code-to-code translation to Promela file is 0.177 
+seconds; for compilation of Promela files to C files and then to executable files is 1.646 seconds. The sequential time 
+for verification by running executable files is 0.113 seconds. 
 
 4. Innput file
 ================
@@ -146,7 +153,9 @@ Input file format from top to bottom is as following:
 
 4.3 Memory's size section
 
-    + This section is optional. However, because the default shared memory's size is 10, if you want to use more than 10 shared variables in your programs, you must explicitly state your memory's size to guarantee the correctness of Persist's results. Also notice that memory always starts from address 0.
+    + This section is optional. However, because the default shared memory's size is 10, if you want to use more than 
+    10 shared variables in your programs, you must explicitly state your memory's size to guarantee the correctness of 
+    Persist's results. Also notice that memory always starts from address 0.
     + Use this instruction to declare shared memory's size:
         memory_size integer_number
     + Example: memory_size 20
@@ -159,7 +168,8 @@ Input file format from top to bottom is as following:
         transition state_i state_j instructions
     end
 
-    + You can explicitly create number_of_threads threads of type thread_type. If you do not indicate number_of_threads, Persist creates 1 thread of type thread_type.
+    + You can explicitly create number_of_threads threads of type thread_type. If you do not indicate number_of_threads,
+    Persist creates 1 thread of type thread_type.
     
     + The following kinds of instructions exist:
         - write <value-expr> <addr-expr>: write to memory
