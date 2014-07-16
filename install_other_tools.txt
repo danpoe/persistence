@@ -1,13 +1,12 @@
-This file instructs how to download and install other 
-state-of-the-art tools for fence insertion in weak memory models.
+This file instructs how to download and install other state-of-the-art tools for fence insertion in weak memory models.
 
-+ Download and install Memorax: please following link [1]
++ Download and install Memorax: please follow link [1]
 
-+ Download and install Trencher: please following link [2]
++ Download and install Trencher: please follow link [2]
 
-+ Download and install Musketeer: please following link [3]
++ Download and install Musketeer: please follow link [3]
 
-+ Download and install Remmex: please following link [4] 
++ Download and install Remmex: please follow link [4] 
 
 [1] http://user.it.uu.se/~carle968/
 [2] http://concurrency.cs.uni-kl.de/trencher.html
