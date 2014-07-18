@@ -1,154 +1,1566 @@
-echo "Doing fence insertion automatically for all examples"
+echo "We are staying in persistence folder. Please add all executable files of Memorax, Persist, Trencher, Muskteer, and Remmex into build folder"
+
+echo "Doing fence insertion automatically for all examples in Table 1"
 
 echo "Simple Dekker"
 
-./build/PERSIST -b -f ../examples/single/mutex/simple_dekker/simple_dekker.rmm
+./build/PERSIST -b -f ./examples/single/mutex/simple_dekker/simple_dekker.txt
 
-./build/trencher -b -f ../examples/single/mutex/simple_dekker/simple_dekker.rmm
+./build/trencher -b -f ./examples/single/mutex/simple_dekker/simple_dekker.txt
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f ../examples/single/mutex/simple_dekker/simple_dekker_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 10 10 10 10 -maximalPermissive
+./build/memorax fencins -a sb --rff rr./examples/single/mutex/simple_dekker/simple_dekker.rmm
 
-./build/goto-cc -o ../examples/single/mutex/simple_dekker/simple_dekker.gb ../examples/single/mutex/simple_dekker/simple_dekker.c 
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/simple_dekker/simple_dekker_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 10 10 10 10 -maximalPermissive
 
-./build/musketeer --mm tso ../examples/single/mutex/simple_dekker/simple_dekker.gb
+./build/goto-cc -o ./examples/single/mutex/simple_dekker/simple_dekker.gb ./examples/single/mutex/simple_dekker/simple_dekker.c 
+
+./build/musketeer --mm tso ./examples/single/mutex/simple_dekker/simple_dekker.gb
  
-./fence-inserter.py x86 fence results.txt 
+./build/fence-inserter.py x86 fence results.txt 
  
 
 echo "Dekker"
 
-./build/PERSIST -b -f ../examples/single/mutex/dekker/dekker.txt
+./build/PERSIST -b -f ./examples/single/mutex/dekker/dekker.txt
 
-./build/trencher -b -f ../examples/single/mutex/dekker/dekker.txt
+./build/trencher -b -f ./examples/single/mutex/dekker/dekker.txt
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f ../examples/single/mutex/dekker/dekker_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 7 7 7 7 -maximalPermissive
+./build/memorax fencins -a sb --rff ./examples/single/mutex/dekker/dekker.rmm
 
-./build/goto-cc -o ../examples/single/mutex/dekker/dekker.gb ../examples/single/mutex/dekker/dekker.c 
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/dekker/dekker_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 7 7 7 7 -maximalPermissive
 
-./build/musketeer --mm tso ../examples/single/mutex/dekker/dekker.gb
+./build/goto-cc -o ./examples/single/mutex/dekker/dekker.gb ./examples/single/mutex/dekker/dekker.c 
+
+./build/musketeer --mm tso ./examples/single/mutex/dekker/dekker.gb
  
-./fence-inserter.py x86 fence results.txt 
+./build/fence-inserter.py x86 fence results.txt 
+
 
 echo "Peterson"
 
-./build/PERSIST -b -f ../examples/single/mutex/peterson/peterson.txt
+./build/PERSIST -b -f ./examples/single/mutex/peterson/peterson.txt
 
-./build/trencher -b -f ../examples/single/mutex/peterson/peterson.txt
+./build/trencher -b -f ./examples/single/mutex/peterson/peterson.txt
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f ../examples/single/mutex/peterson/peterson_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 4 4 4 4 -maximalPermissive
+./build/memorax fencins -a sb --rff ./examples/single/mutex/peterson/peterson.rmm
 
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/peterson/peterson_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 4 4 4 4 -maximalPermissive
 
-./build/goto-cc -o ../examples/single/mutex/peterson/peterson.gb ../examples/single/mutex/peterson/peterson.c 
+./build/goto-cc -o ./examples/single/mutex/peterson/peterson.gb ./examples/single/mutex/peterson/peterson.c 
 
-./build/musketeer --mm tso ../examples/single/mutex/peterson/peterson.gb
+./build/musketeer --mm tso ./examples/single/mutex/peterson/peterson.gb
  
-./fence-inserter.py x86 fence results.txt 
+./build/fence-inserter.py x86 fence results.txt 
 
 
 echo "Lamport Bakery 3 processes"
 
-./build/PERSIST -b -f ../examples/single/mutex/bakery3/bakery3.txt
+./build/PERSIST -b -f ./examples/single/mutex/bakery3/bakery3.txt
 
-./build/trencher -b -f ../examples/single/mutex/bakery3/bakery3.txt
+./build/trencher -b -f ./examples/single/mutex/bakery3/bakery3.txt
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f ../examples/single/mutex/bakery3/bakery3_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 28 28 28 -maximalPermissive
+./build/memorax fencins -a sb --rff ./examples/single/mutex/bakery3/bakery3.rmm
 
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/bakery3/bakery3_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 28 28 28 -maximalPermissive
 
-./build/goto-cc -o ../examples/single/mutex/bakery3/bakery3.gb ../examples/single/mutex/bakery3/bakery3.c
+./build/goto-cc -o ./examples/single/mutex/bakery3/bakery3.gb ./examples/single/mutex/bakery3/bakery3.c
 
-./build/musketeer --mm tso ../examples/single/mutex/bakery3/bakery3.gb
+./build/musketeer --mm tso ./examples/single/mutex/bakery3/bakery3.gb
  
-./fence-inserter.py x86 fence results.txt 
+./build/fence-inserter.py x86 fence results.txt 
 
 
 echo "Lamport Bakery 4 processes"
 
-./build/PERSIST -b -f ../examples/single/mutex/bakery4/bakery4.txt
+./build/PERSIST -b -f ./examples/single/mutex/bakery4/bakery4.txt
 
-./build/trencher -b -f ../examples/single/mutex/bakery4/bakery4.txt
+./build/trencher -b -f ./examples/single/mutex/bakery4/bakery4.txt
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f ../examples/single/mutex/bakery4/bakery4_Remmex.txt safety -MM TSO -Mode errorCorrection -e 2 51 51 51 51 -maximalPermissive
+./build/memorax fencins -a sb --rff ./examples/single/mutex/bakery4/bakery4.rmm
 
-./build/goto-cc -o ../examples/single/mutex/bakery4/bakery4.gb ../examples/single/mutex/bakery4/bakery4.c
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/bakery4/bakery4_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 51 51 51 51 -maximalPermissive
 
-./build/musketeer --mm tso ../examples/single/mutex/bakery4/bakery4.gb
+./build/goto-cc -o ./examples/single/mutex/bakery4/bakery4.gb ./examples/single/mutex/bakery4/bakery4.c
+
+./build/musketeer --mm tso ./examples/single/mutex/bakery4/bakery4.gb
  
-./fence-inserter.py x86 fence results.txt 
+./build/fence-inserter.py x86 fence results.txt 
 
 
-###############################################
-###############################################
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/dijkstra.txt -P safety -MM TSO -Mode errorCorrection -e 2 3 3 3 3 -maximalPermissive
+echo "Dijkstra"
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/burns.txt -P safety -MM TSO -Mode errorCorrection -e 2 9 3 3 3 3 -maximalPermissive
+./build/PERSIST -b -f ./examples/single/mutex/dijkstra/dijkstra.txt
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/szymanski.txt -P safety -MM TSO -Mode errorCorrection -e 2 24 25 -maximalPermissive
+./build/trencher -b -f ./examples/single/mutex/dijkstra/dijkstra.txt
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/szymanski4.txt -P safety -MM TSO -Mode errorCorrection -e 2 33 35 36 37 -maximalPermissive
+./build/memorax fencins -a sb --rff ./examples/single/mutex/dijkstra/dijkstra.rmm
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/fast_mutex.txt -P safety -MM TSO -Mode errorCorrection -e 2 36 36 -maximalPermissive
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/dijkstra/dijkstra_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 3 3 3 3 -maximalPermissive
 
+./build/goto-cc -o ./examples/single/mutex/dijkstra/dijkstra.gb ./examples/single/mutex/dijkstra/dijkstra.c
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/fast_mutex3.txt -P safety -MM TSO -Mode errorCorrection -e 2 39 39 39 -maximalPermissive
-
-
-
+./build/musketeer --mm tso ./examples/single/mutex/dijkstra/dijkstra.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
 
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/seqlock.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 26 26 26  -maximalPermissive
+echo "Double-checked locking"
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/arbiter_2.txt -P safety -MM TSO -Mode errorCorrection -e 2 0 25 -maximalPermissive 
+./build/PERSIST -b -f ./examples/single/mutex/dclocking/dc_locking.txt
 
+./build/trencher -b -f ./examples/single/mutex/dclocking/dc_locking.txt
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/pgsql.txt -P safety -MM TSO -Mode errorCorrection -e 1 13 100 100 100 100 100 -maximalPermissive
+./build/memorax fencins -a sb --rff ./examples/single/mutex/clocking/dc_locking.rmm
 
+java -Xss2048k -Xmx1024m  -jar ./build/remmex.jar -f ./examples/single/mutex/dc_locking_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 1 12 100 100 100 100 100 -e 1 22 100 100 100 100 100 -e 1 100 12 100 100 100 100 -e 1 100 22 100 100 100 100 -e 1 100 100 12 100 100 100 -e 1 100 100 22 100 100 100 -e 1 100 100 100 12 100 100 -e 1 100 100 100 22 100 100 -e 1 100 100 100 100 12 100 -e 1 100 100 100 100 22 100 -e 1 100 100 100 100 100 12 -e 1 100 100 100 100 100 22 -maximalPermissive
 
+./build/goto-cc -o ./examples/single/mutex/dclocking/dc_locking.gb ./examples/single/mutex/dclocking/dc_locking.c
 
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/incr_seq.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 3 3 3 3 3  -maximalPermissive 
-
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/spinlock.txt -P safety -MM TSO -Mode errorCorrection -e 2 9 9 -maximalPermissive 
-
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/ticket_spinlock.txt -P safety -MM TSO -Mode errorCorrection -e 2 14 14 -maximalPermissive 
-
-
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/sense_reversing_barrier.txt -P safety -MM TSO -Mode errorCorrection -e 2 0 4 -e 2 4 0  -maximalPermissive
+./build/musketeer --mm tso ./examples/single/mutex/dclocking/dc_locking.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
 
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/clh_queue_lock.txt -P safety -MM TSO -Mode errorCorrection -e 2 15 15 15 15 -maximalPermissive
+echo "SpinLock"
+
+./build/PERSIST -b -f ./examples/single/mutex/spinlock/spinlock.txt
+
+./build/trencher -b -f ./examples/single/mutex/spinlock/spinlock.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/mutex/spinlock/spinlock.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/spinlock_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 9 9 -maximalPermissive 
+
+./build/goto-cc -o ./examples/single/mutex/spinlock/spinlock.gb ./examples/single/mutex/spinlock/spinlock.c
+
+./build/musketeer --mm tso ./examples/single/mutex/spinlock/spinlock.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Ticket Spin Lock"
+
+./build/PERSIST -b -f ./examples/single/mutex/ticket_spin_lock/ticket_spin_lock.txt
+
+./build/trencher -b -f ./examples/single/mutex/ticket_spin_lock/ticket_spin_lock.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/mutex/ticket_spin_lock/ticket_spin_lock.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/ticket_spin_lock_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 14 14 -maximalPermissive 
+
+./build/goto-cc -o ./examples/single/mutex/ticket_spin_lock/ticket_spin_lock.gb ./examples/single/mutex/ticket_spin_lock/ticket_spin_lock.c
+
+./build/musketeer --mm tso ./examples/single/mutex/ticket_spin_lock/ticket_spin_lock.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Inline Pgsql"
+
+./build/PERSIST -b -f ./examples/single/mutex/inline_pgsql/inline_pgsql.txt
+
+./build/trencher -b -f ./examples/single/mutex/inline_pgsql/inline_pgsql.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/mutex/inline_pgsql/inline_pgsql.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/inline_pgsql/inline_pgsql_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 1 10 100 100 100 100 100 100 100 -e 1 100 10 100 100 100 100 100 100 -e 1 100 100 10 100 100 100 100 100 -e 1 100 100 100 10 100 100 100 100 -e 1 100 100 100 100 10 100 100 100 -e 1 100 100 100 100 100 10 100 100 -e 1 100 100 100 100 100 100 10 100 -e 1 100 100 100 100 100 100 100 10 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/mutex/inline_pgsql/inline_pgsql.gb ./examples/single/mutex/inline_pgsql/inline_pgsql.c
+
+./build/musketeer --mm tso ./examples/single/mutex/inline_pgsql/inline_pgsql.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Burns"
+
+./build/PERSIST -b -f ./examples/single/mutex/burns/burns.txt
+
+./build/trencher -b -f ./examples/single/mutex/burns/burns.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/mutex/burns/burns.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/burns/burns_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 9 3 3 3 3 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/mutex/burns/burns.gb ./examples/single/mutex/burns/burns.c
+
+./build/musketeer --mm tso ./examples/single/mutex/burns/burns.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Szymanski 2 processes"
+
+./build/PERSIST -b -f ./examples/single/mutex/szymanski2/szymanski2.txt
+
+./build/trencher -b -f ./examples/single/mutex/szymanski2/szymanski2.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/mutex/szymanski2/szymanski2.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/szymanski2/szymanski2_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 24 25 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/mutex/szymanski2/szymanski2.gb ./examples/single/mutex/szymanski2/szymanski2.c
+
+./build/musketeer --mm tso ./examples/single/mutex/szymanski2/szymanski2.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Szymanski 4 processes"
+
+./build/PERSIST -b -f ./examples/single/mutex/szymanski4/szymanski4.txt
+
+./build/trencher -b -f ./examples/single/mutex/szymanski4/szymanski4.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/mutex/szymanski4/szymanski4.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/szymanski4/szymanski4_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 33 35 36 37 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/mutex/szymanski4/szymanski4.gb ./examples/single/mutex/szymanski4/szymanski4.c
+
+./build/musketeer --mm tso ./examples/single/mutex/szymanski4/szymanski4.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Lamport Fast 2, 2 processes"
+
+./build/PERSIST -b -f ./examples/single/mutex/lamport2/lamport2.txt
+
+./build/trencher -b -f ./examples/single/mutex/lamport2/lamport2.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/mutex/lamport2/lamport2.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/lamport2/lamport2_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 36 36 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/mutex/lamport2/lamport2.gb ./examples/single/mutex/lamport2/lamport2.c
+
+./build/musketeer --mm tso ./examples/single/mutex/lamport2/lamport2.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Lamport Fast 2, 3 processes"
+
+./build/PERSIST -b -f ./examples/single/mutex/lamport3/lamport3.txt
+
+./build/trencher -b -f ./examples/single/mutex/lamport3/lamport3.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/mutex/lamport3/lamport3.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/lamport3/lamport3_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 39 39 39 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/mutex/lamport3/lamport3.gb ./examples/single/mutex/lamport3/lamport3.c
+
+./build/musketeer --mm tso ./examples/single/mutex/lamport3/lamport3.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
 
 
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/alternating_bit.txt -P safety -MM TSO -Mode errorCorrection -e 2 3 12 -e 2 12 3 -maximalPermissive
+echo "CLH Queue Lock" 
+
+./build/PERSIST -b -f ./examples/single/mutex/clhlock/clhlock.txt
+
+./build/trencher -b -f ./examples/single/mutex/clhlock/clhlock.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/mutex/clhlock/clhlock.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/mutex/clhlock/clhlock_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 15 15 15 15 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/mutex/clhlock/clhlock.gb ./examples/single/mutex/clhlock/clhlock.c
+
+./build/musketeer --mm tso ./examples/single/mutex/clhlock/clhlock.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
 
 
-java -Xss2048k -Xmx1024m -jar remmex.jar -f testcases/task_scheduling.txt -P safety -MM TSO -Mode errorCorrection -e 2 0 100 100 100 100 26 100 100 100 100 -e 2 100 0 100 100 100 26 100 100 100 100 -e 2 100 100 0 100 100 26 100 100 100 100 -e 2 100 100 100 0 100 26 100 100 100 100 -e 2 100 100 100 100 0 26 100 100 100 100    -maximalPermissive
+echo "Parker" 
 
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/inline_pgsql.txt -P safety -MM TSO -Mode errorCorrection -e 1 10 100 100 100 100 100 100 100 -e 1 100 10 100 100 100 100 100 100 -e 1 100 100 10 100 100 100 100 100 -e 1 100 100 100 10 100 100 100 100 -e 1 100 100 100 100 10 100 100 100 -e 1 100 100 100 100 100 10 100 100 -e 1 100 100 100 100 100 100 10 100 -e 1 100 100 100 100 100 100 100 10 -maximalPermissive
+./build/PERSIST -b -f ./examples/single/schedule/parker/parker.txt
 
+./build/trencher -b -f ./examples/single/schedule/parker/parker.txt
 
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/nbw_w_5r.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 15 15 15 15 15 -maximalPermissive
+./build/memorax fencins -a sb --rff ./examples/single/schedule/parker/parker.rmm
 
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/nbw_w_wr.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 27 -maximalPermissive
+java -Xss2048k -Xmx1024m  -jar ./build/remmex.jar -f ./examples/single/schedule/parker/parker_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 50 1 100 100 100 100 -e 2 50 100 1 100 100 100 -e 2 50 100 100 1 100 100 -e 2 50 100 100 100 1 100 -e 2 50 100 100 100 100 1 -maximalPermissive
 
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/dc_locking.txt -P safety -MM TSO -Mode errorCorrection -e 1 12 100 100 100 100 100 -e 1 22 100 100 100 100 100 -e 1 100 12 100 100 100 100 -e 1 100 22 100 100 100 100 -e 1 100 100 12 100 100 100 -e 1 100 100 22 100 100 100 -e 1 100 100 100 12 100 100 -e 1 100 100 100 22 100 100 -e 1 100 100 100 100 12 100 -e 1 100 100 100 100 22 100 -e 1 100 100 100 100 100 12 -e 1 100 100 100 100 100 22 -maximalPermissive
+./build/goto-cc -o ./examples/single/schedule/parker/parker.gb ./examples/single/schedule/parker/parker.c
 
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/parker.txt -P safety -MM TSO -Mode errorCorrection -e 2 50 1 100 100 100 100 -e 2 50 100 1 100 100 100 -e 2 50 100 100 1 100 100 -e 2 50 100 100 100 1 100 -e 2 50 100 100 100 100 1 -maximalPermissive
-
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/write+r.txt -P safety -MM TSO -Mode errorCorrection -e 2 8 13 100 100 100 -e 2 8 100 13 100 100 -e 2 8 100 100 13 100 -e 2 8 100 100 100 13  -maximalPermissive
-
-
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/r+detour.txt -P safety -MM TSO -Mode errorCorrection -e 2 11 100 13 100 100 -e 2 11 100 100 13 100 -e 2 11 100 100 100 13 -e 2 100 11  13 100 100 -e 2 100 11  100 13 100 -e 2 100 11  100 100 13     -maximalPermissive
-
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/r+detours.txt -P safety -MM TSO -Mode errorCorrection -e 3 14 100 100 9 9 -e 3 100 14 100 9 9 -e 3 100 100 14 9 9 -maximalPermissive
+./build/musketeer --mm tso ./examples/single/schedule/parker/parker.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
 
 
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/write+r+coherence.txt -P safety -MM TSO -Mode errorCorrection -e 3 12 100 100 100 8 7 -e 3 1000 12 100 100 8 7  -e 3 100 1000 12 100 8 7 -e 3 100 100 100 12 8 7 -maximalPermissive
+echo "Pgsql" 
+
+./build/PERSIST -b -f ./examples/single/schedule/pgsql/pgsql.txt
+
+./build/trencher -b -f ./examples/single/schedule/pgsql/pgsql.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/schedule/pgsql/pgsql.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/schedule/pgsql/pgsql_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 1 13 100 100 100 100 100 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/schedule/pgsql/pgsql.gb ./examples/single/schedule/pgsql/pgsql.c
+
+./build/musketeer --mm tso ./examples/single/schedule/pgsql/pgsql.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Alternating bit protocol" 
+
+./build/PERSIST -b -f ./examples/single/schedule/alternating_bit_protocol/alternating_bit.txt
+
+./build/trencher -b -f ./examples/single/schedule/alternating_bit_protocol/alternating_bit.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/schedule/alternating_bit_protocol/alternating_bit.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/schedule/alternating_bit_protocol/.alternating_bit_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 3 12 -e 2 12 3 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/schedule/alternating_bit_protocol/alternating_bit.gb ./examples/single/schedule/alternating_bit_protocol/alternating_bit.c
+
+./build/musketeer --mm tso ./examples/single/schedule/alternating_bit_protocol/alternating_bit.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
 
 
 
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/sb+detours.txt -P safety -MM TSO -Mode errorCorrection -e 3 12 100 8 12 100 100 -e 3 12 100 8 100 12 100 -e 3 12 100 8 100 100 12 -e 3 100 12 8 12 100 100 -e 3 100 12 8 100 12 100 -e 3 100 12 8 100 100 12 -maximalPermissive
+echo "Increasing sequence" 
 
-java -Xss2048k -Xmx1024m  -jar remmex.jar -f testcases/sb+detours+coherence.txt -P safety -MM TSO -Mode errorCorrection -e 4 14 100 13 100 9 8 -e 4 14 100 100 13 9 8 -e 4 100 14 13 100 9 8 -e 4 100 14 100 13 9 8 -maximalPermissive
+./build/PERSIST -b -f ./examples/single/schedule/increase_sequence/increase_sequence.txt
+
+./build/trencher -b -f ./examples/single/schedule/increase_sequence/increase_sequence.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/schedule/increase_sequence/increase_sequence.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/schedule/increase_sequence/increase_sequence_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 3 3 3 3 3  -maximalPermissive 
+
+./build/goto-cc -o ./examples/single/schedule/increase_sequence/increase_sequence.gb ./examples/single/schedule/increase_sequence/increase_sequence.c
+
+./build/musketeer --mm tso ./examples/single/schedule/increase_sequence/increase_sequence.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Task scheduling"  
+
+./build/PERSIST -b -f ./examples/single/schedule/task_scheduling/task_scheduling.txt
+
+./build/trencher -b -f ./examples/single/schedule/schedule/task_scheduling/task_scheduling.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/schedule/task_scheduling/task_scheduling.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/schedule/schedule/task_scheduling/task_scheduling_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 0 100 100 100 100 26 100 100 100 100 -e 2 100 0 100 100 100 26 100 100 100 100 -e 2 100 100 0 100 100 26 100 100 100 100 -e 2 100 100 100 0 100 26 100 100 100 100 -e 2 100 100 100 100 0 26 100 100 100 100    -maximalPermissive
+
+./build/goto-cc -o ./examples/single/schedule/schedule/task_scheduling/task_scheduling.gb  ./examples/single/schedule/schedule/task_scheduling/task_scheduling.c
+
+./build/musketeer --mm tso ./examples/single/schedule/schedule/task_scheduling/task_scheduling.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "NBW_W_WR"   
+
+./build/PERSIST -b -f ./examples/single/nbw/nbw_w_wr/nbw_w_wr.txt
+
+./build/trencher -b -f ./examples/single/nbw/nbw_w_wr/nbw_w_wr.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/nbw/nbw_w_wr/nbw_w_wr.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/nbw/nbw_w_wr/nbw_w_wr_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 27 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/nbw/nbw_w_wr/nbw_w_wr.gb  ./examples/single/nbw/nbw_w_wr/nbw_w_wr.c
+
+./build/musketeer --mm tso ./examples/single/nbw/nbw_w_wr/nbw_w_wr.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "NBW_W_5R"   
+
+./build/PERSIST -b -f ./examples/single/nbw/nbw_w_5r/nbw_w_5r.txt
+
+./build/trencher -b -f ./examples/single/nbw/nbw_w_5r/nbw_w_5r.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/nbw/nbw_w_5r/nbw_w_5r.rmm
+
+java -Xss2048k -Xmx1024m  -jar ./build/remmex.jar -f ./examples/single/nbw/nbw_w_5r/nbw_w_5r_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 15 15 15 15 15 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/schedule/nbw/nbw_w_5r/nbw_w_5r.gb  ./examples/single/nbw/nbw_w_5r/nbw_w_5r.c
+
+./build/musketeer --mm tso ./examples/single/nbw/nbw_w_5r/nbw_w_5r.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Seqlock"  
+
+./build/PERSIST -b -f ./examples/single/nbw/seqlock/seqlock.txt
+
+./build/trencher -b -f ./examples/single/nbw/seqlock/seqlock.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/nbw/seqlock/seqlock.rmm
+
+java -Xss2048k -Xmx1024m -jar ./build/remmex.jar -f ./examples/single/nbw/seqlock/seqlock_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 1 100 26 26 26  -maximalPermissive
+
+./build/goto-cc -o ./examples/single/nbw/seqlock/seqlock.gb  ./examples/single/nbw/seqlock/seqlock.c
+
+./build/musketeer --mm tso ./examples/single/nbw/seqlock/seqlock.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
 
 
 
+
+echo "write+r"   
+
+./build/PERSIST -b -f ./examples/single/litmus/write+r/write+r.txt
+
+./build/trencher -b -f ./examples/single/litmus/write+r/write+r.txt
+
+../build/memorax fencins -a sb --rff ./examples/single/litmus/write+r/write+r.rmm
+
+java -Xss2048k -Xmx1024m  -jar ./build/remmex.jar -f ./examples/single/litmus/write+r/write+r_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 8 13 100 100 100 -e 2 8 100 13 100 100 -e 2 8 100 100 13 100 -e 2 8 100 100 100 13  -maximalPermissive
+
+./build/goto-cc -o ./examples/single/litmus/write+r/write+r.gb  ./examples/single/litmus/write+r/write+r.c
+
+./build/musketeer --mm tso ./examples/single/litmus/write+r/write+r.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+
+echo "r+detour"   
+
+./build/PERSIST -b -f ./examples/single/litmus/r+detour/r+detour.txt
+
+./build/trencher -b -f ./examples/single/litmus/r+detour/r+detour.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/litmus/r+detour/r+detour.rmm
+
+java -Xss2048k -Xmx1024m  -jar ./build/remmex.jar -f ./examples/single/litmus/r+detour/r+detour_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 2 11 100 13 100 100 -e 2 11 100 100 13 100 -e 2 11 100 100 100 13 -e 2 100 11  13 100 100 -e 2 100 11  100 13 100 -e 2 100 11  100 100 13     -maximalPermissive
+
+./build/goto-cc -o ./examples/single/litmus/r+detour/r+detour.gb  ./examples/single/litmus/r+detour/r+detour.c
+
+./build/musketeer --mm tso ./examples/single/litmus/r+detour/r+detour.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "r+detours"    
+
+./build/PERSIST -b -f ./examples/single/litmus/r+detours/r+detours.txt
+
+./build/trencher -b -f ./examples/single/litmus/r+detours/r+detours.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/litmus/r+detours/r+detours.rmm
+
+java -Xss2048k -Xmx1024m  -jar ./build/remmex.jar -f ./examples/single/litmus/r+detours/r+detours_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 3 14 100 100 9 9 -e 3 100 14 100 9 9 -e 3 100 100 14 9 9 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/litmus/r+detours/r+detours.gb  ./examples/single/litmus/r+detours/r+detours.c
+
+./build/musketeer --mm tso ./examples/single/litmus/r+detours/r+detours.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "write+r+coherence"    
+
+./build/PERSIST -b -f ./examples/single/litmus/write+r+coherence/write+r+coherence.txt
+
+./build/trencher -b -f ./examples/single/litmus/write+r+coherence/write+r+coherence.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/litmus/write+r+coherence/write+r+coherence.rmm
+
+java -Xss2048k -Xmx1024m  -jar ./build/remmex.jar -f ./examples/single/litmus/write+r+coherence/write+r+coherence_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 3 12 100 100 100 8 7 -e 3 1000 12 100 100 8 7  -e 3 100 1000 12 100 8 7 -e 3 100 100 100 12 8 7 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/litmus/write+r+coherence/write+r+coherence.gb  ./examples/single/litmus/write+r+coherence/write+r+coherence.c
+
+./build/musketeer --mm tso ./examples/single/litmus/write+r+coherence/write+r+coherence.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "sb+detours"    
+
+./build/PERSIST -b -f ./examples/single/litmus/sb+detours/sb+detours.txt
+
+./build/trencher -b -f ./examples/single/litmus/sb+detours/sb+detours.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/litmus/sb+detours/sb+detours.rmm
+
+java -Xss2048k -Xmx1024m  -jar ./build/remmex.jar -f ./examples/single/litmus/sb+detours/sb+detours_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 3 12 100 8 12 100 100 -e 3 12 100 8 100 12 100 -e 3 12 100 8 100 100 12 -e 3 100 12 8 12 100 100 -e 3 100 12 8 100 12 100 -e 3 100 12 8 100 100 12 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/litmus/sb+detours/sb+detours.gb  ./examples/single/litmus/sb+detours/sb+detours.c
+
+./build/musketeer --mm tso ./examples/single/litmus/sb+detours/sb+detours.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "sb+detours+coherence"    
+
+./build/PERSIST -b -f ./examples/single/litmus/sb+detours+coherence/sb+detours+coherence.txt
+
+./build/trencher -b -f ./examples/single/litmus/sb+detours+coherence/sb+detours+coherence.txt
+
+./build/memorax fencins -a sb --rff ./examples/single/litmus/sb+detours+coherence/sb+detours+coherence.rmm
+
+java -Xss2048k -Xmx1024m  -jar ./build/remmex.jar -f ./examples/single/litmus/sb+detours+coherence/sb+detours+coherence_Remmex.txt -P safety -MM TSO -Mode errorCorrection -e 4 14 100 13 100 9 8 -e 4 14 100 100 13 9 8 -e 4 100 14 13 100 9 8 -e 4 100 14 100 13 9 8 -maximalPermissive
+
+./build/goto-cc -o ./examples/single/litmus/sb+detours+coherence/sb+detours+coherence.gb  ./examples/single/litmus/sb+detours+coherence/sb+detours+coherence.c
+
+./build/musketeer --mm tso ./examples/single/litmus/sb+detours+coherence/sb+detours+coherence.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Cilk THE WSQ"     
+
+./build/PERSIST -b -f ./examples/single/dynamic_stuture_algorithms/cilk/cilk-the-wsq.txt
+
+./build/trencher -b -f ./examples/single/dynamic_stuture_algorithms/cilk/cilk-the-wsq.txt
+
+./build/goto-cc -o ./examples/single/dynamic_stuture_algorithms/cilk/cilk-the-wsq.gb  ../examples/single/dynamic_stuture_algorithms/cilk/cilk-the-wsq.c
+
+./build/musketeer --mm tso ./examples/single/dynamic_stuture_algorithms/cilk/cilk-the-wsq.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+
+
+echo "Chase-Lev WSQ"     
+
+./build/PERSIST -b -f ./examples/single/dynamic_stuture_algorithms/chase-lev-wsq/chase-lev-wsq.txt
+
+./build/trencher -b -f ./examples/single/dynamic_stuture_algorithms/chase-lev-wsq/chase-lev-wsq.txt
+
+./build/goto-cc -o ./examples/single/dynamic_stuture_algorithms/chase-lev-wsq/chase-lev-wsq.gb  ./examples/single/dynamic_stuture_algorithms/chase-lev-wsq/chase-lev-wsq.c
+
+./build/musketeer --mm tso ./examples/single/dynamic_stuture_algorithms/chase-lev-wsq/chase-lev-wsq.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo “FIFO_iWSQ"    
+
+./build/PERSIST -b -f ./examples/single/dynamic_stuture_algorithms/FIFO_iWSQ/FIFO-iWSQ.txt
+
+./build/trencher -b -f ./examples/single/dynamic_stuture_algorithms/FIFO_iWSQ/FIFO-iWSQ.txt
+
+./build/goto-cc -o ./examples/single/dynamic_stuture_algorithms/FIFO_iWSQ/FIFO_iWSQ.gb  ./examples/single/dynamic_stuture_algorithms/FIFO_iWSQ/FIFO_iWSQ.c
+
+./build/musketeer --mm tso ./examples/single/dynamic_stuture_algorithms/FIFO_iWSQ/FIFO_iWSQ.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo “LIFO_iWSQ"    
+
+./build/PERSIST -b -f ./examples/single/dynamic_stuture_algorithms/LIFO_iWSQ/LIFO-iWSQ.txt
+
+./build/trencher -b -f ../examples/single/dynamic_stuture_algorithms/LIFO_iWSQ/LIFO-iWSQ.txt
+
+./build/goto-cc -o ./examples/single/dynamic_stuture_algorithms/LIFO_iWSQ/LIFO_iWSQ.gb  ./examples/single/dynamic_stuture_algorithms/LIFO_iWSQ/LIFO_iWSQ.c
+
+./build/musketeer --mm tso ./examples/single/dynamic_stuture_algorithms/LIFO_iWSQ/LIFO_iWSQ.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Anchor_iWSQ"    
+
+./build/PERSIST -b -f ./examples/single/dynamic_stuture_algorithms/anchor_iWSQ/Anchor-iWSQ.txt
+
+./build/trencher -b -f ./examples/single/dynamic_stuture_algorithms/anchor_iWSQ/Anchor-iWSQ.txt
+
+./build/goto-cc -o ./examples/single/dynamic_stuture_algorithms/anchor_iWSQ/Anchor_iWSQ.gb  ./examples/single/dynamic_stuture_algorithms/anchor_iWSQ/Anchor_iWSQ.c
+
+./build/musketeer --mm tso ./examples/single/dynamic_stuture_algorithms/anchor_iWSQ/Anchor_iWSQ.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Doing fence insertion automatically for all examples in Figure 17" 
+
+
+echo "Burns 2"    
+
+./build/PERSIST -b -f ./examples/parameterized/burns/burns2.txt
+
+./build/trencher -b -f ./examples/parameterized/burns/burns2.txt
+
+./build/goto-cc -o ./examples/parameterized/burns/burns2.gb  ./examples/parameterized/burns/burns2.c
+
+./build/musketeer --mm tso ./examples/parameterized/burns/burns2.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Burns 3 "    
+
+./build/PERSIST -b -f ./examples/parameterized/burns/burns3.txt
+
+./build/trencher -b -f ./examples/parameterized/burns/burns3.txt
+
+./build/goto-cc -o ./examples/parameterized/burns/burns3.gb  ./examples/parameterized/burns/burns3.c
+
+./build/musketeer --mm tso ./examples/parameterized/burns/burns3.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Burns 4 "    
+
+./build/PERSIST -b -f ./examples/parameterized/burns/burns4.txt
+
+./build/trencher -b -f ./examples/parameterized/burns/burns4.txt
+
+./build/goto-cc -o ./examples/parameterized/burns/burns4.gb  ./examples/parameterized/burns/burns4.c
+
+./build/musketeer --mm tso ./examples/parameterized/burns/burns4.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Burns 5 "    
+
+./build/PERSIST -b -f ./examples/parameterized/burns/burns5.txt
+
+./build/trencher -b -f ./examples/parameterized/burns/burns5.txt
+
+./build/goto-cc -o ./examples/parameterized/burns/burns5.gb  ./examples/parameterized/burns/burns5.c
+
+./build/musketeer --mm tso ./examples/parameterized/burns/burns5.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Burns 6 "    
+
+./build/PERSIST -b -f ./examples/parameterized/burns/burns6.txt
+
+./build/trencher -b -f ./examples/parameterized/burns/burns6.txt
+
+./build/goto-cc -o ./examples/parameterized/burns/burns6.gb  ./examples/parameterized/burns/burns6.c
+
+./build/musketeer --mm tso ./examples/parameterized/burns/burns6.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Burns 7 "    
+
+./build/PERSIST -b -f ./examples/parameterized/burns/burns7.txt
+
+./build/trencher -b -f ./examples/parameterized/burns/burns7.txt
+
+./build/goto-cc -o ./examples/parameterized/burns/burns7.gb  ./examples/parameterized/burns/burns7.c
+
+./build/musketeer --mm tso ./examples/parameterized/burns/burns7.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Burns 8 "    
+
+./build/PERSIST -b -f ./examples/parameterized/burns/burns8.txt
+
+./build/trencher -b -f ./examples/parameterized/burns/burns8.txt
+
+./build/goto-cc -o ./examples/parameterized/burns/burns8.gb  ./examples/parameterized/burns/burns8.c
+
+./build/musketeer --mm tso ./examples/parameterized/burns/burns8.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Burns 9 "    
+
+./build/PERSIST -b -f ./examples/parameterized/burns/burns9.txt
+
+./build/trencher -b -f ./examples/parameterized/burns/burns9.txt
+
+./build/goto-cc -o ./examples/parameterized/burns/burns9.gb  ./examples/parameterized/burns/burns9.c
+
+./build/musketeer --mm tso ./examples/parameterized/burns/burns9.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Burns 10 "    
+
+./build/PERSIST -b -f ./examples/parameterized/burns/burns10.txt
+
+./build/trencher -b -f ./examples/parameterized/burns/burns10.txt
+
+./build/goto-cc -o ./examples/parameterized/burns/burns10.gb  ./examples/parameterized/burns/burns10.c
+
+./build/musketeer --mm tso ./examples/parameterized/burns/burns10.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Double-checked locking 2 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dclocking/dc_locking2.txt
+
+./build/trencher -b -f ./examples/parameterized/dclocking/dc_locking2.txt
+
+./build/goto-cc -o ./examples/parameterized/dclocking/dc_locking2.gb  ./examples/parameterized/dclocking/dc_locking2.c
+
+./build/musketeer --mm tso ./examples/parameterized/dclocking/dc_locking2.gb
+ 
+./build/fence-inserter.py x86 fence results.txt  
+
+
+echo "Double-checked locking 3 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dclocking/dc_locking3.txt
+
+./build/trencher -b -f ./examples/parameterized/dclocking/dc_locking3.txt
+
+./build/goto-cc -o ./examples/parameterized/dclocking/dc_locking3.gb  ./examples/parameterized/dclocking/dc_locking3.c
+
+./build/musketeer --mm tso ./examples/parameterized/dclocking/dc_locking3.gb
+ 
+./build/fence-inserter.py x86 fence results.txt  
+
+
+echo "Double-checked locking 4 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dclocking/dc_locking4.txt
+
+./build/trencher -b -f ./examples/parameterized/dclocking/dc_locking4.txt
+
+./build/goto-cc -o ./examples/parameterized/dclocking/dc_locking4.gb  ./examples/parameterized/dclocking/dc_locking4.c
+
+./build/musketeer --mm tso ./examples/parameterized/dclocking/dc_locking4.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Double-checked locking 5 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dclocking/dc_locking5.txt
+
+./build/trencher -b -f ./examples/parameterized/dclocking/dc_locking5.txt
+
+./build/goto-cc -o ./examples/parameterized/dclocking/dc_locking5.gb  ./examples/parameterized/dclocking/dc_locking5.c
+
+./build/musketeer --mm tso ./examples/parameterized/dclocking/dc_locking5.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Double-checked locking 6 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dclocking/dc_locking6.txt
+
+./build/trencher -b -f ./examples/parameterized/dclocking/dc_locking6.txt
+
+./build/goto-cc -o ./examples/parameterized/dclocking/dc_locking6.gb  ./examples/parameterized/dclocking/dc_locking6.c
+
+./build/musketeer --mm tso ./examples/parameterized/dclocking/dc_locking6.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Double-checked locking 7 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dclocking/dc_locking7.txt
+
+./build/trencher -b -f ./examples/parameterized/dclocking/dc_locking7.txt
+
+./build/goto-cc -o ./examples/parameterized/dclocking/dc_locking7.gb  ./examples/parameterized/dclocking/dc_locking7.c
+
+./build/musketeer --mm tso ./examples/parameterized/dclocking/dc_locking7.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Double-checked locking 8 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dclocking/dc_locking8.txt
+
+./build/trencher -b -f ./examples/parameterized/dclocking/dc_locking8.txt
+
+./build/goto-cc -o ./examples/parameterized/dclocking/dc_locking8.gb  ./examples/parameterized/dclocking/dc_locking8.c
+
+./build/musketeer --mm tso ./examples/parameterized/dclocking/dc_locking8.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Double-checked locking 9 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dclocking/dc_locking9.txt
+
+./build/trencher -b -f ./examples/parameterized/dclocking/dc_locking9.txt
+
+./build/goto-cc -o ./examples/parameterized/dclocking/dc_locking9.gb  ./examples/parameterized/dclocking/dc_locking9.c
+
+./build/musketeer --mm tso ./examples/parameterized/dclocking/dc_locking9.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Double-checked locking 10 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dclocking/dc_locking10.txt
+
+./build/trencher -b -f ./examples/parameterized/dclocking/dc_locking10.txt
+
+./build/goto-cc -o ./examples/parameterized/dclocking/dc_locking10.gb  ./examples/parameterized/dclocking/dc_locking10.c
+
+./build/musketeer --mm tso ./examples/parameterized/dclocking/dc_locking10.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Dijkstra 2 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dijkstra/dijkstra2.txt
+
+./build/trencher -b -f ./examples/parameterized/dijkstra/dijkstra2.txt
+
+./build/goto-cc -o ./examples/parameterized/dijkstra/dijkstra2.gb  ./examples/parameterized/dijkstra/dijkstra2.c
+
+./build/musketeer --mm tso ./examples/parameterized/dijkstra/dijkstra2.gb
+ 
+./build/fence-inserter.py x86 fence results.txt 
+
+
+echo "Dijkstra 3 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dijkstra/dijkstra3.txt
+
+./build/trencher -b -f ./examples/parameterized/dijkstra/dijkstra3.txt
+
+./build/goto-cc -o ./examples/parameterized/dijkstra/dijkstra3.gb  ./examples/parameterized/dijkstra/dijkstra3.c
+
+./build/musketeer --mm tso ./examples/parameterized/dijkstra/dijkstra3.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Dijkstra 4 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dijkstra/dijkstra4.txt
+
+./build/trencher -b -f ./examples/parameterized/dijkstra/dijkstra4.txt
+
+./build/goto-cc -o ./examples/parameterized/dijkstra/dijkstra4.gb  ./examples/parameterized/dijkstra/dijkstra4.c
+
+./build/musketeer --mm tso ./examples/parameterized/dijkstra/dijkstra4.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Dijkstra 5 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dijkstra/dijkstra5.txt
+
+./build/trencher -b -f ./examples/parameterized/dijkstra/dijkstra5.txt
+
+./build/goto-cc -o ./examples/parameterized/dijkstra/dijkstra5.gb  ./examples/parameterized/dijkstra/dijkstra5.c
+
+./build/musketeer --mm tso ./examples/parameterized/dijkstra/dijkstra5.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Dijkstra 6 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dijkstra/dijkstra6.txt
+
+./build/trencher -b -f ./examples/parameterized/dijkstra/dijkstra6.txt
+
+./build/goto-cc -o ./examples/parameterized/dijkstra/dijkstra6.gb  ./examples/parameterized/dijkstra/dijkstra6.c
+
+./build/musketeer --mm tso ./examples/parameterized/dijkstra/dijkstra6.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Dijkstra 7 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dijkstra/dijkstra7.txt
+
+./build/trencher -b -f ./examples/parameterized/dijkstra/dijkstra7.txt
+
+./build/goto-cc -o ./examples/parameterized/dijkstra/dijkstra7.gb  ./examples/parameterized/dijkstra/dijkstra7.c
+
+./build/musketeer --mm tso ./examples/parameterized/dijkstra/dijkstra7.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Dijkstra 8 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dijkstra/dijkstra8.txt
+
+./build/trencher -b -f ./examples/parameterized/dijkstra/dijkstra8.txt
+
+./build/goto-cc -o ./examples/parameterized/dijkstra/dijkstra8.gb  ./examples/parameterized/dijkstra/dijkstra8.c
+
+./build/musketeer --mm tso ./examples/parameterized/dijkstra/dijkstra8.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Dijkstra 9 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dijkstra/dijkstra9.txt
+
+./build/trencher -b -f ./examples/parameterized/dijkstra/dijkstra9.txt
+
+./build/goto-cc -o ./examples/parameterized/dijkstra/dijkstra9.gb  ./examples/parameterized/dijkstra/dijkstra9.c
+
+./build/musketeer --mm tso ./examples/parameterized/dijkstra/dijkstra9.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Dijkstra 10 "    
+
+./build/PERSIST -b -f ./examples/parameterized/dijkstra/dijkstra10.txt
+
+./build/trencher -b -f ./examples/parameterized/dijkstra/dijkstra10.txt
+
+./build/goto-cc -o ./examples/parameterized/dijkstra/dijkstra10.gb  ./examples/parameterized/dijkstra/dijkstra10.c
+
+./build/musketeer --mm tso ./examples/parameterized/dijkstra/dijkstra10.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Increasing sequence 2 "    
+
+./build/PERSIST -b -f ./examples/parameterized/increase-sequence/increase-sequence2.txt
+
+./build/trencher -b -f ./examples/parameterized/increase-sequence/increase-sequence2.txt
+
+./build/goto-cc -o ./examples/parameterized/increase-sequence/increase-sequence2.gb  ./examples/parameterized/increase-sequence/increase-sequence2.c
+
+./build/musketeer --mm tso ./examples/parameterized/increase-sequence/increase-sequence2.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Increasing sequence 3 "    
+
+./build/PERSIST -b -f ./examples/parameterized/increase-sequence/increase-sequence3.txt
+
+./build/trencher -b -f ./examples/parameterized/increase-sequence/increase-sequence3.txt
+
+./build/goto-cc -o ./examples/parameterized/increase-sequence/increase-sequence3.gb  ./examples/parameterized/increase-sequence/increase-sequence3.c
+
+./build/musketeer --mm tso ./examples/parameterized/increase-sequence/increase-sequence3.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Increasing sequence 4 "    
+
+./build/PERSIST -b -f ./examples/parameterized/increase-sequence/increase-sequence4.txt
+
+./build/trencher -b -f ./examples/parameterized/increase-sequence/increase-sequence4.txt
+
+./build/goto-cc -o ./examples/parameterized/increase-sequence/increase-sequence4.gb  ./examples/parameterized/increase-sequence/increase-sequence4.c
+
+./build/musketeer --mm tso ./examples/parameterized/increase-sequence/increase-sequence4.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Increasing sequence 5 "    
+
+./build/PERSIST -b -f ./examples/parameterized/increase-sequence/increase-sequence5.txt
+
+./build/trencher -b -f ./examples/parameterized/increase-sequence/increase-sequence5.txt
+
+./build/goto-cc -o ./examples/parameterized/increase-sequence/increase-sequence5.gb  ./examples/parameterized/increase-sequence/increase-sequence5.c
+
+./build/musketeer --mm tso ./examples/parameterized/increase-sequence/increase-sequence5.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Increasing sequence 6 "    
+
+./build/PERSIST -b -f ./examples/parameterized/increase-sequence/increase-sequence6.txt
+
+./build/trencher -b -f ./examples/parameterized/increase-sequence/increase-sequence6.txt
+
+./build/goto-cc -o ./examples/parameterized/increase-sequence/increase-sequence6.gb  ./examples/parameterized/increase-sequence/increase-sequence6.c
+
+./build/musketeer --mm tso ./examples/parameterized/increase-sequence/increase-sequence6.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo "Increasing sequence 7 "    
+
+./build/PERSIST -b -f ./examples/parameterized/increase-sequence/increase-sequence7.txt
+
+./build/trencher -b -f ./examples/parameterized/increase-sequence/increase-sequence7.txt
+
+./build/goto-cc -o ./examples/parameterized/increase-sequence/increase-sequence7.gb  ./examples/parameterized/increase-sequence/increase-sequence7.c
+
+./build/musketeer --mm tso ./examples/parameterized/increase-sequence/increase-sequence7.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Increasing sequence 8 "    
+
+./build/PERSIST -b -f ./examples/parameterized/increase-sequence/increase-sequence8.txt
+
+./build/trencher -b -f ./examples/parameterized/increase-sequence/increase-sequence8.txt
+
+./build/goto-cc -o ./examples/parameterized/increase-sequence/increase-sequence8.gb  ./examples/parameterized/increase-sequence/increase-sequence8.c
+
+./build/musketeer --mm tso ./examples/parameterized/increase-sequence/increase-sequence8.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Increasing sequence 9 "    
+
+./build/PERSIST -b -f ./examples/parameterized/increase-sequence/increase-sequence9.txt
+
+./build/trencher -b -f ./examples/parameterized/increase-sequence/increase-sequence9.txt
+
+./build/goto-cc -o ./examples/parameterized/increase-sequence/increase-sequence9.gb  ./examples/parameterized/increase-sequence/increase-sequence9.c
+
+./build/musketeer --mm tso ./examples/parameterized/increase-sequence/increase-sequence9.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Increasing sequence 10 "    
+
+./build/PERSIST -b -f ./examples/parameterized/increase-sequence/increase-sequence10.txt
+
+./build/trencher -b -f ./examples/parameterized/increase-sequence/increase-sequence10.txt
+
+./build/goto-cc -o ./examples/parameterized/increase-sequence/increase-sequence10.gb  ./examples/parameterized/increase-sequence/increase-sequence10.c
+
+./build/musketeer --mm tso ./examples/parameterized/increase-sequence/increase-sequence10.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Partial Dekker 2 "    
+
+./build/PERSIST -b -f ./examples/parameterized/partial-dekker/partial-dekker2.txt
+
+./build/trencher -b -f ./examples/parameterized/partial-dekker/partial-dekker2.txt
+
+./build/goto-cc -o ./examples/parameterized/partial-dekker/partial-dekker2.gb  ./examples/parameterized/partial-dekker/partial-dekker2.c
+
+./build/musketeer --mm tso ./examples/parameterized/partial-dekker/partial-dekker2.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Partial Dekker 3 "    
+
+./build/PERSIST -b -f ./examples/parameterized/partial-dekker/partial-dekker3.txt
+
+./build/trencher -b -f ./examples/parameterized/partial-dekker/partial-dekker3.txt
+
+./build/goto-cc -o ./examples/parameterized/partial-dekker/partial-dekker3.gb  ./examples/parameterized/partial-dekker/partial-dekker3.c
+
+./build/musketeer --mm tso ./examples/parameterized/partial-dekker/partial-dekker3.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Partial Dekker 4 "    
+
+./build/PERSIST -b -f ./examples/parameterized/partial-dekker/partial-dekker4.txt
+
+./build/trencher -b -f ./examples/parameterized/partial-dekker/partial-dekker4.txt
+
+./build/goto-cc -o ./examples/parameterized/partial-dekker/partial-dekker4.gb  ./examples/parameterized/partial-dekker/partial-dekker4.c
+
+./build/musketeer --mm tso ./examples/parameterized/partial-dekker/partial-dekker4.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Partial Dekker 5 "    
+
+./build/PERSIST -b -f ./examples/parameterized/partial-dekker/partial-dekker5.txt
+
+./build/trencher -b -f ./examples/parameterized/partial-dekker/partial-dekker5.txt
+
+./build/goto-cc -o ./examples/parameterized/partial-dekker/partial-dekker5.gb  ./examples/parameterized/partial-dekker/partial-dekker5.c
+
+./build/musketeer --mm tso ./examples/parameterized/partial-dekker/partial-dekker5.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Partial Dekker 6 "    
+
+./build/PERSIST -b -f ./examples/parameterized/partial-dekker/partial-dekker6.txt
+
+./build/trencher -b -f ./examples/parameterized/partial-dekker/partial-dekker6.txt
+
+./build/goto-cc -o ./examples/parameterized/partial-dekker/partial-dekker6.gb  ./examples/parameterized/partial-dekker/partial-dekker6.c
+
+./build/musketeer --mm tso ./examples/parameterized/partial-dekker/partial-dekker6.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Partial Dekker 7 "    
+
+./build/PERSIST -b -f ./examples/parameterized/partial-dekker/partial-dekker7.txt
+
+./build/trencher -b -f ./examples/parameterized/partial-dekker/partial-dekker7.txt
+
+./build/goto-cc -o ./examples/parameterized/partial-dekker/partial-dekker7.gb  ./examples/parameterized/partial-dekker/partial-dekker7.c
+
+./build/musketeer --mm tso ./examples/parameterized/partial-dekker/partial-dekker7.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Partial Dekker 8 "    
+
+./build/PERSIST -b -f ./examples/parameterized/partial-dekker/partial-dekker8.txt
+
+./build/trencher -b -f ./examples/parameterized/partial-dekker/partial-dekker8.txt
+
+./build/goto-cc -o ./examples/parameterized/partial-dekker/partial-dekker8.gb  ./examples/parameterized/partial-dekker/partial-dekker8.c
+
+./build/musketeer --mm tso ./examples/parameterized/partial-dekker/partial-dekker8.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Partial Dekker 9 "    
+
+./build/PERSIST -b -f ./examples/parameterized/partial-dekker/partial-dekker9.txt
+
+./build/trencher -b -f ./examples/parameterized/partial-dekker/partial-dekker9.txt
+
+./build/goto-cc -o ./examples/parameterized/partial-dekker/partial-dekker9.gb  ./examples/parameterized/partial-dekker/partial-dekker9.c
+
+./build/musketeer --mm tso ./examples/parameterized/partial-dekker/partial-dekker9.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Partial Dekker 10 "    
+
+./build/PERSIST -b -f ./examples/parameterized/partial-dekker/partial-dekker10.txt
+
+./build/trencher -b -f ./examples/parameterized/partial-dekker/partial-dekker10.txt
+
+./build/goto-cc -o ./examples/parameterized/partial-dekker/partial-dekker10.gb  ./examples/parameterized/partial-dekker/partial-dekker10.c
+
+./build/musketeer --mm tso ./examples/parameterized/partial-dekker/partial-dekker10.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo "Pgsql 2 "    
+
+./build/PERSIST -b -f ./examples/parameterized/pgsql/pgsql2.txt
+
+./build/trencher -b -f ./examples/parameterized/pgsql/pgsql2.txt
+
+./build/goto-cc -o ./examples/parameterized/pgsql/pgsql2.gb  ./examples/parameterized/pgsql/pgsql2.c
+
+./build/musketeer --mm tso ./examples/parameterized/pgsql/pgsql2.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo "Pgsql 4 "    
+
+./build/PERSIST -b -f ./examples/parameterized/pgsql/pgsql4.txt
+
+./build/trencher -b -f ./examples/parameterized/pgsql/pgsql4.txt
+
+./build/goto-cc -o ./examples/parameterized/pgsql/pgsql4.gb  ./examples/parameterized/pgsql/pgsql4.c
+
+./build/musketeer --mm tso ./examples/parameterized/pgsql/pgsql4.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo "Pgsql 6 "    
+
+./build/PERSIST -b -f ./examples/parameterized/pgsql/pgsql6.txt
+
+./build/trencher -b -f ./examples/parameterized/pgsql/pgsql6.txt
+
+./build/goto-cc -o ./examples/parameterized/pgsql/pgsql6.gb  ./examples/parameterized/pgsql/pgsql6.c
+
+./build/musketeer --mm tso ./examples/parameterized/pgsql/pgsql6.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Pgsql 8 "    
+
+./build/PERSIST -b -f ./examples/parameterized/pgsql/pgsql8.txt
+
+./build/trencher -b -f ./examples/parameterized/pgsql/pgsql8.txt
+
+./build/goto-cc -o ./examples/parameterized/pgsql/pgsql8.gb  ./examples/parameterized/pgsql/pgsql8.c
+
+./build/musketeer --mm tso ./examples/parameterized/pgsql/pgsql8.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Pgsql 10 "    
+
+./build/PERSIST -b -f ./examples/parameterized/pgsql/pgsql10.txt
+
+./build/trencher -b -f ./examples/parameterized/pgsql/pgsql10.txt
+
+./build/goto-cc -o ./examples/parameterized/pgsql/pgsql10.gb  ./examples/parameterized/pgsql/pgsql10.c
+
+./build/musketeer --mm tso ./examples/parameterized/pgsql/pgsql10.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Pgsql 12 "    
+
+./build/PERSIST -b -f ./examples/parameterized/pgsql/pgsql12.txt
+
+./build/trencher -b -f ./examples/parameterized/pgsql/pgsql12.txt
+
+./build/goto-cc -o ./examples/parameterized/pgsql/pgsql12.gb  ./examples/parameterized/pgsql/pgsql12.c
+
+./build/musketeer --mm tso ./examples/parameterized/pgsql/pgsql12.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo "Pgsql 14 "    
+
+./build/PERSIST -b -f ./examples/parameterized/pgsql/pgsql14.txt
+
+./build/trencher -b -f ./examples/parameterized/pgsql/pgsql14.txt
+
+./build/goto-cc -o ./examples/parameterized/pgsql/pgsql14.gb  ./examples/parameterized/pgsql/pgsql14.c
+
+./build/musketeer --mm tso ./examples/parameterized/pgsql/pgsql14.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo "Pgsql 16 "    
+
+./build/PERSIST -b -f ./examples/parameterized/pgsql/pgsql16.txt
+
+./build/trencher -b -f ./examples/parameterized/pgsql/pgsql16.txt
+
+./build/goto-cc -o ./examples/parameterized/pgsql/pgsql16.gb  ./examples/parameterized/pgsql/pgsql16.c
+
+./build/musketeer --mm tso ./examples/parameterized/pgsql/pgsql16.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo "Pgsql 18 "    
+
+./build/PERSIST -b -f ./examples/parameterized/pgsql/pgsql18.txt
+
+./build/trencher -b -f ./examples/parameterized/pgsql/pgsql18.txt
+
+./build/goto-cc -o ./examples/parameterized/pgsql/pgsql18.gb  ./examples/parameterized/pgsql/pgsql18.c
+
+./build/musketeer --mm tso ./examples/parameterized/pgsql/pgsql18.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo "Pgsql 20 "    
+
+./build/PERSIST -b -f ./examples/parameterized/pgsql/pgsql20.txt
+
+./build/trencher -b -f ./examples/parameterized/pgsql/pgsql20.txt
+
+./build/goto-cc -o ./examples/parameterized/pgsql/pgsql20.gb  ./examples/parameterized/pgsql/pgsql20.c
+
+./build/musketeer --mm tso ./examples/parameterized/pgsql/pgsql20.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo “Seqlock 2 "    
+
+./build/PERSIST -b -f ./examples/parameterized/seqlock/seqlock2.txt
+
+./build/trencher -b -f ./examples/parameterized/seqlock/seqlock2.txt
+
+./build/goto-cc -o ./examples/parameterized/seqlock/seqlock2.gb  ./examples/parameterized/seqlock/seqlock2.c
+
+./build/musketeer --mm tso ./examples/parameterized/seqlock/seqlock2.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo “Seqlock 4 "    
+
+./build/PERSIST -b -f ./examples/parameterized/seqlock/seqlock4.txt
+
+./build/trencher -b -f ./examples/parameterized/seqlock/seqlock4.txt
+
+./build/goto-cc -o ./examples/parameterized/seqlock/seqlock4.gb  ./examples/parameterized/seqlock/seqlock4.c
+
+./build/musketeer --mm tso ./examples/parameterized/seqlock/seqlock4.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo “Seqlock 6 "    
+
+./build/PERSIST -b -f ./examples/parameterized/seqlock/seqlock6.txt
+
+./build/trencher -b -f ./examples/parameterized/seqlock/seqlock6.txt
+
+./build/goto-cc -o ./examples/parameterized/seqlock/seqlock6.gb  ./examples/parameterized/seqlock/seqlock6.c
+
+./build/musketeer --mm tso ./examples/parameterized/seqlock/seqlock6.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo “Seqlock 8 "    
+
+./build/PERSIST -b -f ./examples/parameterized/seqlock/seqlock8.txt
+
+./build/trencher -b -f ./examples/parameterized/seqlock/seqlock8.txt
+
+./build/goto-cc -o ./examples/parameterized/seqlock/seqlock8.gb  ./examples/parameterized/seqlock/seqlock8.c
+
+./build/musketeer --mm tso ./examples/parameterized/seqlock/seqlock8.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo “Seqlock 10 "    
+
+./build/PERSIST -b -f ./examples/parameterized/seqlock/seqlock10.txt
+
+./build/trencher -b -f ./examples/parameterized/seqlock/seqlock10.txt
+
+./build/goto-cc -o ./examples/parameterized/seqlock/seqlock10.gb  ./examples/parameterized/seqlock/seqlock10.c
+
+./build/musketeer --mm tso ./examples/parameterized/seqlock/seqlock10.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+
+echo “Seqlock 12 "    
+
+./build/PERSIST -b -f ./examples/parameterized/seqlock/seqlock12.txt
+
+./build/trencher -b -f ./examples/parameterized/seqlock/seqlock12.txt
+
+./build/goto-cc -o ./examples/parameterized/seqlock/seqlock12.gb  ./examples/parameterized/seqlock/seqlock12.c
+
+./build/musketeer --mm tso ./examples/parameterized/seqlock/seqlock12.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo “Seqlock 14 "    
+
+./build/PERSIST -b -f ./examples/parameterized/seqlock/seqlock14.txt
+
+./build/trencher -b -f ./examples/parameterized/seqlock/seqlock14.txt
+
+./build/goto-cc -o ./examples/parameterized/seqlock/seqlock14.gb  ./examples/parameterized/seqlock/seqlock14.c
+
+./build/musketeer --mm tso ./examples/parameterized/seqlock/seqlock14.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo “Seqlock 16 "    
+
+./build/PERSIST -b -f ./examples/parameterized/seqlock/seqlock16.txt
+
+./build/trencher -b -f ./examples/parameterized/seqlock/seqlock16.txt
+
+./build/goto-cc -o ./examples/parameterized/seqlock/seqlock16.gb  ./examples/parameterized/seqlock/seqlock16.c
+
+./build/musketeer --mm tso ./examples/parameterized/seqlock/seqlock16.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo “Seqlock 18 "    
+
+./build/PERSIST -b -f ./examples/parameterized/seqlock/seqlock18.txt
+
+./build/trencher -b -f ./examples/parameterized/seqlock/seqlock18.txt
+
+./build/goto-cc -o ./examples/parameterized/seqlock/seqlock18.gb  ./examples/parameterized/seqlock/seqlock18.c
+
+./build/musketeer --mm tso ./examples/parameterized/seqlock/seqlock18.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo “Seqlock 20 "    
+
+./build/PERSIST -b -f ./examples/parameterized/seqlock/seqlock20.txt
+
+./build/trencher -b -f ./examples/parameterized/seqlock/seqlock20.txt
+
+./build/goto-cc -o ./examples/parameterized/seqlock/seqlock20.gb  ./examples/parameterized/seqlock/seqlock20.c
+
+./build/musketeer --mm tso ./examples/parameterized/seqlock/seqlock20.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo “Szymanski 2 "    
+
+./build/PERSIST -b -f ./examples/parameterized/szymanski/szymanski2.txt
+
+./build/trencher -b -f ./examples/parameterized/szymanski/szymanski2.txt
+
+./build/goto-cc -o ./examples/parameterized/szymanski/szymanski2.gb  ./examples/parameterized/szymanski/szymanski2.c
+
+./build/musketeer --mm tso ./examples/parameterized/szymanski/szymanski2.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo “Szymanski 3 "    
+
+./build/PERSIST -b -f ./examples/parameterized/szymanski/szymanski3.txt
+
+./build/trencher -b -f ./examples/parameterized/szymanski/szymanski3.txt
+
+./build/goto-cc -o ./examples/parameterized/szymanski/szymanski3.gb  ./examples/parameterized/szymanski/szymanski3.c
+
+./build/musketeer --mm tso ./examples/parameterized/szymanski/szymanski3.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo “Szymanski 4 "    
+
+./build/PERSIST -b -f ./examples/parameterized/szymanski/szymanski4.txt
+
+./build/trencher -b -f ./examples/parameterized/szymanski/szymanski4.txt
+
+./build/goto-cc -o ./examples/parameterized/szymanski/szymanski4.gb  ./examples/parameterized/szymanski/szymanski4.c
+
+./build/musketeer --mm tso ./examples/parameterized/szymanski/szymanski4.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo “Szymanski 5 "    
+
+./build/PERSIST -b -f ./examples/parameterized/szymanski/szymanski5.txt
+
+./build/trencher -b -f ./examples/parameterized/szymanski/szymanski5.txt
+
+./build/goto-cc -o ./examples/parameterized/szymanski/szymanski5.gb  ./examples/parameterized/szymanski/szymanski5.c
+
+./build/musketeer --mm tso ./examples/parameterized/szymanski/szymanski5.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+echo “Szymanski 6 "    
+
+./build/PERSIST -b -f ./examples/parameterized/szymanski/szymanski6.txt
+
+./build/trencher -b -f ./examples/parameterized/szymanski/szymanski6.txt
+
+./build/goto-cc -o ./examples/parameterized/szymanski/szymanski6.gb  ./examples/parameterized/szymanski/szymanski6.c
+
+./build/musketeer --mm tso ./examples/parameterized/szymanski/szymanski6.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo “Szymanski 7 "    
+
+./build/PERSIST -b -f ./examples/parameterized/szymanski/szymanski7.txt
+
+./build/trencher -b -f ./examples/parameterized/szymanski/szymanski7.txt
+
+./build/goto-cc -o ./examples/parameterized/szymanski/szymanski7.gb  ./examples/parameterized/szymanski/szymanski7.c
+
+./build/musketeer --mm tso ./examples/parameterized/szymanski/szymanski7.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo “Szymanski 8 "    
+
+./build/PERSIST -b -f ./examples/parameterized/szymanski/szymanski8.txt
+
+./build/trencher -b -f ./examples/parameterized/szymanski/szymanski8.txt
+
+./build/goto-cc -o ./examples/parameterized/szymanski/szymanski8.gb  ./examples/parameterized/szymanski/szymanski8.c
+
+./build/musketeer --mm tso ./examples/parameterized/szymanski/szymanski8.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo “Szymanski 9 "    
+
+./build/PERSIST -b -f ./examples/parameterized/szymanski/szymanski9.txt
+
+./build/trencher -b -f ./examples/parameterized/szymanski/szymanski9.txt
+
+./build/goto-cc -o ./examples/parameterized/szymanski/szymanski9.gb  ./examples/parameterized/szymanski/szymanski9.c
+
+./build/musketeer --mm tso ./examples/parameterized/szymanski/szymanski9.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
+
+
+
+echo “Szymanski 10 "    
+
+./build/PERSIST -b -f ./examples/parameterized/szymanski/szymanski10.txt
+
+./build/trencher -b -f ./examples/parameterized/szymanski/szymanski10.txt
+
+./build/goto-cc -o ./examples/parameterized/szymanski/szymanski10.gb  ./examples/parameterized/szymanski/szymanski10.c
+
+./build/musketeer --mm tso ./examples/parameterized/szymanski/szymanski10.gb
+ 
+./build/fence-inserter.py x86 fence results.txt
