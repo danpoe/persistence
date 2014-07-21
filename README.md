@@ -16,6 +16,8 @@ Source code for Persist: You can find instructions how to istall, run, and repro
 + commands.txt: common commands to use with Trencher, Persist, Memorax, Musketeer, and Remmex.
 + examples:  algorithm directory using in Table 1 and Figure 17 of paper.
 + run_test.sh: file for automatic running all tests, each test includes Persist, Trencher, Musketeer, Memorax, and Remmex if available. To do this work automatically, please put executable files of Memorax (memorax), Trencher (trencher), Persist (PERSIST), Musketeer (goto-cc, musketeer, fence-insert.py) into build folder. 
++ fence-inserter.py: script file used by Musketeer version 17 April 2014, in the case cannot find it from Musketeer's 
+website.
 + test_cases.txt: file used by run_test.sh. 
 + src: source file directory.
 
