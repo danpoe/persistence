@@ -23,8 +23,12 @@ Source code for Persist: You can find instructions how to install, run, and repr
 NOTE: using run_test.sh, except Persist, some examples will take longer than 40 mins (in a machine of 2.4 Ghz 2 cores, 4GB RAM), or run out of memory; you may need to stop it yourself!!!
 
 [1] D. Shasha and M. Snir. Efficient and correct execution of parallel programs that share memory. ACM Trans. Program. Lang. Syst., 10(2):282–312, Apr. 1988.
+
 [2] A. Bouajjani, E. Derevenetc, and R. Meyer. Checking and enforcing robustness against tso. In ESOP, pages 533–553, 2013.
+
 [3]  S. Burckhardt and M. Musuvathi. Effective program verification for relaxed memory models. In CAV, volume 5123 of LNCS, pages 107–120. Springer, 2008.
+
 [4] J. Alglave, D. Kroening, V. Nimal, and D. Poetzl. Don’t sit on the fence: A static analysis approach to automatic fence insertion. In CAV, volume 8559 of LNCS. Springer, 2014.
+
 [5] S. Owens. Reasoning about the implementation of concurrency abstractions on x86-tso. In ECOOP, volume 6183 of LNCS, pages 478-503, Springer 2010.
 
