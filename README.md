@@ -9,7 +9,8 @@ One of important differences between Persistence and Robustnes that we can verif
 
 Source code for Persist: You can find instructions how to install, run, and reproduce all results in Table 1 and Figure 17 of the paper using material provided in this package. Here is list of files and folders:
 
-+ Readmefirst.txt: this current file.
++ README.md: this current file.
++ Readmefirst.txt: simimar information as README.md but shorter.
 + install.txt: how to download and install Persist.
 + install_other_tools.txt: how to download and install other tools (Memorax, Musketeer, Trencher, and Remmex).
 + manual.txt: how to run and custermize input files with Persist.
