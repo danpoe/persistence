@@ -5,8 +5,8 @@ Before download and install, you should check requirements of operation system (
 1. Operation requirements
 ================
 
-PERSIST is implemented for 32-bit Unix environments such as Ubuntu, Fedora, Debian, etc. It can run under Mac OS, but
-but does not tested stressfully.
+PERSIST is implemented for 32-bit Unix environments such as Ubuntu, Fedora, Debian, etc. It can run under Mac OS, but 
+does not tested stressfully.
 
 2. Software requirements
 ================
@@ -25,7 +25,7 @@ You need to install the following package to be able to produce visual represent
 programs:
     + Graphviz <http://www.graphviz.org/> (optional)
 Then test by command: *dot -?* to check the existence of dot command from Graphviz. If you do not do this step, visual 
-presentation with options *-dot* or *-rdot* is not supported.
+presentation with options *-dot* or *-pdot* is not supported.
 
 
 3. Download and building commands
@@ -33,7 +33,7 @@ presentation with options *-dot* or *-rdot* is not supported.
 
 + Download the source code from PERSIST in Githup (https://github.com/PhongNgo/persistence), then unpackage.
 + Use a terminal, *cd* to the directory containing the package's source code.
-+ Type *make* to configure and build the package (The package will be built in the subdirectory called build that 
++ Type *make* to configure and build the package (The package will be built in the subdirectory called *build* that 
 contains an executable file).
 
 ##########################
