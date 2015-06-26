@@ -36,7 +36,7 @@ end
 thread reader1  
 initial q0
 transition 	q0 	q1	read	c0	0
-transition	q1	q1_0	local	c01	& c01 1 
+transition	q1	q1_0	local	c01	& c0 1 
 transition	q1_0	q2	check	== c01	0
 transition	q1_0	q0	check	!= c0	0
 
@@ -51,7 +51,7 @@ end
 thread reader2  
 initial q0
 transition 	q0 	q1	read	c0	0
-transition	q1	q1_0	local	c01	& c01 1 
+transition	q1	q1_0	local	c01	& c0 1 
 transition	q1_0	q2	check	== c01	0
 transition	q1_0	q0	check	!= c0	0
 
@@ -66,7 +66,7 @@ end
 thread reader3  
 initial q0
 transition 	q0 	q1	read	c0	0
-transition	q1	q1_0	local	c01	& c01 1 
+transition	q1	q1_0	local	c01	& c0 1 
 transition	q1_0	q2	check	== c01	0
 transition	q1_0	q0	check	!= c0	0
 
