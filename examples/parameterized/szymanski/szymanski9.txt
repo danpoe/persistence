@@ -6,6 +6,7 @@
 # 1 - flag[1]
 # ...
 
+# comment this for new version of Trencher - version without Spin
 memory_size 9
 
 
