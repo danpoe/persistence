@@ -71,9 +71,9 @@ set(PERSIST_SOURCES
 )
 
 add_library(persistLib ${PERSIST_SOURCES})
-link_directories(${PERSIST_SOURCE_DIR}/3rdparty/lpsolve)
+#link_directories(${PERSIST_SOURCE_DIR}/3rdparty/lpsolve)
 
 
 add_executable(PERSIST Persist.cpp)
-
-target_link_libraries(PERSIST persistLib liblpsolve55.a m boost_regex dl ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+target_link_libraries(PERSIST persistLib m boost_regex dl ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+#target_link_libraries(PERSIST persistLib liblpsolve55.a m boost_regex dl ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
