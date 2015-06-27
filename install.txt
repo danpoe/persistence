@@ -5,8 +5,7 @@ Before download and install, you should check requirements of operation system (
 1. Operation requirements
 ================
 
-PERSIST is implemented for 32-bit Unix environments such as Ubuntu, Fedora, Debian, etc. It can run under Mac OS, but 
-does not tested stressfully.
+PERSIST is implemented for 32-bit Unix environments such as Ubuntu, Fedora, Debian, etc. It can run under Mac OS or other OS, but does not tested stressfully.
 
 2. Software requirements
 ================
