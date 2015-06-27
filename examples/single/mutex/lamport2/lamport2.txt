@@ -15,6 +15,7 @@
 
 # Result: trencher 4, Persist 8, musketeer 14 
 
+# comment this for new version of Trencher - version without Spin
 memory_size 5 
 
 thread t1
