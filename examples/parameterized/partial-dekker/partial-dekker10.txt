@@ -34,7 +34,7 @@
 # 9 — flag[9]
 # 10 — flag[10]
 
-
+# comment this for new version of Trencher - version without Spin
 memory_size 11
 
 thread t1
