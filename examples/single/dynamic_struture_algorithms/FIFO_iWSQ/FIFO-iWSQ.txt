@@ -11,6 +11,7 @@
 # 2 — Data
 # 3 - Lock
 
+# comment this for new version of Trencher - version without Spin
 memory_size 4
 
 thread owner
