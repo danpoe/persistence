@@ -8,7 +8,7 @@
 # mem4 - 4
 # lock - 5
 
-
+# comment this for new version of Trencher - version without Spin
 memory_size 6
 
 thread t0
