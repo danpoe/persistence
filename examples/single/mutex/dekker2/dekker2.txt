@@ -1,0 +1,67 @@
+#
+# Dekker's mutex algorithm for 2 threads
+#
+# void* thr0(void * arg) {
+#   flag0 = 1;
+#   while (flag1 >= 1) {
+#     if (turn != 0) {
+#       flag0 = 0;
+#       while (turn != 0) {};
+#       flag0 = 1;
+#     }
+#   }
+#   // critical section
+#   turn = 1;
+#   flag0 = 0;
+# }
+#
+# Memory layout:
+# 0, 1: flag0, flag1
+# 2:    turn
+
+thread t0
+initial q0
+
+transition q0 q1 write 1 0
+transition q1 q2 read rflag1 1
+transition q2 q3 check >= rflag1 1
+transition q2 q4 check < rflag1 1
+
+transition q3 q7 read rturn 2
+transition q7 q8 check != rturn 0
+transition q7 q1 check == rturn 0
+
+transition q8 q9 write 0 0
+transition q9 q10 read rturn 2
+transition q10 q9 check != rturn 0
+transition q10 q11 check == rturn 0
+transition q11 q1 write 1 0
+
+transition q4 q5 write 1 2
+transition q5 q6 write 0 0
+
+end
+
+thread t1
+initial q0
+
+transition q0 q1 write 1 1
+transition q1 q2 read rflag0 0
+transition q2 q3 check >= rflag0 1
+transition q2 q4 check < rflag0 1
+
+transition q3 q7 read rturn 2
+transition q7 q8 check != rturn 0
+transition q7 q1 check == rturn 0
+
+transition q8 q9 write 0 1
+transition q9 q10 read rturn 2
+transition q10 q9 check != rturn 0
+transition q10 q11 check == rturn 0
+transition q11 q1 write 1 1
+
+transition q4 q5 write 1 2
+transition q5 q6 write 0 1
+
+end
+

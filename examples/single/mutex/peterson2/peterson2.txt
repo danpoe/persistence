@@ -1,5 +1,14 @@
 #
 # Peterson's mutex algorithm for 2 processes
+# 
+# void* thr0(void * arg) {
+#   flag0 = 1;
+#   turn = 1;
+#   do {} while (flag1==1 && turn==1);
+#   // critical section
+#   flag0 = 0;
+# }
+#
 # Memory layout:
 # 0,1: flag0, flag1
 # 2:   turn
@@ -10,7 +19,8 @@ transition q0 q1 write 1 0
 transition q1 q2 write 1 2
 transition q2 q3 read  rflag1 1
 transition q3 q4 read  rturn  2
-transition q4 q5 check || != rflag1 2 != rturn 1
+transition q4 q5 check || != rflag1 1 != rturn 1
+transition q4 q2 check && == rflag1 1 == rturn 1
 transition q5 q6 write 0 0
 end
 
@@ -20,7 +30,8 @@ transition q0 q1 write 1 1
 transition q1 q2 write 1 2
 transition q2 q3 read  rflag0 0
 transition q3 q4 read  rturn  2
-transition q4 q5 check || != rflag0 2 != rturn 1
+transition q4 q5 check || != rflag0 1 != rturn 1
+transition q4 q2 check && == rflag0 1 == rturn 1
 transition q5 q6 write 0 1
 end
 
